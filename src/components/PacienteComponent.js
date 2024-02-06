@@ -11,7 +11,7 @@ import PacienteImg from './assets/pacii.jpg';
 import { useLocation } from 'react-router-dom';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-
+//hola
 function PacienteComponent() {
   const location = useLocation();
   const navigate = useNavigate();

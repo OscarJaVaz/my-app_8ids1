@@ -1,103 +1,70 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Button from '@mui/material/Button';
+import IconButton from '@mui/material/IconButton';
+import MenuIcon from '@mui/icons-material/Menu';
+import CloseIcon from '@mui/icons-material/Close';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle'; // Nuevo icono de usuario
 import paciente from './assets/paciente.png';
 import doctor from './assets/doctor.png';
 import enfermedad from './assets/enfermedad.png';
 import cita from './assets/cita1.png';
 import salir from './assets/salir.png';
+import agregar from './assets/agregar.png';
 
 function MenuComponent() {
   const navigate = useNavigate();
-
-  const home = () => {
-    navigate("/home");
-  }
-
-  const homedoctor = () => {
-    navigate("/homedoctor");
-  }
-
-  const homeenfermedad = () => {
-    navigate("/homeenfermedad");
-  }
-
-  const homeecitas = () => {
-    navigate("/homecita");
-  }
-
-  const login = () => {
-    navigate("/");
-  }
+  const [menuVisible, setMenuVisible] = useState(true);
 
   const handleClick = (path) => {
     navigate(path);
-  }
+  };
+
+  const toggleMenu = () => {
+    setMenuVisible(!menuVisible);
+  };
+
+  
 
   return (
-    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '130vh' }}>
-      <ul style={{ listStyleType: 'none', textAlign: 'center', padding: 0 }}>
-
-      <div className="ag-format-container">
-        <div className="ag-courses_box">
-          <div className="ag-courses_item">
-            <a className="ag-courses-item_link" onClick={() => handleClick("/home")}>
-              <div className="ag-courses-item_bg"></div>
-              <div className="ag-courses-item_title">Gestionar:</div>
-              <img src={paciente} style={{ height: '35%', width: '35%' }} />
-              <div className="ag-courses-item_date-box">
-                <Button variant="contained" style={{ backgroundColor: '#FF8C00', marginRight: '10px' }}>Pacientes</Button>
-              </div>
-            </a>
-          </div>
-
-          <div className="ag-courses_item">
-            <a className="ag-courses-item_link" onClick={() => handleClick("/homedoctor")}>
-              <div className="ag-courses-item_bg"></div>
-              <div className="ag-courses-item_title">Gestionar:</div>
-              <img src={doctor} style={{ height: '35%', width: '35%' }} />
-              <div className="ag-courses-item_date-box">
-                <Button variant="contained" style={{ backgroundColor: 'green', marginRight: '10px' }}>Doctores</Button>
-              </div>
-            </a>
-          </div>
-
-          <div className="ag-courses_item">
-            <a className="ag-courses-item_link" onClick={() => handleClick("/homeenfermedad")}>
-              <div className="ag-courses-item_bg"></div>
-              <div className="ag-courses-item_title">Gestionar:</div>
-              <img src={enfermedad} style={{ height: '35%', width: '35%' }} />
-              <div className="ag-courses-item_date-box">
-                <Button variant="contained" style={{ backgroundColor: '#FF4500', marginRight: '10px' }}>Enfermedades</Button>
-              </div>
-            </a>
-          </div>
-
-          <div className="ag-courses_item">
-            <a className="ag-courses-item_link" onClick={() => handleClick("/homecita")}>
-              <div className="ag-courses-item_bg"></div>
-              <div className="ag-courses-item_title">Gestionar:</div>
-              <img src={cita} style={{ height: '35%', width: '35%' }} />
-              <div className="ag-courses-item_date-box">
-                <Button variant="contained" style={{ backgroundColor: 'purple', marginRight: '10px' }}>Citas</Button>
-              </div>
-            </a>
-          </div>
-
-          <div className="ag-courses_item">
-            <a className="ag-courses-item_link" onClick={() => handleClick("/")}>
-              <div className="ag-courses-item_bg"></div>
-              <div className="ag-courses-item_title">Salir del sistema:</div>
-              <img src={salir} style={{ height: '35%', width: '35%' }} />
-              <div className="ag-courses-item_date-box">
-                <Button variant="contained" style={{ backgroundColor: 'red' }}>Salir</Button>
-              </div>
-            </a>
-          </div>
-
-        </div>
+    <div className={`menu-container ${menuVisible ? 'menu-visible' : 'menu-hidden'}`}>
+      <div className="sidebar">
+        <div className="user-info">
+          <h2 style={{ color: 'white' }}>BIENVENIDO</h2>
+          <AccountCircleIcon style={{ color: 'white' }} />
+        </div> 
+        <p></p>
+        <a onClick={() => handleClick("/home")}>
+          <img src={paciente} alt="Pacientes" />
+          <span>Pacientes</span>
+        </a>
+        <a onClick={() => handleClick("/homedoctor")}>
+          <img src={doctor} alt="Doctores" />
+          <span>Doctores</span>
+        </a>
+        <a onClick={() => handleClick("/homeenfermedad")}>
+          <img src={enfermedad} alt="Enfermedades" />
+          <span>Enfermedades</span>
+        </a>
+        <a onClick={() => handleClick("/homecita")}>
+          <img src={cita} alt="Citas" />
+          <span>Citas</span>
+        </a>
+        <a onClick={() => handleClick("/homeproducto")}>
+          <img src={agregar} alt="Productos" />
+          <span>Productos</span>
+        </a>
+        <a onClick={() => handleClick("/")}>
+          <img src={salir} alt="Salir" />
+          <span>Salir</span>
+        </a>
       </div>
-      </ul>
+      <div className="content">
+        <IconButton onClick={toggleMenu} className="toggle-button">
+          {menuVisible ? <CloseIcon /> : <MenuIcon />}
+        </IconButton>
+        {/* Contenido principal va aquí */}
+      </div>
     </div>
   );
 }

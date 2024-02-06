@@ -37,16 +37,7 @@ code {
 }
 
 
-body {
-  min-height: 100vh;
-  
-  display: flex;
-  /*align-items: center;*/
-  flex-direction: column;
-  padding-top: 2rem;
-  padding-bottom: 2rem;
-  box-sizing: border-box;
-}
+
 
 
 .card {
@@ -324,4 +315,78 @@ h1 {
   color: rgb(0, 0, 0);
   outline: none;
   text-align: center;
+}
+
+/* Estilos menu */
+
+.menu-container {
+  display: flex;
+  height: 100vh;
+}
+
+.welcome-container {
+  background-color: #333;
+  color: white;
+  padding: 10px;
+  text-align: center;
+}
+
+.welcome-container p {
+  margin: 0;
+  font-size: 18px;
+}
+
+.sidebar {
+  width: 200px;
+  background-color: #333;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  transition: width 0.3s ease;
+}
+
+.sidebar a {
+  margin-bottom: 10px;
+  text-decoration: none;
+  color: white;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+.sidebar img {
+  margin-right: 10px;
+  height: 25px;
+  width: 25px; 
+}
+
+.content {
+  flex-grow: 1;
+  padding: 20px;
+  background-color: #f4f4f4; 
+}
+
+.menu-hidden .sidebar {
+  width: 0;
+  overflow: hidden;
+}
+
+.menu-hidden .content {
+  margin-left: 0;
+}
+
+/* Estilos responsivos */
+
+@media (max-width: 768px) {
+  .sidebar {
+    width: 100%;
+  }
+
+  .menu-hidden .sidebar {
+    width: 100%;
+  }
+
+  .content {
+    margin-left: 0;
+  }
 }
