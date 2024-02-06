@@ -21,11 +21,12 @@ function ProductoComponent() {
     nom_producto: '',
     descripcion: '',
     price: '',
-    imagen: '',
+    imagen: '', // Esta propiedad guarda la URL de la imagen
   });
 
   const [loading, setLoading] = useState(false);
   const [imagen, setImagen] = useState(null);
+  const [error, setError] = useState(null);
 
   const handleImageChange = (event) => {
     const file = event.target.files[0];
@@ -51,15 +52,24 @@ function ProductoComponent() {
   const GuardarDatos = async () => {
     setLoading(true);
     try {
-      // Acortar la cadena de imagen si es necesario
-      
+      // Validar el campo 'price'
+      const regex = /^[0-9.]+$/;
+      if (!regex.test(productos.price)) {
+        setError('El campo de precio contiene caracteres no válidos ingrese solo numeros');
+        setLoading(false);
+        return;
+      }
 
-      await axios.post('http://127.0.0.1:8000/api/producto/crear', { ...productos, imagen});
+      // Acortar la cadena de imagen si es necesario
+      const imagenGuardada = imagen || productos.imagen;
+
+      await axios.post('http://127.0.0.1:8000/api/producto/crear', { ...productos, imagen: imagenGuardada });
       console.log('Datos guardados correctamente');
       setLoading(false);
       navigate("/homeproducto");
     } catch (error) {
       console.error('Error al guardar datos:', error);
+      setError('Error al guardar datos. Por favor, inténtalo de nuevo.');
       setLoading(false);
     }
   };
@@ -73,6 +83,7 @@ function ProductoComponent() {
       navigate("/homeproducto");
     } catch (error) {
       console.error('Error al eliminar datos:', error);
+      alert('Error al eliminar datos. Por favor, inténtalo de nuevo.');
       setLoading(false);
     }
   };
@@ -95,7 +106,7 @@ function ProductoComponent() {
   
       const { nom_producto, descripcion, price, imagen } = response.data;
   
-      // Actualiza el estado con los datos del producto
+      // Actualiza el estado con los datos del producto, incluida la imagen
       setProducto({
         id: location.state.id,
         nom_producto,
@@ -103,15 +114,18 @@ function ProductoComponent() {
         price,
         imagen,
       });
-  
+
+      // Si hay una URL de imagen, establecerla en el estado de la imagen
+      if (imagen) {
+        setImagen(imagen);
+      }
+
       setLoading(false);
     } catch (error) {
       console.error('Error al obtener datos:', error);
       setLoading(false);
     }
   };
-  
-  
 
   useEffect(() => {
     document.body.style.backgroundImage = `url(${Enfermedad2})`;
@@ -123,7 +137,6 @@ function ProductoComponent() {
       document.body.style.backgroundPosition = '';
     };
   }, []);
-  
 
   const regresar = async () => {
     navigate('/homeproducto');
@@ -134,7 +147,7 @@ function ProductoComponent() {
       productos.nom_producto.trim() !== '' &&
       productos.descripcion.trim() !== '' &&
       productos.price.trim() !== '' &&
-      imagen !== ''
+      (imagen || productos.imagen)
     );
   };
 
@@ -154,6 +167,12 @@ function ProductoComponent() {
     >
       <h1 style={{ marginBottom: '10px' }}>Agregar productos</h1>
       <img src={Enfermedad} style={{ height: '25%', width: '25%' }} />
+      {error && (
+  <div style={{ color: 'red', marginTop: '10px', whiteSpace: 'pre-wrap', overflowWrap: 'break-word' }}>
+    <p>{error}</p>
+  </div>
+)}
+
       <ul style={{ listStyleType: 'none', textAlign: 'center', padding: 0 }}>
         <p></p>
         <li>
@@ -195,23 +214,19 @@ function ProductoComponent() {
             accept="image/*"
             onChange={handleImageChange}
           />
-    {productos.imagen && (
-  <div>
-    <p>Imagen del producto:</p>
-    <img
-      src={productos.imagen}
-      alt="Imagen del producto"
-      style={{
-        maxWidth: '60%',  // Ancho máximo
-        maxHeight: '80vh' // Altura máxima (en este caso, 20% de la altura de la ventana)
-      }}
-    />
-  </div>
-)}
-
-
-
-
+          {imagen || productos.imagen ? (
+            <div>
+              <p>Imagen del producto:</p>
+              <img
+                src={imagen || productos.imagen}
+                alt="Imagen del producto"
+                style={{
+                  maxWidth: '60%',  // Ancho máximo
+                  maxHeight: '80vh' // Altura máxima (en este caso, 20% de la altura de la ventana)
+                }}
+              />
+            </div>
+          ) : null}
         </li>
         <p></p>
         <Button
