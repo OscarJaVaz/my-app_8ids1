@@ -64,16 +64,16 @@ const Inicio = () => {
         <header style={estiloEncabezado}>
             <nav>
                 <ul style={estiloOpcion}>
-                    <Button variant="contained" style={button} onClick={inicio} startIcon={<PersonIcon />} >
+                    <Button variant="outline" style={button} onClick={inicio} startIcon={<PersonIcon />} >
                         Iniciar sesión
                     </Button> 
-                    <Button variant="contained" style={button} onClick={registrar} startIcon={<PersonIcon />} >
+                    <Button variant="outline" style={button} onClick={registrar} startIcon={<PersonIcon />} >
                         Registrarse
                     </Button>
-                    <Button variant="contained" style={button} onClick={farmacia} startIcon={<LocalPharmacyIcon />} >
+                    <Button variant="outline" style={button} onClick={farmacia} startIcon={<LocalPharmacyIcon />} >
                         Farmacia
                     </Button>
-                    <Button variant="contained" style={button} onClick={aviso} startIcon={<NotificationImportantIcon />} >
+                    <Button variant="outline" style={button} onClick={aviso} startIcon={<NotificationImportantIcon />} >
                         Aviso de privacidad
                     </Button>
                 </ul>
@@ -91,11 +91,11 @@ const Inicio = () => {
                 position: 'absolute', 
                 top: '830px', 
                 left: '900px', }} />
-              <p style={{ fontSize: '20px'}}>Bienvenido al Consultorio Médico, donde nos dedicamos a brindar atención médica 
+              <p style={{ fontSize: '20px'}}>Bienvenido al Consultorio Médico Santoyo, donde nos dedicamos a brindar atención médica 
                 de calidad con un enfoque centrado en el paciente.</p>
               <p></p>  
-             <h2 style={{ color: 'blue' }}>Descripción del Consultorio</h2>
-              <p style={{ fontSize: '20px'}} >En el Consultorio Médico XYZ, nos comprometemos a proporcionar cuidado médico 
+             <h2 style={{ color: 'blue' }}>Descripción: </h2>
+              <p style={{ fontSize: '20px'}} >En el Consultorio Médico Santoyo, nos comprometemos a proporcionar cuidado médico 
                 integral y personalizado. Nuestra misión es mejorar la salud y el bienestar de 
                 nuestros pacientes a través de un enfoque dedicado y compasivo.</p> 
               <p></p>
