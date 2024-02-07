@@ -79,7 +79,7 @@ const Inicio = () => {
                 </ul>
             </nav>
         </header>
-        <div style={{ marginTop: '20px', padding: '20px', borderRadius: '8px', height: '2110px'}}>
+        <div style={{ marginTop: '40px', padding: '20px', borderRadius: '8px', height: '2110px'}}>
         <img src={consultorio} alt="Avatar Doctor" style={{ width: '450px',
                 height: '300px',  
                 position: 'absolute',
