@@ -20,7 +20,7 @@ const Farmacia = () => {
 
   const estiloProductosContainer = {
     backgroundColor: '#CBCBCB', // Agregar fondo de color rojo
-    padding: '30px', // Puedes ajustar el relleno según tus preferencias
+    padding: '50px', // Puedes ajustar el relleno según tus preferencias
   };
 
   const [productos, setProductos] = useState([]);
