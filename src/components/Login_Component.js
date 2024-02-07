@@ -135,9 +135,7 @@ const Login_Component = () => {
           )}
         </Stack>
         <div style={{ position: 'absolute', top: 540, right: 20 }}>
-          <Button variant="contained" style={{ backgroundColor: 'red' }} onClick={aviso}>
-            Aviso de Privacidad
-          </Button>
+         
         </div>
       </div>
     </div>
