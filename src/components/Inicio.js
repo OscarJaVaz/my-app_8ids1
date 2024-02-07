@@ -33,6 +33,8 @@ const Inicio = () => {
         zIndex: 1000, 
     };
 
+    
+
     const estiloOpcion = {
         listStyleType: 'none',
         margin: 0,

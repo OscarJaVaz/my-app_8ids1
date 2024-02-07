@@ -18,6 +18,7 @@ const Farmacia = () => {
     zIndex: 1000, 
   };
 
+  
   const estiloProductosContainer = {
     backgroundColor: '#CBCBCB', // Agregar fondo de color rojo
     padding: '50px', // Puedes ajustar el relleno según tus preferencias
@@ -54,7 +55,14 @@ const Farmacia = () => {
           <div key={producto.id} className="producto">
             <p></p>
             <h2 style={{color:'red'}}>{producto.nom_producto}</h2>
-            <img src={producto.imagen} alt={producto.nom_producto} className="producto-imagen" />
+            <img 
+              src={producto.imagen} 
+              alt={producto.nom_producto} 
+              className="producto-imagen"
+              style={{ maxWidth: '200px' }} // Establecer un ancho máximo para todas las imágenes
+            />
+            
+            
             <p>{producto.descripcion}</p>
             <p style={{color:'blue'}}>${producto.price}</p>
             <Button
