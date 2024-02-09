@@ -48,6 +48,8 @@ const Farmacia = () => {
   };
 
   const [productos, setProductos] = useState([]);
+  const [carrito, setCarrito] = useState([]);
+  const [mostrarCarrito, setMostrarCarrito] = useState(false); // Estado para controlar si se muestra el carrito o no
 
   useEffect(() => {
     const fetchProductos = async () => {
@@ -63,7 +65,20 @@ const Farmacia = () => {
   }, []);
 
   const addToCart = (productId) => {
+    const productoSeleccionado = productos.find(producto => producto.id === productId);
+    setCarrito([...carrito, productoSeleccionado]);
     console.log('Producto añadido al carrito con ID:', productId);
+  };
+
+  const removeFromCart = (productId) => {
+    const updatedCart = carrito.filter(producto => producto.id !== productId);
+    setCarrito(updatedCart);
+    console.log('Producto eliminado del carrito con ID:', productId);
+  };
+
+  const handleBuy = () => {
+    // Aquí puedes implementar la lógica para proceder con el pago
+    console.log('Comprando productos:', carrito);
   };
 
   return (
@@ -75,11 +90,32 @@ const Farmacia = () => {
         <nav style={{ flex: 1 }}>BIENVENIDO</nav>
         <Button
           style={estiloCarritoIcono}
-          onClick={() => addToCart()}
+          onClick={() => setMostrarCarrito(!mostrarCarrito)} // Toggle para mostrar u ocultar el carrito
         >
           <ShoppingCartIcon />
+          <span style={{marginLeft: '5px'}}>{carrito.length}</span> {/* Muestra la cantidad de productos en el carrito */}
         </Button>
       </header>
+      {/* Mostrar el carrito si mostrarCarrito es true */}
+      {mostrarCarrito && (
+        <div style={{ position: 'fixed', top: '60px', right: '20px', backgroundColor: 'white', padding: '10px', zIndex: 1001 }}>
+          {carrito.length === 0 ? ( // Verificar si el carrito está vacío
+            <p>El carrito está vacío</p>
+          ) : (
+            carrito.map((producto, index) => (
+              <div key={index}>
+                <h3>{producto.nom_producto}</h3>
+                <p>{producto.descripcion}</p>
+                <p>${producto.price}</p>
+                <Button onClick={() => removeFromCart(producto.id)}>Eliminar</Button>
+              </div>
+            ))
+          )}
+          {carrito.length > 0 && ( // Condición para mostrar el botón "Comprar" solo si hay productos en el carrito
+            <Button onClick={handleBuy}>Comprar</Button>
+          )}
+        </div>
+      )}
       <div style={estiloProductosContainer}>
         {productos.map((producto) => (
           <div key={producto.id} style={estiloProducto}>
