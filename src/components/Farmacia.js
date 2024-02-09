@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import Button from '@mui/material/Button';
+import { Link } from 'react-router-dom'; 
+import ArrowBackIcon from '@mui/icons-material/ArrowBack'; 
 
 const Farmacia = () => {
   const estiloEncabezado = {
@@ -16,6 +18,14 @@ const Farmacia = () => {
     position: 'fixed',
     top: 0,
     zIndex: 1000,
+    display: 'flex',
+    justifyContent: 'space-between', // Espacio entre los elementos
+    alignItems: 'center', // Centra verticalmente los elementos
+  };
+
+  const estiloCarritoIcono = {
+    marginRight: '20px',
+    color:'white'
   };
 
   const estiloProductosContainer = {
@@ -59,7 +69,16 @@ const Farmacia = () => {
   return (
     <>
       <header style={estiloEncabezado}>
-        <nav>BIENVENIDO</nav>
+        <Link to="/menu" style={{ textDecoration: 'none', color: 'white' }}>
+          <ArrowBackIcon />
+        </Link>
+        <nav style={{ flex: 1 }}>BIENVENIDO</nav>
+        <Button
+          style={estiloCarritoIcono}
+          onClick={() => addToCart()}
+        >
+          <ShoppingCartIcon />
+        </Button>
       </header>
       <div style={estiloProductosContainer}>
         {productos.map((producto) => (

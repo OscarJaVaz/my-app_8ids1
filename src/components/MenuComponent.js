@@ -11,6 +11,7 @@ import enfermedad from './assets/enfermedad.png';
 import cita from './assets/cita1.png';
 import salir from './assets/salir.png';
 import agregar from './assets/agregar.png';
+import farmacia from './assets/farmacia.png';
 
 function MenuComponent() {
   const navigate = useNavigate();
@@ -54,6 +55,10 @@ function MenuComponent() {
           <img src={agregar} alt="Productos" />
           <span>Productos</span>
         </a>
+        <a onClick={() => handleClick("/farmacia")}>
+          <img src={farmacia} alt="Farmacia" />
+          <span>Farmacia</span>
+        </a>  
         <a onClick={() => handleClick("/")}>
           <img src={salir} alt="Salir" />
           <span>Salir</span>
