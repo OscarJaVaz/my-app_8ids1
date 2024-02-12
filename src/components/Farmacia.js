@@ -116,6 +116,7 @@ const Farmacia = () => {
           )}
         </div>
       )}
+      //RICARDO
       <div style={estiloProductosContainer}>
         {productos.map((producto) => (
           <div key={producto.id} style={estiloProducto}>
