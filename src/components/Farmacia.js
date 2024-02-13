@@ -31,7 +31,7 @@ const Farmacia = () => {
 
   const estiloProductosContainer = {
     backgroundColor: '#CBCBCB',
-    padding: '50px',
+    padding: '60px',
     display: 'flex', // Mostrar los productos en línea
     flexWrap: 'wrap', // Permitir que los productos se envuelvan cuando no haya suficiente espacio
     justifyContent: 'space-between', // Distribuir el espacio horizontalmente entre los productos
