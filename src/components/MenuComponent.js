@@ -14,6 +14,7 @@ import agregar from './assets/agregar.png';
 import farmacia from './assets/farmacia.png';
 import FullCalendar from '@fullcalendar/react'; // Importa FullCalendar
 import dayGridPlugin from '@fullcalendar/daygrid'; // Importa el plugin de vista de día
+import esLocale from '@fullcalendar/core/locales/es';
 
 function MenuComponent() {
   const navigate = useNavigate();
@@ -70,7 +71,7 @@ function MenuComponent() {
         </IconButton>
         {/* Contenido principal va aquí */}
         <div className="calendar-container">
-          <FullCalendar plugins={[dayGridPlugin]} initialView="dayGridMonth" />
+          <FullCalendar plugins={[dayGridPlugin]} initialView="dayGridMonth" locale={esLocale}/>
         </div>
       </div>
     </div>
