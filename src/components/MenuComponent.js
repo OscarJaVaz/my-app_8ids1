@@ -12,6 +12,8 @@ import cita from './assets/cita1.png';
 import salir from './assets/salir.png';
 import agregar from './assets/agregar.png';
 import farmacia from './assets/farmacia.png';
+import FullCalendar from '@fullcalendar/react'; // Importa FullCalendar
+import dayGridPlugin from '@fullcalendar/daygrid'; // Importa el plugin de vista de día
 
 function MenuComponent() {
   const navigate = useNavigate();
@@ -24,8 +26,6 @@ function MenuComponent() {
   const toggleMenu = () => {
     setMenuVisible(!menuVisible);
   };
-
-  
 
   return (
     <div className={`menu-container ${menuVisible ? 'menu-visible' : 'menu-hidden'}`}>
@@ -69,6 +69,7 @@ function MenuComponent() {
           {menuVisible ? <CloseIcon /> : <MenuIcon />}
         </IconButton>
         {/* Contenido principal va aquí */}
+        <FullCalendar plugins={[dayGridPlugin]} initialView="dayGridMonth" />
       </div>
     </div>
   );
