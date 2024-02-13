@@ -2,8 +2,9 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import Button from '@mui/material/Button';
-import { Link } from 'react-router-dom'; 
-import ArrowBackIcon from '@mui/icons-material/ArrowBack'; 
+import Modal from '@mui/material/Modal';
+import { Link } from 'react-router-dom';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 
 const Farmacia = () => {
   const estiloEncabezado = {
@@ -25,7 +26,7 @@ const Farmacia = () => {
 
   const estiloCarritoIcono = {
     marginRight: '20px',
-    color:'white'
+    color: 'white'
   };
 
   const estiloProductosContainer = {
@@ -50,6 +51,8 @@ const Farmacia = () => {
   const [productos, setProductos] = useState([]);
   const [carrito, setCarrito] = useState([]);
   const [mostrarCarrito, setMostrarCarrito] = useState(false); // Estado para controlar si se muestra el carrito o no
+  const [selectedProduct, setSelectedProduct] = useState(null); // Estado para almacenar el producto seleccionado
+  const [quantity, setQuantity] = useState(1); // Estado para almacenar la cantidad de productos a agregar al carrito
 
   useEffect(() => {
     const fetchProductos = async () => {
@@ -64,16 +67,22 @@ const Farmacia = () => {
     fetchProductos();
   }, []);
 
-  const addToCart = (productId) => {
-    const productoSeleccionado = productos.find(producto => producto.id === productId);
-    setCarrito([...carrito, productoSeleccionado]);
-    console.log('Producto añadido al carrito con ID:', productId);
+  const addToCart = () => {
+    const updatedCart = [...carrito];
+    const existingItemIndex = updatedCart.findIndex(item => item.id === selectedProduct.id);
+    if (existingItemIndex !== -1) {
+      updatedCart[existingItemIndex].quantity += quantity;
+    } else {
+      updatedCart.push({ ...selectedProduct, quantity });
+    }
+    setCarrito(updatedCart);
+    setSelectedProduct(null);
+    setQuantity(1);
   };
 
   const removeFromCart = (productId) => {
-    const updatedCart = carrito.filter(producto => producto.id !== productId);
+    const updatedCart = carrito.filter(item => item.id !== productId);
     setCarrito(updatedCart);
-    console.log('Producto eliminado del carrito con ID:', productId);
   };
 
   const handleBuy = () => {
@@ -93,7 +102,7 @@ const Farmacia = () => {
           onClick={() => setMostrarCarrito(!mostrarCarrito)} // Toggle para mostrar u ocultar el carrito
         >
           <ShoppingCartIcon />
-          <span style={{marginLeft: '5px'}}>{carrito.length}</span> {/* Muestra la cantidad de productos en el carrito */}
+          <span style={{ marginLeft: '5px' }}>{carrito.length}</span> {/* Muestra la cantidad de productos en el carrito */}
         </Button>
       </header>
       {/* Mostrar el carrito si mostrarCarrito es true */}
@@ -106,7 +115,8 @@ const Farmacia = () => {
               <div key={index}>
                 <h3>{producto.nom_producto}</h3>
                 <p>{producto.descripcion}</p>
-                <p>${producto.price}</p>
+                <p>Cantidad: {producto.quantity}</p>
+                <p>Precio Total: ${producto.quantity * producto.price}</p>
                 <Button onClick={() => removeFromCart(producto.id)}>Eliminar</Button>
               </div>
             ))
@@ -116,7 +126,6 @@ const Farmacia = () => {
           )}
         </div>
       )}
-      //RICARDO
       <div style={estiloProductosContainer}>
         {productos.map((producto) => (
           <div key={producto.id} style={estiloProducto}>
@@ -133,13 +142,46 @@ const Farmacia = () => {
               variant="contained"
               style={{ color: 'white', backgroundColor: 'blue' }}
               startIcon={<ShoppingCartIcon />}
-              onClick={() => addToCart(producto.id)}
+              onClick={() => setSelectedProduct(producto)}
             >
-              Añadir al carrito
+              Ver Detalles
             </Button>
           </div>
         ))}
       </div>
+      {/* Modal para mostrar detalles del producto */}
+      <Modal
+        open={!!selectedProduct}
+        onClose={() => setSelectedProduct(null)}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <div style={{ backgroundColor: 'white', padding: '20px', width: '300px', margin: '100px auto', textAlign: 'center' }}>
+          <h2>{selectedProduct?.nom_producto}</h2>
+          <img
+            src={selectedProduct?.imagen}
+            alt={selectedProduct?.nom_producto}
+            className="producto-imagen"
+            style={estiloImagen}
+          />
+          <p>{selectedProduct?.descripcion}</p>
+          <p style={{ color: 'blue', marginBottom: '10px' }}>${selectedProduct?.price}</p>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '10px', border: '1px solid #ccc', borderRadius: '5px', padding: '5px' }}>
+            <Button variant="outlined" onClick={() => setQuantity(quantity > 1 ? quantity - 1 : 1)}>-</Button>
+            <input type="number" min="1" value={quantity} onChange={(e) => setQuantity(parseInt(e.target.value))} style={{ margin: '0 10px', width: '60px', textAlign: 'center', border: 'none', outline: 'none', fontSize: '16px' }} />
+            <Button variant="outlined" onClick={() => setQuantity(quantity + 1)}>+</Button>
+          </div>
+          <Button
+            variant="contained"
+            style={{ color: 'white', backgroundColor: 'blue' }}
+            onClick={addToCart}
+          >
+            Añadir al carrito
+          </Button>
+        </div>
+
+
+      </Modal>
     </>
   );
 };
