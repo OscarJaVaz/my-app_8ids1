@@ -29,7 +29,7 @@ function MenuComponent() {
 
   return (
     <div className={`menu-container ${menuVisible ? 'menu-visible' : 'menu-hidden'}`}>
-      <div className="sidebar">
+      <div className="sidebar" style={{ overflowY: 'auto' }}>
         <div className="user-info">
           <h2 style={{ color: 'white' }}>BIENVENIDO</h2>
           <AccountCircleIcon style={{ color: 'white' }} />
@@ -69,7 +69,9 @@ function MenuComponent() {
           {menuVisible ? <CloseIcon /> : <MenuIcon />}
         </IconButton>
         {/* Contenido principal va aquí */}
-        <FullCalendar plugins={[dayGridPlugin]} initialView="dayGridMonth" />
+        <div className="calendar-container">
+          <FullCalendar plugins={[dayGridPlugin]} initialView="dayGridMonth" />
+        </div>
       </div>
     </div>
   );
