@@ -68,8 +68,9 @@ const Registrar = () => {
       <div style={styles.mensajeContainer}>
         {mostrarMensaje && (
           <div style={styles.mensaje}>
-            <p style={styles.mensajeTexto}>¡Bienvenido al Registro del Hospital!</p>
-            <button style={styles.cerrarMensajeButton} onClick={regresar}>Regresar</button>
+            <p style="text-align: center;">¡Bienvenido al Registro del Consultorio Médico!</p>
+
+           
           </div>
         )}
       </div>
@@ -121,6 +122,8 @@ const Registrar = () => {
             <p style={styles.mensajeValidacion}>{mensajeValidacion}</p>
           )}
           <button style={styles.botonSubmit} type="submit">Registrar cliente</button>
+          <br></br>
+          <button style={styles.cerrarMensajeButton} onClick={regresar}>Regresar</button>
         </form>
       </div>
     </div>
