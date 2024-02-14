@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-
+import { useNavigate } from 'react-router-dom';
 const Registrar = () => {
   const [mostrarMensaje, setMostrarMensaje] = useState(true);
   const [nombre, setNombre] = useState('');
@@ -13,6 +13,8 @@ const Registrar = () => {
   const cerrarMensaje = () => {
     setMostrarMensaje(false);
   };
+
+  const navigate = useNavigate();
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -43,6 +45,10 @@ const Registrar = () => {
     validarContrasena(valor);
   };
 
+  const regresar = () => {
+    navigate('/');
+  };
+
   const validarContrasena = (valor) => {
     let mensaje = '';
     if (!/[A-Z]/.test(valor)) {
@@ -63,7 +69,7 @@ const Registrar = () => {
         {mostrarMensaje && (
           <div style={styles.mensaje}>
             <p style={styles.mensajeTexto}>¡Bienvenido al Registro del Hospital!</p>
-            <button style={styles.cerrarMensajeButton} onClick={cerrarMensaje}>Regresar</button>
+            <button style={styles.cerrarMensajeButton} onClick={regresar}>Regresar</button>
           </div>
         )}
       </div>
