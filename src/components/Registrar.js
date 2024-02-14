@@ -68,8 +68,7 @@ const Registrar = () => {
       <div style={styles.mensajeContainer}>
         {mostrarMensaje && (
           <div style={styles.mensaje}>
-            <p style="text-align: center;">¡Bienvenido al Registro del Consultorio Médico!</p>
-
+            <p style={styles.mensajeTexto }>¡Bienvenido al Registro del Consultorio Medico!</p>
            
           </div>
         )}
