@@ -7,6 +7,7 @@ const Registrar = () => {
   const [email, setEmail] = useState('');
   const [telefono, setTelefono] = useState('');
   const [contrasena, setContrasena] = useState('');
+  const [domicilio, setDomicilio] = useState('');
   const [confirmarContrasena, setConfirmarContrasena] = useState('');
   const [mensajeValidacion, setMensajeValidacion] = useState('');
 
@@ -29,6 +30,7 @@ const Registrar = () => {
     console.log('Apellido:', apellido);
     console.log('Email:', email);
     console.log('Teléfono:', telefono);
+    console.log('Domicilio:', domicilio);
     console.log('Contraseña:', contrasena);
     // También podrías restablecer los campos del formulario después del envío si lo deseas
     setNombre('');
@@ -36,6 +38,7 @@ const Registrar = () => {
     setEmail('');
     setTelefono('');
     setContrasena('');
+    setDomicilio('');
     setConfirmarContrasena('');
   };
 
@@ -82,6 +85,7 @@ const Registrar = () => {
             style={styles.input}
             placeholder="Nombre"
           />
+          
           <input
             type="text"
             value={apellido}
@@ -94,7 +98,7 @@ const Registrar = () => {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             style={styles.input}
-            placeholder="Email"
+            placeholder="Correo electronico"
           />
           <input
             type="tel"
@@ -109,6 +113,13 @@ const Registrar = () => {
             onChange={handleContrasenaChange}
             style={styles.input}
             placeholder="Contraseña"
+          />
+          <input
+            type="domicilio"
+            value={domicilio}
+            onChange={(e) => setDomicilio(e.target.value)}
+            style={styles.input}
+            placeholder="Domicilio"
           />
           <input
             type="password"
