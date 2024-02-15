@@ -1,5 +1,9 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import Snackbar from '@mui/material/Snackbar';
+import MuiAlert from '@mui/material/Alert';
+import CircularProgress from '@mui/material/CircularProgress'; // Importar componente de rueda de carga
+
 const Registrar = () => {
   const [mostrarMensaje, setMostrarMensaje] = useState(true);
   const [nombre, setNombre] = useState('');
@@ -10,6 +14,9 @@ const Registrar = () => {
   const [domicilio, setDomicilio] = useState('');
   const [confirmarContrasena, setConfirmarContrasena] = useState('');
   const [mensajeValidacion, setMensajeValidacion] = useState('');
+  const [contrasenaValida, setContrasenaValida] = useState(false);
+  const [openAlert, setOpenAlert] = useState(false);
+  const [showLoader, setShowLoader] = useState(false); // Estado para controlar la visualización de la rueda de carga
 
   const cerrarMensaje = () => {
     setMostrarMensaje(false);
@@ -17,22 +24,56 @@ const Registrar = () => {
 
   const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (contrasena !== confirmarContrasena) {
       setMensajeValidacion('Las contraseñas no coinciden');
       return;
     }
-    // Aquí podrías agregar más validaciones si lo necesitas
+
+    // Validar que todos los campos estén completados
+    if (!nombre || !apellido || !email || !telefono || !domicilio || !contrasena || !confirmarContrasena) {
+      setMensajeValidacion('Todos los campos son obligatorios');
+      return;
+    }
+
+    // Restablecer mensaje de validación
     setMensajeValidacion('');
-    // Aquí podrías enviar los datos del cliente a tu backend o realizar alguna acción con ellos
-    console.log('Nombre:', nombre);
-    console.log('Apellido:', apellido);
-    console.log('Email:', email);
-    console.log('Teléfono:', telefono);
-    console.log('Domicilio:', domicilio);
-    console.log('Contraseña:', contrasena);
-    // También podrías restablecer los campos del formulario después del envío si lo deseas
+    setShowLoader(true); // Mostrar la rueda de carga al enviar el formulario
+
+    try {
+      const response = await fetch('http://127.0.0.1:8000/api/cliente/crear', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          nombre,
+          apellido,
+          email,
+          telefono,
+          domicilio,
+          contrasena,
+        }),
+      });
+
+      if (response.ok) {
+        // Mostrar Snackbar de Material-UI con mensaje de registro exitoso
+        setOpenAlert(true);
+        // Redirigir al usuario a la vista del cliente
+        navigate('/cliente');
+      } else {
+        // Manejar el caso de error en la respuesta de la API
+        console.error('Error al guardar el cliente');
+      }
+    } catch (error) {
+      // Manejar errores de red u otros errores
+      console.error('Error:', error);
+    } finally {
+      setShowLoader(false); // Ocultar la rueda de carga después de recibir la respuesta del servidor
+    }
+
+    // Restablecer los campos del formulario
     setNombre('');
     setApellido('');
     setEmail('');
@@ -63,7 +104,16 @@ const Registrar = () => {
     if (!/[0-9]/.test(valor)) {
       mensaje += 'Debe contener al menos un número. ';
     }
+    if (valor.length >= 8) {
+      setContrasenaValida(true);
+    } else {
+      setContrasenaValida(false);
+    }
     setMensajeValidacion(mensaje);
+  };
+
+  const handleCloseAlert = () => {
+    setOpenAlert(false);
   };
 
   return (
@@ -71,8 +121,7 @@ const Registrar = () => {
       <div style={styles.mensajeContainer}>
         {mostrarMensaje && (
           <div style={styles.mensaje}>
-            <p style={styles.mensajeTexto }>¡Bienvenido al Registro del Consultorio Medico!</p>
-           
+            <p style={styles.mensajeTexto}>¡Bienvenido al Registro del Consultorio Medico!</p>
           </div>
         )}
       </div>
@@ -85,20 +134,19 @@ const Registrar = () => {
             style={styles.input}
             placeholder="Nombre"
           />
-          
           <input
             type="text"
             value={apellido}
             onChange={(e) => setApellido(e.target.value)}
             style={styles.input}
-            placeholder="Apellido"
+            placeholder="Apellidos"
           />
           <input
             type="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             style={styles.input}
-            placeholder="Correo electronico"
+            placeholder="Correo electrónico"
           />
           <input
             type="tel"
@@ -108,18 +156,18 @@ const Registrar = () => {
             placeholder="Teléfono"
           />
           <input
-            type="password"
-            value={contrasena}
-            onChange={handleContrasenaChange}
-            style={styles.input}
-            placeholder="Contraseña"
-          />
-          <input
-            type="domicilio"
+            type="text"
             value={domicilio}
             onChange={(e) => setDomicilio(e.target.value)}
             style={styles.input}
             placeholder="Domicilio"
+          />
+          <input
+            type="password"
+            value={contrasena}
+            onChange={handleContrasenaChange}
+            style={{ ...styles.input, color: contrasenaValida ? 'green' : 'inherit' }}
+            placeholder="Contraseña"
           />
           <input
             type="password"
@@ -131,11 +179,20 @@ const Registrar = () => {
           {mensajeValidacion && (
             <p style={styles.mensajeValidacion}>{mensajeValidacion}</p>
           )}
-          <button style={styles.botonSubmit} type="submit">Registrar cliente</button>
+          {showLoader ? ( // Mostrar la rueda de carga si showLoader es true
+            <CircularProgress style={{ margin: 'auto' }} />
+          ) : (
+            <button style={styles.botonSubmit} type="submit">Registrar</button>
+          )}
           <br></br>
           <button style={styles.cerrarMensajeButton} onClick={regresar}>Regresar</button>
         </form>
       </div>
+      <Snackbar open={openAlert} autoHideDuration={6000} onClose={handleCloseAlert}>
+        <MuiAlert onClose={handleCloseAlert} severity="success" sx={{ width: '100%' }}>
+          Registro exitoso
+        </MuiAlert>
+      </Snackbar>
     </div>
   );
 };

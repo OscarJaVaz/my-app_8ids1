@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
+import SearchIcon from '@mui/icons-material/Search';
 import Button from '@mui/material/Button';
 import Modal from '@mui/material/Modal';
 import { Link } from 'react-router-dom';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-//HOLA
 
 const Farmacia = () => {
   const estiloEncabezado = {
@@ -21,39 +21,48 @@ const Farmacia = () => {
     top: 0,
     zIndex: 1000,
     display: 'flex',
-    justifyContent: 'space-between', // Espacio entre los elementos
-    alignItems: 'center', // Centra verticalmente los elementos
+    justifyContent: 'space-between',
+    alignItems: 'center',
   };
 
   const estiloCarritoIcono = {
     marginRight: '20px',
-    color: 'white'
+    color: 'white',
+  };
+
+  const estiloSearchIcon = {
+    marginRight: '20px',
+    color: 'white',
+    cursor: 'pointer',
   };
 
   const estiloProductosContainer = {
     backgroundColor: '#CBCBCB',
     padding: '60px',
-    display: 'flex', // Mostrar los productos en línea
-    flexWrap: 'wrap', // Permitir que los productos se envuelvan cuando no haya suficiente espacio
-    justifyContent: 'space-between', // Distribuir el espacio horizontalmente entre los productos
+    display: 'flex',
+    flexWrap: 'wrap',
+    justifyContent: 'space-between',
   };
 
   const estiloProducto = {
-    width: '300px', // Establecer un ancho fijo para cada producto
-    marginBottom: '30px', // Espacio entre cada producto
+    width: '300px',
+    marginBottom: '30px',
   };
 
   const estiloImagen = {
-    width: '100%', // Ajustar todas las imágenes a un mismo tamaño
-    height: '200px', // Establecer una altura fija para las imágenes
-    objectFit: 'cover', // Escalar la imagen para que se ajuste dentro del contenedor sin distorsionarla
+    width: '100%',
+    height: '200px',
+    objectFit: 'cover',
   };
 
   const [productos, setProductos] = useState([]);
   const [carrito, setCarrito] = useState([]);
-  const [mostrarCarrito, setMostrarCarrito] = useState(false); // Estado para controlar si se muestra el carrito o no
-  const [selectedProduct, setSelectedProduct] = useState(null); // Estado para almacenar el producto seleccionado
-  const [quantity, setQuantity] = useState(1); // Estado para almacenar la cantidad de productos a agregar al carrito
+  const [mostrarCarrito, setMostrarCarrito] = useState(false);
+  const [selectedProduct, setSelectedProduct] = useState(null);
+  const [quantity, setQuantity] = useState(1);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [sortBy, setSortBy] = useState('');
+  const [showSearchModal, setShowSearchModal] = useState(false);
 
   useEffect(() => {
     const fetchProductos = async () => {
@@ -87,9 +96,21 @@ const Farmacia = () => {
   };
 
   const handleBuy = () => {
-    // Aquí puedes implementar la lógica para proceder con el pago
     console.log('Comprando productos:', carrito);
   };
+
+  const filteredProducts = productos.filter(producto => {
+    return producto.nom_producto.toLowerCase().includes(searchQuery.toLowerCase());
+  });
+
+  const sortedProducts = filteredProducts.sort((a, b) => {
+    if (sortBy === 'nameAZ') {
+      return a.nom_producto.localeCompare(b.nom_producto);
+    } else if (sortBy === 'recent') {
+      return new Date(b.created_at) - new Date(a.created_at);
+    }
+    return 0;
+  });
 
   return (
     <>
@@ -99,17 +120,53 @@ const Farmacia = () => {
         </Link>
         <nav style={{ flex: 1 }}>BIENVENIDO</nav>
         <Button
+          style={estiloSearchIcon}
+          onClick={() => setShowSearchModal(true)}
+        >
+          <SearchIcon />
+        </Button>
+        <Button
           style={estiloCarritoIcono}
-          onClick={() => setMostrarCarrito(!mostrarCarrito)} // Toggle para mostrar u ocultar el carrito
+          onClick={() => setMostrarCarrito(!mostrarCarrito)}
         >
           <ShoppingCartIcon />
-          <span style={{ marginLeft: '5px' }}>{carrito.length}</span> {/* Muestra la cantidad de productos en el carrito */}
+          <span style={{ marginLeft: '5px' }}>{carrito.length}</span>
         </Button>
       </header>
-      {/* Mostrar el carrito si mostrarCarrito es true */}
+      {showSearchModal && (
+        <Modal
+          open={showSearchModal}
+          onClose={() => setShowSearchModal(false)}
+          aria-labelledby="modal-modal-title"
+          aria-describedby="modal-modal-description"
+        >
+          <div style={{ backgroundColor: 'white', padding: '10px', width: '300px', margin: '100px auto', textAlign: 'center' }}>
+            <h2>Buscar Productos</h2>
+            <input
+              type="text"
+              placeholder="Buscar productos..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              style={{ padding: '10px', width: '90%', marginBottom: '20px' }}
+            />
+            <select value={sortBy} onChange={(e) => setSortBy(e.target.value)} style={{ padding: '10px', fontSize: '16px', width: '100%', marginBottom: '20px' }}>
+              <option value="">Ordenar por...</option>
+              <option value="nameAZ">Nombre (A-Z)</option>
+              <option value="recent">Más recientes</option>
+            </select>
+            <Button
+              variant="contained"
+              style={{ color: 'white', backgroundColor: 'blue' }}
+              onClick={() => setShowSearchModal(false)}
+            >
+              Aplicar Filtros
+            </Button>
+          </div>
+        </Modal>
+      )}
       {mostrarCarrito && (
         <div style={{ position: 'fixed', top: '60px', right: '20px', backgroundColor: 'white', padding: '10px', zIndex: 1001 }}>
-          {carrito.length === 0 ? ( // Verificar si el carrito está vacío
+          {carrito.length === 0 ? (
             <p>El carrito está vacío</p>
           ) : (
             carrito.map((producto, index) => (
@@ -122,13 +179,13 @@ const Farmacia = () => {
               </div>
             ))
           )}
-          {carrito.length > 0 && ( // Condición para mostrar el botón "Comprar" solo si hay productos en el carrito
+          {carrito.length > 0 && (
             <Button onClick={handleBuy}>Comprar</Button>
           )}
         </div>
       )}
       <div style={estiloProductosContainer}>
-        {productos.map((producto) => (
+        {sortedProducts.map((producto) => (
           <div key={producto.id} style={estiloProducto}>
             <h2 style={{ color: 'red' }}>{producto.nom_producto}</h2>
             <img
@@ -150,7 +207,6 @@ const Farmacia = () => {
           </div>
         ))}
       </div>
-      {/* Modal para mostrar detalles del producto */}
       <Modal
         open={!!selectedProduct}
         onClose={() => setSelectedProduct(null)}
@@ -180,8 +236,6 @@ const Farmacia = () => {
             Añadir al carrito
           </Button>
         </div>
-
-
       </Modal>
     </>
   );

@@ -20,6 +20,7 @@ import Registrar from './components/Registrar';
 import Farmacia from './components/Farmacia';
 import ProductoComponent from './components/ProductoComponent';
 import HomeComponentProducto from './components/HomeComponentProducto';
+import HomeClienteComponent from './components/HomeClienteComponent';
 
 
 function App() {   
@@ -50,6 +51,7 @@ function App() {
     <Route path="/farmacia" element={token == null ? <Inicio /> :<Farmacia/>}/>
     <Route path="/homeproducto" element={token == null ? <Inicio /> :<HomeComponentProducto />}/>
     <Route path="/producto/nuevo" element={token == null ? <Inicio /> :<ProductoComponent/>}/>
+    <Route path="/cliente" element={token == null ? <Inicio /> :<HomeClienteComponent/>}/>
 
     </Routes>
 
