@@ -15,11 +15,14 @@ import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import esLocale from '@fullcalendar/core/locales/es';
 import axios from 'axios';
+import secureLocalStorage from 'react-secure-storage';
 
-function MenuComponent() {
+const MenuComponent = () => {
   const navigate = useNavigate();
   const [menuVisible, setMenuVisible] = useState(true);
   const [citas, setCitas] = useState([]);
+  const [username, setUsername] = useState('');
+  const [usernameLoaded, setUsernameLoaded] = useState(false); // Nuevo estado para verificar si el nombre de usuario se ha cargado correctamente
 
   const toggleMenu = () => {
     setMenuVisible(!menuVisible);
@@ -36,6 +39,14 @@ function MenuComponent() {
     }
 
     fetchData();
+
+    // Obtener el nombre de usuario
+    const storedUsername = secureLocalStorage.getItem('username');
+    
+    if (storedUsername) {
+      setUsername(storedUsername);
+      setUsernameLoaded(true);
+    }
 
     // Evitar que el usuario retroceda usando el botón del navegador
     const handleBackButton = (event) => {
@@ -58,10 +69,14 @@ function MenuComponent() {
   return (
     <div className={`menu-container ${menuVisible ? 'menu-visible' : 'menu-hidden'}`}>
       <div className="sidebar" style={{ overflowY: 'auto' }}>
-        <div className="user-info">
-          <h2 style={{ color: 'white' }}>BIENVENIDO</h2>
-          <AccountCircleIcon style={{ color: 'white' }} />
-        </div>
+  <h2 style={{ margin: 0 ,color:'white', textAlign:'center'}}>BIENVENIDO</h2>
+  <br></br>
+  <AccountCircleIcon style={{ marginRight: '5px', color:'white'}} />
+  {usernameLoaded ? ( // Verificar si el nombre de usuario se ha cargado correctamente
+            <span style={{ color: 'white' }}>{username}</span>
+          ) : (
+            <span>Loading...</span> // Mostrar un mensaje de carga mientras se carga el nombre de usuario
+          )}
         <p></p>
         <a onClick={() => handleClick("/home")}>
           <img src={paciente} alt="Pacientes" />

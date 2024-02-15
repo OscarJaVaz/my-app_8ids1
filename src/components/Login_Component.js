@@ -4,7 +4,7 @@ import Button from '@mui/material/Button';
 import Snackbar from '@mui/material/Snackbar';
 import TextField from '@mui/material/TextField';
 import Alert from '@mui/material/Alert';
-import CircularProgress from '@mui/material/CircularProgress'; // Importar CircularProgress
+import CircularProgress from '@mui/material/CircularProgress';
 import axios from 'axios';
 import secureLocalStorage from 'react-secure-storage';
 import { useNavigate } from 'react-router-dom';
@@ -38,14 +38,14 @@ const Login_Component = () => {
 
   const fnLogin = async (e) => {
     e.preventDefault();
-
+  
     if (!email || !password) {
       setEmptyFieldsError(true);
       return;
     }
-
+  
     setLoading(true);
-
+  
     try {
       const response = await axios.post('http://127.0.0.1:8000/api/login', { email, password });
       console.log('Validando Acceso..');
@@ -53,6 +53,7 @@ const Login_Component = () => {
       if (response.data.token !== '') {
         console.log('OK');
         secureLocalStorage.setItem('token', response.data.token); 
+        secureLocalStorage.setItem('username', response.data.username); // Almacenar el nombre de usuario
         setOpen(true);
         navigate('/menu');
       } else {
@@ -61,7 +62,7 @@ const Login_Component = () => {
     } catch (error) {
       console.error(error);
     }
-
+  
     setEmail('');
     setPassword('');
     setLoading(false);
