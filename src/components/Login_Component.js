@@ -33,9 +33,6 @@ const Login_Component = () => {
     }
     setOpen(false);
   };
-  const regresar = () => {
-    navigate('/');
-  };
 
   const navigate = useNavigate();
 
@@ -55,7 +52,7 @@ const Login_Component = () => {
       console.log(response.data);
       if (response.data.token !== '') {
         console.log('OK');
-        secureLocalStorage.setItem('token', response.data.token);
+        secureLocalStorage.setItem('token', response.data.token); 
         setOpen(true);
         navigate('/menu');
       } else {
@@ -80,7 +77,7 @@ const Login_Component = () => {
           textAlign: 'center',
         }}
       >
-        {loading ? (
+        {loading ? ( 
           <CircularProgress /> // Mostrar CircularProgress cuando loading es true
         ) : (
           <>
@@ -113,13 +110,7 @@ const Login_Component = () => {
                 >
                   ENTRAR
                 </Button>
-                
-                
               </Stack>
-              <Button variant="contained"
-                  sx={{ fontFamily: 'sans-serif', fontWeight: 'bold', backgroundColor: '#8A8D95', color: '#ffffff' }} 
-                  onClick={regresar}>Regresar
-                  </Button>
               <br />
               <Snackbar
                 open={open}

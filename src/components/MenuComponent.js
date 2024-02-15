@@ -36,6 +36,19 @@ function MenuComponent() {
     }
 
     fetchData();
+
+    // Evitar que el usuario retroceda usando el botón del navegador
+    const handleBackButton = (event) => {
+      event.preventDefault();
+      window.history.pushState(null, '', window.location.pathname);
+    };
+
+    window.history.pushState(null, '', window.location.pathname); // Reemplazar la entrada actual en el historial
+    window.addEventListener('popstate', handleBackButton);
+
+    return () => {
+      window.removeEventListener('popstate', handleBackButton);
+    };
   }, []);
 
   const handleClick = (path) => {
