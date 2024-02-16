@@ -16,6 +16,7 @@ import dayGridPlugin from '@fullcalendar/daygrid';
 import esLocale from '@fullcalendar/core/locales/es';
 import axios from 'axios';
 import secureLocalStorage from 'react-secure-storage';
+import Login_Component from './Login_Component';
 
 const MenuComponent = () => {
   const navigate = useNavigate();
@@ -29,6 +30,10 @@ const MenuComponent = () => {
   };
 
   useEffect(() => {
+
+    setUsername(secureLocalStorage.getItem('username')); 
+    setUsernameLoaded(true); 
+
     async function fetchData() {
       try {
         const response = await axios.get('http://127.0.0.1:8000/api/citas');
@@ -72,7 +77,7 @@ const MenuComponent = () => {
   <h2 style={{ margin: 0 ,color:'white', textAlign:'center'}}>BIENVENIDO</h2>
   <br></br>
   <AccountCircleIcon style={{ marginRight: '5px', color:'white'}} />
-  {usernameLoaded ? ( // Verificar si el nombre de usuario se ha cargado correctamente
+  {usernameLoaded ? (
             <span style={{ color: 'white' }}>{username}</span>
           ) : (
             <span>Loading...</span> // Mostrar un mensaje de carga mientras se carga el nombre de usuario

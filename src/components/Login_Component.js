@@ -53,7 +53,7 @@ const Login_Component = () => {
       if (response.data.token !== '') {
         console.log('OK');
         secureLocalStorage.setItem('token', response.data.token); 
-        secureLocalStorage.setItem('username', response.data.username); // Almacenar el nombre de usuario
+        secureLocalStorage.setItem('username', response.data.nombre); // Almacenar el nombre de usuario
         setOpen(true);
         navigate('/menu');
       } else {

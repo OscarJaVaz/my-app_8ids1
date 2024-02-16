@@ -72,9 +72,7 @@ const Inicio = () => {
                     <Button variant="outline" style={button} onClick={registrar} startIcon={<PersonIcon />} >
                         Registrarse
                     </Button>
-                    <Button variant="outline" style={button} onClick={farmacia} startIcon={<LocalPharmacyIcon />} >
-                        Farmacia
-                    </Button>
+             
                     <Button variant="outline" style={button} onClick={aviso} startIcon={<NotificationImportantIcon />} >
                         Aviso de privacidad
                     </Button>
