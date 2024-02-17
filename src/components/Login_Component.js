@@ -18,6 +18,7 @@ const Login_Component = () => {
   const [emptyFieldsError, setEmptyFieldsError] = useState(false);
   const [userNotFoundError, setUserNotFoundError] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [selectedRole, setSelectedRole] = useState('administrador'); // Por defecto, se selecciona Administrador
 
   const handleEmailChange = (event) => {
     setEmail(event.target.value);
@@ -25,6 +26,10 @@ const Login_Component = () => {
 
   const handlePasswordChange = (event) => {
     setPassword(event.target.value);
+  };
+
+  const handleRoleChange = (event) => {
+    setSelectedRole(event.target.value);
   };
 
   const handleClose = (event, reason) => {
@@ -38,31 +43,43 @@ const Login_Component = () => {
 
   const fnLogin = async (e) => {
     e.preventDefault();
-  
+
     if (!email || !password) {
       setEmptyFieldsError(true);
       return;
     }
-  
+
     setLoading(true);
-  
+
     try {
-      const response = await axios.post('http://127.0.0.1:8000/api/login', { email, password });
+      let response;
+      if (selectedRole === 'administrador') {
+        response = await axios.post('http://127.0.0.1:8000/api/login', { email, password });
+      } else {
+        response = await axios.post('http://127.0.0.1:8000/api/cliente', { email, password });
+      }
+
       console.log('Validando Acceso..');
       console.log(response.data);
       if (response.data.token !== '') {
         console.log('OK');
-        secureLocalStorage.setItem('token', response.data.token); 
+        secureLocalStorage.setItem('token', response.data.token);
         secureLocalStorage.setItem('username', response.data.nombre); // Almacenar el nombre de usuario
         setOpen(true);
-        navigate('/menu');
+        if (selectedRole === 'administrador') {
+          // Si el usuario seleccionó Administrador
+          navigate('/menu'); // Redirigir a la ventana de administrador
+        } else {
+          // Si el usuario seleccionó Cliente
+          navigate('/cliente'); // Redirigir a la ventana de cliente
+        }
       } else {
         setUserNotFoundError(true);
       }
     } catch (error) {
       console.error(error);
     }
-  
+
     setEmail('');
     setPassword('');
     setLoading(false);
@@ -78,7 +95,7 @@ const Login_Component = () => {
           textAlign: 'center',
         }}
       >
-        {loading ? ( 
+        {loading ? (
           <CircularProgress /> // Mostrar CircularProgress cuando loading es true
         ) : (
           <>
@@ -137,6 +154,14 @@ const Login_Component = () => {
                   Usuario o contraseña incorrectos
                 </Alert>
               )}
+              <div>
+                <input type="radio" id="admin" name="role" value="administrador" checked={selectedRole === 'administrador'} onChange={handleRoleChange} />
+                <label htmlFor="admin">Administrador</label>
+              </div>
+              <div>
+                <input type="radio" id="client" name="role" value="cliente" checked={selectedRole === 'cliente'} onChange={handleRoleChange} />
+                <label htmlFor="client">Cliente</label>
+              </div>
             </Stack>
           </>
         )}

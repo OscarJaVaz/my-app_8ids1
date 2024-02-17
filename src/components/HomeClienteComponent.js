@@ -1,21 +1,55 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import IconButton from '@mui/material/IconButton';
+import MenuIcon from '@mui/icons-material/Menu';
+import CloseIcon from '@mui/icons-material/Close';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import cita from './assets/cita1.png';
+import salir from './assets/salir.png';
+import farmacia from './assets/farmacia.png';
+import axios from 'axios';
+import secureLocalStorage from 'react-secure-storage';
 
-function HomeClienteComponent() {
-  const handleLogout = () => {
-    // Aquí puedes agregar la lógica para cerrar la sesión
-    console.log('Sesión cerrada');
-    // Redirigir al usuario a la página de inicio de sesión
-    window.location.href = '/login';
+const HomeClienteComponent = () => {
+  const navigate = useNavigate();
+  const [menuVisible, setMenuVisible] = useState(true);
+  const [citas, setCitas] = useState([]);
+  const [username, setUsername] = useState('');
+  const [usernameLoaded, setUsernameLoaded] = useState(false);
+
+  const toggleMenu = () => {
+    setMenuVisible(!menuVisible);
   };
 
-  // Evitar que el usuario retroceda usando el botón del navegador
-  React.useEffect(() => {
+  useEffect(() => {
+
+    setUsername(secureLocalStorage.getItem('username')); 
+    setUsernameLoaded(true); 
+
+    async function fetchData() {
+      try {
+        const response = await axios.get('http://127.0.0.1:8000/api/citas');
+        setCitas(response.data);
+      } catch (error) {
+        console.error('Error fetching citas:', error);
+      }
+    }
+
+    fetchData();
+
+    const storedUsername = secureLocalStorage.getItem('username');
+    
+    if (storedUsername) {
+      setUsername(storedUsername);
+      setUsernameLoaded(true);
+    }
+
     const handleBackButton = (event) => {
       event.preventDefault();
       window.history.pushState(null, '', window.location.pathname);
     };
 
-    window.history.pushState(null, '', window.location.pathname); // Reemplazar la entrada actual en el historial
+    window.history.pushState(null, '', window.location.pathname);
     window.addEventListener('popstate', handleBackButton);
 
     return () => {
@@ -23,10 +57,40 @@ function HomeClienteComponent() {
     };
   }, []);
 
+  const handleClick = (path) => {
+    navigate(path);
+  };
+
   return (
-    <div>
-      <p>¡Bienvenido!</p>
-      <button onClick={handleLogout}>Cerrar Sesión</button>
+    <div className={`menu-container ${menuVisible ? 'menu-visible' : 'menu-hidden'}`}>
+      <div className="sidebar" style={{ overflowY: 'auto' }}>
+        <h2 style={{ margin: 0 ,color:'white', textAlign:'center'}}>BIENVENIDO</h2>
+        <br></br>
+        <AccountCircleIcon style={{ marginRight: '5px', color:'white'}} />
+        {usernameLoaded ? (
+          <span style={{ color: 'white' }}>{username}</span>
+        ) : (
+          <span>Loading...</span>
+        )}
+        <p></p>
+        <a onClick={() => handleClick("/farmacia")}>
+          <img src={farmacia} alt="Farmacia" />
+          <span>Farmacia</span>
+        </a>
+        <a onClick={() => handleClick("/registrarCita")}>
+          <img src={cita} alt="Citas" />
+          <span>Citas</span>
+        </a>
+        <a onClick={() => handleClick("/")}>
+          <img src={salir} alt="Salir" />
+          <span>Salir</span>
+        </a>
+      </div>
+      <div className="content">
+        <IconButton onClick={toggleMenu} className="toggle-button">
+          {menuVisible ? <CloseIcon /> : <MenuIcon />}
+        </IconButton>
+      </div>
     </div>
   );
 }

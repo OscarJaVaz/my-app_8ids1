@@ -21,6 +21,8 @@ import Farmacia from './components/Farmacia';
 import ProductoComponent from './components/ProductoComponent';
 import HomeComponentProducto from './components/HomeComponentProducto';
 import HomeClienteComponent from './components/HomeClienteComponent';
+import VerClientesComponent from './components/VerClientesComponent';
+import RegistraCitaCliente from './components/RegistrarCitaCliente';
 
 
 function App() {   
@@ -52,7 +54,8 @@ function App() {
     <Route path="/homeproducto" element={token == null ? <Inicio /> :<HomeComponentProducto />}/>
     <Route path="/producto/nuevo" element={token == null ? <Inicio /> :<ProductoComponent/>}/>
     <Route path="/cliente" element={token == null ? <Inicio /> :<HomeClienteComponent/>}/>
-
+    <Route path="/Verclientes" element={token == null ? <Inicio /> :<VerClientesComponent/>}/>
+    <Route path="/registrarCita" element={token == null ? <Inicio /> :<RegistraCitaCliente/>}/>
     </Routes>
 
 );//

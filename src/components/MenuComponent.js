@@ -107,6 +107,10 @@ const MenuComponent = () => {
           <img src={farmacia} alt="Farmacia" />
           <span>Farmacia</span>
         </a>
+        <a onClick={() => handleClick("/Verclientes")}>
+          <img src={farmacia} alt="ClientesRegistrados" />
+          <span>Ver usuarios registrados</span>
+        </a>
         <a onClick={() => handleClick("/")}>
           <img src={salir} alt="Salir" />
           <span>Salir</span>
