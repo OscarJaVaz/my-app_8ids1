@@ -11,7 +11,8 @@ import PacienteImg from './assets/pacii.jpg';
 import { useLocation } from 'react-router-dom';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-//hola
+import Autocomplete from '@mui/material/Autocomplete';
+
 function PacienteComponent() {
   const location = useLocation();
   const navigate = useNavigate();
@@ -26,6 +27,7 @@ function PacienteComponent() {
 
   const [loading, setLoading] = useState(false);
   const [nssError, setNssError] = useState('');
+  const [clientes, setClientes] = useState([]);
 
   const fnObtenerDatos = async () => {
     await axios
@@ -82,6 +84,21 @@ function PacienteComponent() {
     navigate('/home');
   };
 
+  const obtenerClientes = async () => {
+    await axios
+      .get('http://127.0.0.1:8000/api/clientes')
+      .then((response) => {
+        setClientes(response.data);
+      })
+      .catch((error) => {
+        console.error('Error al obtener clientes:', error);
+      });
+  };
+
+  useEffect(() => {
+    obtenerClientes();
+  }, []);
+
   useEffect(() => {
     document.body.style.backgroundImage = `url(${PacienteImg})`;
     document.body.style.backgroundSize = 'cover';
@@ -124,14 +141,28 @@ function PacienteComponent() {
 
       <div style={styles.formContainer}>
         <div style={styles.formItem}>
-          <TextField
-            required
-            id="outlined-required"
-            label="Nombre"
-            name="nombre"
-            value={paciente.nombre}
-            onChange={handleGuardar}
+          <Autocomplete
+            id="combo-box-cliente"
+            options={clientes}
+            getOptionLabel={(option) => option.nombre}
+            value={clientes.find((c) => c.nombre === paciente.nombre) || null}
+            onChange={(event, value) => {
+              setPaciente((prevState) => ({
+                ...prevState,
+                nombre: value ? value.nombre : '', // Actualiza el nombre del paciente seleccionado
+              }));
+            }}
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                label="Cliente"
+                name="nombre"
+                value={paciente.nombre} // Utiliza el valor del estado paciente.nombre
+                onChange={(event) => handleGuardar(event)} // Asegúrate de manejar los cambios en el estado
+              />
+            )}
           />
+
         </div>
 
         <div style={styles.formItem}>
@@ -189,25 +220,23 @@ function PacienteComponent() {
             Eliminar
           </Button>
 
-          <br/><br/>
+          <br /><br />
           <Button
-          variant="contained"
-          style={styles.backButton}
-          onClick={regresar}
-          startIcon={<ArrowBackIosIcon />}
-        >
-          Regresar
-        </Button>
+            variant="contained"
+            style={styles.backButton}
+            onClick={regresar}
+            startIcon={<ArrowBackIosIcon />}
+          >
+            Regresar
+          </Button>
 
-        <br/><br/>
-        {loading && (
-          <Box sx={styles.progressContainer}>
-            <LinearProgress />
-          </Box>
-        )}
+          <br /><br />
+          {loading && (
+            <Box sx={styles.progressContainer}>
+              <LinearProgress />
+            </Box>
+          )}
         </div>
-
-        
       </div>
     </div>
   );
@@ -215,7 +244,7 @@ function PacienteComponent() {
 
 const styles = {
   container: {
-    margin: 'auto', 
+    margin: 'auto',
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'center',
