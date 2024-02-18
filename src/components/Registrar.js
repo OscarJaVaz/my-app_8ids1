@@ -70,7 +70,7 @@ const Registrar = () => {
       // Manejar errores de red u otros errores
       console.error('Error:', error);
     } finally {
-      setShowLoader(false); // Ocultar la rueda de carga después de recibir la respuesta del servidor
+      setShowLoader(false); // Ocultar la rueda de carga después de recibir la respuesta del servido
     }
 
     // Restablecer los campos del formulario
