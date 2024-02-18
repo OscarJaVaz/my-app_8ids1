@@ -23,6 +23,8 @@ import HomeComponentProducto from './components/HomeComponentProducto';
 import HomeClienteComponent from './components/HomeClienteComponent';
 import VerClientesComponent from './components/VerClientesComponent';
 import RegistraCitaCliente from './components/RegistrarCitaCliente';
+import { ViewQuiltRounded } from '@mui/icons-material';
+import VerQrComponent from './components/VerQrComponent';
 
 
 function App() {   
@@ -56,6 +58,7 @@ function App() {
     <Route path="/cliente" element={token == null ? <Inicio /> :<HomeClienteComponent/>}/>
     <Route path="/Verclientes" element={token == null ? <Inicio /> :<VerClientesComponent/>}/>
     <Route path="/registrarCita" element={token == null ? <Inicio /> :<RegistraCitaCliente/>}/>
+    <Route path="/verqr" element={token == null ? <Inicio /> :<VerQrComponent/>}/>
     </Routes>
 
 );//

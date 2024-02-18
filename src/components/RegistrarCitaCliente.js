@@ -1,17 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import Button from '@mui/material/Button';
+import QRCode from 'react-qr-code';
 import axios from 'axios';
 import Box from '@mui/material/Box';
 import LinearProgress from '@mui/material/LinearProgress';
-import DeleteIcon from '@mui/icons-material/Delete';
 import SaveIcon from '@mui/icons-material/Save';
 import Autocomplete from '@mui/material/Autocomplete';
 import TextField from '@mui/material/TextField';
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import Cita from './assets/cita2.png';
-import Cita2 from './assets/citaa.jpg';
-
+import Modal from '@mui/material/Modal';
+import Backdrop from '@mui/material/Backdrop';
+import Fade from '@mui/material/Fade';
 
 function RegistrarCitaCliente() {
   const navigate = useNavigate();
@@ -27,27 +28,26 @@ function RegistrarCitaCliente() {
   });
 
   const [loading, setLoading] = useState(false);
-  const [pacientes, setPacientes] = useState([]);
   const [doctores, setDoctores] = useState([]);
   const [enfermedades, setEnfermedades] = useState([]);
+  const [openModal, setOpenModal] = useState(false);
+  const [qrData, setQRData] = useState('');
+  const [confirmacionVisible, setConfirmacionVisible] = useState(false);
 
   const fnObtenerDatos = async () => {
-    await axios.get('http://127.0.0.1:8000/api/cita', {
-      params: {
-        id: location.state.id
-      }
-    }).then((response) => {
-      console.log(response.data);
-      setCita(response.data);
-      setLoading(false);
-    });
-  };
-
-  const fnObtenerPacientes = async () => {
-    await axios.get('http://127.0.0.1:8000/api/pacientes')
-      .then((response) => {
-        setPacientes(response.data);
+    if (location.state && location.state.id) {
+      await axios.get('http://127.0.0.1:8000/api/cita', {
+        params: {
+          id: location.state.id
+        }
+      }).then((response) => {
+        console.log(response.data);
+        setCita(response.data);
+        setLoading(false);
       });
+    } else {
+      console.error("No se encontró el ID en location.state");
+    }
   };
 
   const fnObtenerDoctores = async () => {
@@ -73,38 +73,39 @@ function RegistrarCitaCliente() {
     }));
   };
 
+  const generarQR = () => {
+    const qrCodeData = JSON.stringify(cita);
+    setQRData(qrCodeData);
+    setOpenModal(true);
+  };
+
   const GuardarDatos = async () => {
     setLoading(true);
-    await axios.post('http://127.0.0.1:8000/api/cita/crear', cita);
-    console.log('Datos guardados correctamente'); 
+    await axios.post('http://127.0.0.1:8000/api/cita/crear', {
+      ...cita,
+      codigo_qr: qrData
+    });
+    console.log('Datos guardados correctamente');
     setLoading(false);
+    setConfirmacionVisible(true);
+    setTimeout(() => {
+      navigate('/cliente');
+    }, 2000);
+  };
+
+  const regresar = () => {
     navigate('/cliente');
   };
 
-
-
-  const regresar = async () => {
-    navigate('/cliente');
+  const handleCloseModal = () => {
+    setOpenModal(false);
   };
-
-  useEffect(() => {
-    document.body.style.backgroundImage = `url(${Cita2})`;
-    document.body.style.backgroundSize = 'cover';
-    document.body.style.backgroundPosition = 'center';
-    return () => {
-      document.body.style.backgroundImage = '';
-      document.body.style.backgroundSize = '';
-      document.body.style.backgroundPosition = '';
-    };
-  }, []);
 
   useEffect(() => {
     console.log('Render');
-    fnObtenerPacientes();
+    fnObtenerDatos();
     fnObtenerDoctores();
     fnObtenerEnfermedades();
-    
-    
   }, []);
 
   const camposCompletos = () => {
@@ -119,30 +120,29 @@ function RegistrarCitaCliente() {
 
   return (
     <div
-    style={{
-      margin: 'auto', 
-      display: 'flex',
-      flexDirection: 'column',
-      justifyContent: 'center',
-      alignItems: 'center',
-      height: '130vh',
-      width: '440px',
-      background: '#DEDFEF',
-      borderRadius: '50px',
-
-    }}
-  >
-    <h1 style={{ marginBottom: '10px' }}>Citas</h1>
-    <img src={Cita} style={{ height: '18%', width: '25%' }} />
+      style={{
+        margin: 'auto',
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center',
+        height: '130vh',
+        width: '440px',
+        background: '#DEDFEF',
+        borderRadius: '50px',
+      }}
+    >
+      <h1 style={{ marginBottom: '10px' }}>Citas</h1>
+      <img src={Cita} style={{ height: '18%', width: '25%' }} alt="Imagen de cita" />
       <ul style={{ listStyleType: 'none', textAlign: 'center', padding: 0 }}>
         <p></p>
         <li>
-              <TextField
-                label="Paciente"
-                name="paciente"
-                value={cita.paciente}
-                onChange={(event, value) => handleGuardar(event, value?.nombre)}
-              />
+          <TextField
+            label="Paciente"
+            name="paciente"
+            value={cita.paciente}
+            onChange={(event, value) => handleGuardar(event, value?.nombre)}
+          />
         </li>
         <p></p>
         <li>
@@ -166,7 +166,7 @@ function RegistrarCitaCliente() {
         </li>
         <p></p>
         <li>
-          <Autocomplete  
+          <Autocomplete
             options={enfermedades}
             getOptionLabel={(option) => option.nombre}
             renderInput={(params) => (
@@ -209,16 +209,17 @@ function RegistrarCitaCliente() {
           />
         </li>
         <p></p>
-        <Button 
-        variant="contained" 
-        style={{ backgroundColor: 'green', marginRight: '10px' }} 
-        onClick={GuardarDatos} 
-        startIcon={<SaveIcon />}
-        disabled={!camposCompletos()}>
-          Guardar
+        <Button
+          variant="contained"
+          style={{ backgroundColor: 'green', marginRight: '10px' }}
+          onClick={generarQR}
+          startIcon={<SaveIcon />}
+          disabled={!camposCompletos()}
+        >
+          Generar QR
         </Button>
 
-        <br/><br/>
+        <br /><br />
         <Button
           variant="contained"
           style={{ backgroundColor: '#F66E10' }}
@@ -228,10 +229,46 @@ function RegistrarCitaCliente() {
           Regresar
         </Button>
 
-        <br/><br/>
+        <br /><br />
         {loading ? <Box sx={{ width: '100%' }}>
-         <LinearProgress />
-        </Box> :''}
+          <LinearProgress />
+        </Box> : ''}
+        <Modal
+          open={openModal}
+          onClose={handleCloseModal}
+          aria-labelledby="transition-modal-title"
+          aria-describedby="transition-modal-description"
+          closeAfterTransition
+          BackdropComponent={Backdrop}
+          BackdropProps={{
+            timeout: 500,
+          }}
+        >
+          <Fade in={openModal}>
+            <div style={{ backgroundColor: '#fff', padding: '20px', borderRadius: '10px', maxWidth: '80vw', margin: 'auto' }}>
+              <QRCode value={qrData} size={256} />
+              <Button variant="contained" color="primary" onClick={handleCloseModal}>Cerrar</Button>
+              <Button variant="contained" color="primary" onClick={GuardarDatos}>Registrar cita</Button>
+            </div>
+          </Fade>
+        </Modal>
+        <Modal
+          open={confirmacionVisible}
+          aria-labelledby="transition-modal-title"
+          aria-describedby="transition-modal-description"
+          closeAfterTransition
+          BackdropComponent={Backdrop}
+          BackdropProps={{
+            timeout: 500,
+          }}
+        >
+          <Fade in={confirmacionVisible}>
+            <div style={{ backgroundColor: '#fff', padding: '20px', borderRadius: '10px', maxWidth: '80vw', margin: 'auto' }}>
+              <h2 id="transition-modal-title">¡Cita registrada!</h2>
+              <p id="transition-modal-description">¡Tu cita se ha registrado exitosamente!</p>
+            </div>
+          </Fade>
+        </Modal>
       </ul>
     </div>
   );

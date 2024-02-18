@@ -34,7 +34,7 @@ const VerClientesComponent = () => {
   const handleRowClick = (params) => {
     console.log('Id:' + params.row.id);
     console.log('Cliente: ' + params.row.clientes);
-    navigate('/paciente/nuevo', {
+    navigate('', {
       state: {
         id: params.row.id,
         nombre: params.row.nombre,
@@ -84,7 +84,22 @@ const VerClientesComponent = () => {
       <h1 style={styles.title}>Clientes Registrados</h1>
 
       <div>
-        
+        <SpeedDial
+          ariaLabel="SpeedDial basic example"
+          sx={{ position: 'absolute', bottom: 16, right: 16 }}
+          icon={<SpeedDialIcon />}
+        >
+          {actions.map((action) => (
+            <SpeedDialAction
+              key={action.name}
+              icon={action.icon}
+              tooltipTitle={action.name}
+              onClick={(e) => {
+                handleFunction(e, action.key);
+              }}
+            />
+          ))}
+        </SpeedDial>
         <DataGrid
           rows={rows}
           columns={columns}
@@ -97,7 +112,7 @@ const VerClientesComponent = () => {
             },
           }}
           pageSizeOptions={[5, 10]}
-        
+          onRowClick={handleRowClick}
         />
         <div style={styles.buttonContainer}>
           <Button variant="contained" style={styles.button} onClick={menu} startIcon={<ArrowBackIosIcon />}>
