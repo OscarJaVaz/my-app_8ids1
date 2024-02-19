@@ -108,10 +108,20 @@ const renderTableData = () => {
 
   return (
     <div style={{ textAlign: 'center' }}>
-      <h2>Escanea el código QR de la cita</h2>
-      <input type="file" onChange={handleFileChange} accept="image/*" />
+      <h2 textAlign="center">Escanea el código QR de la cita que se te proporcionó anteriormente</h2>
+      <label htmlFor="file-upload" className="custom-btn btn-3">
+        <span> Escoger archivo </span>
+      </label>
+      <input
+        id="file-upload"
+        type="file"
+        onChange={handleFileChange}
+        accept="image/*"
+        style={{ display: 'none' }}
+      />
+
       <br />
-      <br />
+      
       {cameraActivated && (
         <>
           <Webcam
@@ -126,11 +136,11 @@ const renderTableData = () => {
             onUserMediaError={handleError}
           />
           <br />
-          <button onClick={handleCameraScan}>Escanear desde la cámara</button>
+          <button class="custom-btn btn-3" onClick={handleCameraScan}>Escanear desde la cámara</button>
         </>
       )}
       <br />
-      <button onClick={handleActivateCamera}>Encender cámara</button>
+      <button class="custom-btn btn-3" onClick={handleActivateCamera}><span>Encender camara</span></button>
       <br />
       {qrData && (
         <div>

@@ -245,10 +245,18 @@ function RegistrarCitaCliente() {
           }}
         >
           <Fade in={openModal}>
-            <div style={{ backgroundColor: '#fff', padding: '20px', borderRadius: '10px', maxWidth: '80vw', margin: 'auto' }}>
+            <div style={{ backgroundColor: '#fff', padding: '20px', borderRadius: '10px', maxWidth: '30vw', margin: 'auto', textAlign: 'center' }}>
+              <br></br>
+              <br></br>
+              <br></br>
+              <br></br>
+              <br></br>
               <QRCode value={qrData} size={256} />
-              <Button variant="contained" color="primary" onClick={handleCloseModal}>Cerrar</Button>
-              <Button variant="contained" color="primary" onClick={GuardarDatos}>Registrar cita</Button>
+              <div style={{ marginTop: '20px' }}>
+              <Button variant="contained" color="primary" onClick={GuardarDatos} style={{ marginRight: '10px' }} >Registrar cita</Button>
+              <Button variant="contained" color="primary" onClick={handleCloseModal} >Cerrar</Button>
+                
+              </div>
             </div>
           </Fade>
         </Modal>
