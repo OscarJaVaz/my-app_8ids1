@@ -38,20 +38,20 @@ function App() {
   return (
 
 <Routes>
-    <Route path="/login" element={token == null ? <Inicio /> :<Login_Component />}/>
     <Route path="/home" element={token == null ? <Inicio /> :<HomeComponent />}/>
     <Route path="/paciente/nuevo" element={token == null ? <Inicio /> :<PacienteComponent />}/>
     <Route path="/homedoctor" element={token == null ? <Inicio /> :<HomeComponentDoctor />}/>
     <Route path="/doctor/nuevo" element={token == null ? <Inicio /> :<DoctorComponent />}/>
     <Route path="/homeenfermedad" element={token == null ? <Inicio /> :<HomeComponentEnfermedad />}/>
     <Route path="/enfermedad/nuevo" element={token == null ? <Inicio /> :<EnfermedadComponent />}/>
-    <Route path="/menu" element={token == null ? <Inicio /> :<MenuComponent />}/>
     <Route path="/homecita" element={token == null ? <Inicio /> :<HomeComponentCita />}/>
     <Route path="/cita/nuevo" element={token == null ? <Inicio /> :<CitaComponent />}/>
-    <Route path="/aviso" element={token == null ? <Inicio /> :<AvisoComponent/>}/>
     <Route path="/inicio" element={token == null ? <Inicio /> :<Inicio/>}/>
     <Route path="/" element={<Inicio />}/>
-    <Route path="/registrar" element={token == null ? <Inicio /> :<Registrar/>}/>
+    <Route path="/registrar" element={<Registrar />} />
+    <Route path="/login" element={<Login_Component />} />
+    <Route path="/aviso" element={<AvisoComponent />} />
+    <Route path="/menu" element={<MenuComponent />} />
     <Route path="/farmacia" element={token == null ? <Inicio /> :<Farmacia/>}/>
     <Route path="/homeproducto" element={token == null ? <Inicio /> :<HomeComponentProducto />}/>
     <Route path="/producto/nuevo" element={token == null ? <Inicio /> :<ProductoComponent/>}/>
