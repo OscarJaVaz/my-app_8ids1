@@ -25,6 +25,7 @@ import VerClientesComponent from './components/VerClientesComponent';
 import RegistraCitaCliente from './components/RegistrarCitaCliente';
 import { ViewQuiltRounded } from '@mui/icons-material';
 import VerQrComponent from './components/VerQrComponent';
+import ClienteFarmacia from './components/ClienteFarmacia';
 
 
 function App() {   
@@ -59,6 +60,7 @@ function App() {
     <Route path="/Verclientes" element={token == null ? <Inicio /> :<VerClientesComponent/>}/>
     <Route path="/registrarCita" element={token == null ? <Inicio /> :<RegistraCitaCliente/>}/>
     <Route path="/verqr" element={token == null ? <Inicio /> :<VerQrComponent/>}/>
+    <Route path="/farmaciacliente" element={token == null ? <Inicio /> :<ClienteFarmacia/>}/>
     </Routes>
 
 );//
