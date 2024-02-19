@@ -34,7 +34,7 @@ function RegistrarCitaCliente() {
   const [openModal, setOpenModal] = useState(false);
   const [qrData, setQRData] = useState('');
   const [confirmacionVisible, setConfirmacionVisible] = useState(false);
-  const [botonesHabilitados, setBotonesHabilitados] = useState(false); // Nuevo estado
+  const [botonesHabilitados, setBotonesHabilitados] = useState(false); 
 
   const fnObtenerDatos = async () => {
     if (location.state && location.state.id) {
@@ -66,12 +66,12 @@ function RegistrarCitaCliente() {
       });
   };
 
-  const handleGuardar = (event, value) => {
+  const handleGuardar = (event, value, fieldName) => {
     const { name, value: fieldValue } = event.target;
     const newValue = value || fieldValue;
     setCita((prevState) => ({
       ...prevState,
-      [name]: newValue,
+      [fieldName]: newValue,
     }));
   };
 
@@ -79,7 +79,7 @@ function RegistrarCitaCliente() {
     const qrCodeData = JSON.stringify(cita);
     setQRData(qrCodeData);
     setOpenModal(true);
-    setBotonesHabilitados(false); // Deshabilitar los botones al abrir el modal
+    setBotonesHabilitados(false); 
   };
 
   const GuardarDatos = async () => {
@@ -111,7 +111,7 @@ function RegistrarCitaCliente() {
       link.download = 'codigo_qr.png';
       link.href = imgData;
       link.click();
-      setBotonesHabilitados(true); // Habilitar los botones después de descargar el QR
+      setBotonesHabilitados(true); 
     });
   };
 
@@ -155,7 +155,7 @@ function RegistrarCitaCliente() {
             label="Paciente"
             name="paciente"
             value={cita.paciente}
-            onChange={(event, value) => handleGuardar(event, value?.nombre)}
+            onChange={(event, value) => handleGuardar(event, value?.nombre, "paciente")}
           />
         </li>
         <p></p>
@@ -167,11 +167,10 @@ function RegistrarCitaCliente() {
               <TextField
                 {...params}
                 required
-                id="combo-box-demo"
                 label="Doctor"
                 name="doctor"
                 value={cita.doctor}
-                onChange={(event, value) => handleGuardar(event, value?.nombre)}
+                onChange={(event, value) => handleGuardar(event, value?.nombre, "doctor")}
               />
             )}
             value={doctores.find((d) => d.nombre === cita.doctor) || null}
@@ -187,11 +186,10 @@ function RegistrarCitaCliente() {
               <TextField
                 {...params}
                 required
-                id="combo-box-demo"
                 label="Enfermedad"
                 name="enfermedad"
                 value={cita.enfermedad}
-                onChange={(event, value) => handleGuardar(event, value?.nombre)}
+                onChange={(event, value) => handleGuardar(event, value?.nombre, "enfermedad")}
               />
             )}
             value={enfermedades.find((e) => e.nombre === cita.enfermedad) || null}
@@ -207,7 +205,7 @@ function RegistrarCitaCliente() {
             name="fecha"
             type="date"
             value={cita.fecha}
-            onChange={handleGuardar}
+            onChange={(event) => handleGuardar(event, event.target.value, "fecha")}
           />
         </li>
         <p></p>
@@ -219,7 +217,7 @@ function RegistrarCitaCliente() {
             name="hora"
             type="time"
             value={cita.hora}
-            onChange={handleGuardar}
+            onChange={(event) => handleGuardar(event, event.target.value, "hora")}
           />
         </li>
         <p></p>
