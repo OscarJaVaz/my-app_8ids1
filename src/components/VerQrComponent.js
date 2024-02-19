@@ -1,7 +1,7 @@
 import React, { useState, useRef } from 'react';
 import Webcam from 'react-webcam'; // Importa react-webcam
 import jsQR from 'jsqr';
-
+//hola
 const VerQrComponent = () => {
   const [qrData, setQrData] = useState('');
   const [cameraActivated, setCameraActivated] = useState(false);
