@@ -34,6 +34,7 @@ function RegistrarCitaCliente() {
   const [openModal, setOpenModal] = useState(false);
   const [qrData, setQRData] = useState('');
   const [confirmacionVisible, setConfirmacionVisible] = useState(false);
+  const [botonesHabilitados, setBotonesHabilitados] = useState(false); // Nuevo estado
 
   const fnObtenerDatos = async () => {
     if (location.state && location.state.id) {
@@ -78,6 +79,7 @@ function RegistrarCitaCliente() {
     const qrCodeData = JSON.stringify(cita);
     setQRData(qrCodeData);
     setOpenModal(true);
+    setBotonesHabilitados(false); // Deshabilitar los botones al abrir el modal
   };
 
   const GuardarDatos = async () => {
@@ -109,6 +111,7 @@ function RegistrarCitaCliente() {
       link.download = 'codigo_qr.png';
       link.href = imgData;
       link.click();
+      setBotonesHabilitados(true); // Habilitar los botones después de descargar el QR
     });
   };
 
@@ -261,8 +264,8 @@ function RegistrarCitaCliente() {
                 <QRCode value={qrData} size={256} />
               </div>
               <div style={{ marginTop: '20px' }}>
-                <Button variant="contained" color="primary" onClick={GuardarDatos} style={{ marginRight: '10px',padding: '5px' }} >Registrar cita</Button>
-                <Button variant="contained" color="primary" onClick={handleCloseModal} style={{ marginRight: '10px', padding: '5px' }}>Cerrar</Button>
+                <Button variant="contained" color="primary" onClick={GuardarDatos} style={{ marginRight: '10px', padding: '5px' }} disabled={!botonesHabilitados}>Registrar cita</Button>
+                <Button variant="contained" color="primary" onClick={handleCloseModal} style={{ marginRight: '10px', padding: '5px' }} disabled={!botonesHabilitados}>Cerrar</Button>
                 <Button variant="contained" color="primary" onClick={handleDownloadQR} style={{ padding: '5px' }}>Descargar QR</Button>
               </div>
             </div>
