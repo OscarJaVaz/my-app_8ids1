@@ -61,7 +61,7 @@ const Registrar = () => {
         // Mostrar Snackbar de Material-UI con mensaje de registro exitoso
         setOpenAlert(true);
         // Redirigir al usuario a la vista del cliente
-        navigate('/cliente');
+        navigate('/');
       } else {
         // Manejar el caso de error en la respuesta de la API
         console.error('Error al guardar el cliente');
