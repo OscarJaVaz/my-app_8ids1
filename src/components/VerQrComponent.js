@@ -69,40 +69,42 @@ const VerQrComponent = () => {
   };
 
   // Función para mostrar los datos en formato de tabla
-  const renderTableData = () => {
-    if (!qrData) return null;
-    const citaData = JSON.parse(qrData);
-    return (
-      <table>
-        <tbody>
-          <tr>
-            <td>ID:</td>
-            <td>{citaData.id}</td>
-          </tr>
-          <tr>
-            <td>Paciente:</td>
-            <td>{citaData.paciente}</td>
-          </tr>
-          <tr>
-            <td>Doctor:</td>
-            <td>{citaData.doctor}</td>
-          </tr>
-          <tr>
-            <td>Enfermedad:</td>
-            <td>{citaData.enfermedad}</td>
-          </tr>
-          <tr>
-            <td>Fecha:</td>
-            <td>{citaData.fecha}</td>
-          </tr>
-          <tr>
-            <td>Hora:</td>
-            <td>{citaData.hora}</td>
-          </tr>
-        </tbody>
-      </table>
-    );
-  };
+  // Función para mostrar los datos en formato de tabla
+const renderTableData = () => {
+  if (!qrData) return null;
+  const citaData = JSON.parse(qrData);
+  return (
+    <table style={{ margin: 'auto', textAlign: 'left' }}>
+      <tbody>
+        <tr>
+          <td style={{ padding: '5px' }}>ID:</td>
+          <td style={{ padding: '5px' }}>{citaData.id}</td>
+        </tr>
+        <tr>
+          <td style={{ padding: '5px' }}>Paciente:</td>
+          <td style={{ padding: '5px' }}>{citaData.paciente}</td>
+        </tr>
+        <tr>
+          <td style={{ padding: '5px' }}>Doctor:</td>
+          <td style={{ padding: '5px' }}>{citaData.doctor}</td>
+        </tr>
+        <tr>
+          <td style={{ padding: '5px' }}>Enfermedad:</td>
+          <td style={{ padding: '5px' }}>{citaData.enfermedad}</td>
+        </tr>
+        <tr>
+          <td style={{ padding: '5px' }}>Fecha:</td>
+          <td style={{ padding: '5px' }}>{citaData.fecha}</td>
+        </tr>
+        <tr>
+          <td style={{ padding: '5px' }}>Hora:</td>
+          <td style={{ padding: '5px' }}>{citaData.hora}</td>
+        </tr>
+      </tbody>
+    </table>
+  );
+};
+
 
   return (
     <div style={{ textAlign: 'center' }}>
