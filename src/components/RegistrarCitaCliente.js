@@ -13,6 +13,7 @@ import Cita from './assets/cita2.png';
 import Modal from '@mui/material/Modal';
 import Backdrop from '@mui/material/Backdrop';
 import Fade from '@mui/material/Fade';
+import html2canvas from 'html2canvas';
 
 function RegistrarCitaCliente() {
   const navigate = useNavigate();
@@ -99,6 +100,16 @@ function RegistrarCitaCliente() {
 
   const handleCloseModal = () => {
     setOpenModal(false);
+  };
+
+  const handleDownloadQR = () => {
+    html2canvas(document.querySelector("#qrCodeContainer")).then(canvas => {
+      const imgData = canvas.toDataURL('image/png');
+      const link = document.createElement('a');
+      link.download = 'codigo_qr.png';
+      link.href = imgData;
+      link.click();
+    });
   };
 
   useEffect(() => {
@@ -246,16 +257,13 @@ function RegistrarCitaCliente() {
         >
           <Fade in={openModal}>
             <div style={{ backgroundColor: '#fff', padding: '20px', borderRadius: '10px', maxWidth: '30vw', margin: 'auto', textAlign: 'center' }}>
-              <br></br>
-              <br></br>
-              <br></br>
-              <br></br>
-              <br></br>
-              <QRCode value={qrData} size={256} />
+              <div id="qrCodeContainer">
+                <QRCode value={qrData} size={256} />
+              </div>
               <div style={{ marginTop: '20px' }}>
-              <Button variant="contained" color="primary" onClick={GuardarDatos} style={{ marginRight: '10px' }} >Registrar cita</Button>
-              <Button variant="contained" color="primary" onClick={handleCloseModal} >Cerrar</Button>
-                
+                <Button variant="contained" color="primary" onClick={GuardarDatos} style={{ marginRight: '10px',padding: '5px' }} >Registrar cita</Button>
+                <Button variant="contained" color="primary" onClick={handleCloseModal} style={{ marginRight: '10px', padding: '5px' }}>Cerrar</Button>
+                <Button variant="contained" color="primary" onClick={handleDownloadQR} style={{ padding: '5px' }}>Descargar QR</Button>
               </div>
             </div>
           </Fade>
