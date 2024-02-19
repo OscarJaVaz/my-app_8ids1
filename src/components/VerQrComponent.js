@@ -1,11 +1,11 @@
 import React, { useState, useRef } from 'react';
-import Webcam from 'react-webcam'; // Importa react-webcam
+import Webcam from 'react-webcam';
 import jsQR from 'jsqr';
-//hola
+
 const VerQrComponent = () => {
   const [qrData, setQrData] = useState('');
   const [cameraActivated, setCameraActivated] = useState(false);
-  const webcamRef = useRef(null); // Referencia al componente Webcam
+  const webcamRef = useRef(null);
 
   const handleScan = (data) => {
     if (data) {
@@ -68,6 +68,42 @@ const VerQrComponent = () => {
     }
   };
 
+  // Función para mostrar los datos en formato de tabla
+  const renderTableData = () => {
+    if (!qrData) return null;
+    const citaData = JSON.parse(qrData);
+    return (
+      <table>
+        <tbody>
+          <tr>
+            <td>ID:</td>
+            <td>{citaData.id}</td>
+          </tr>
+          <tr>
+            <td>Paciente:</td>
+            <td>{citaData.paciente}</td>
+          </tr>
+          <tr>
+            <td>Doctor:</td>
+            <td>{citaData.doctor}</td>
+          </tr>
+          <tr>
+            <td>Enfermedad:</td>
+            <td>{citaData.enfermedad}</td>
+          </tr>
+          <tr>
+            <td>Fecha:</td>
+            <td>{citaData.fecha}</td>
+          </tr>
+          <tr>
+            <td>Hora:</td>
+            <td>{citaData.hora}</td>
+          </tr>
+        </tbody>
+      </table>
+    );
+  };
+
   return (
     <div style={{ textAlign: 'center' }}>
       <h2>Escanea el código QR de la cita</h2>
@@ -97,7 +133,7 @@ const VerQrComponent = () => {
       {qrData && (
         <div>
           <h3>Datos de la cita:</h3>
-          <p>{qrData}</p>
+          {renderTableData()}
         </div>
       )}
     </div>
