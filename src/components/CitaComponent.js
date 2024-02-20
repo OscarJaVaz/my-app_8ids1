@@ -31,6 +31,8 @@ function CitaComponent() {
   const [doctores, setDoctores] = useState([]);
   const [enfermedades, setEnfermedades] = useState([]);
 
+   // Obtener la fecha de hoy en formato ISO (AAAA-MM-DD)
+  const fechaHoy = new Date().toISOString().split('T')[0];
   const fnObtenerDatos = async () => {
     await axios.get('http://127.0.0.1:8000/api/cita', {
       params: {
@@ -204,16 +206,18 @@ function CitaComponent() {
         </li>
         <p></p>
         <li>
-          <TextField
-            required
-            id="outlined-required"
-            label="Fecha"
-            name="fecha"
-            type="date"
-            value={cita.fecha}
-            onChange={handleGuardar}
-          />
-        </li>
+      <TextField
+        required
+        id="outlined-required"
+        label="Fecha"
+        name="fecha"
+        type="date"
+        value={cita.fecha}
+        onChange={handleGuardar}
+        // Establecer el atributo min con la fecha de hoy
+        inputProps={{ min: fechaHoy }}
+      />
+    </li>
         <p></p>
         <li>
           <TextField

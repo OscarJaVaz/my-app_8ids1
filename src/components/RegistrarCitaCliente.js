@@ -36,6 +36,10 @@ function RegistrarCitaCliente() {
   const [confirmacionVisible, setConfirmacionVisible] = useState(false);
   const [botonesHabilitados, setBotonesHabilitados] = useState(false); 
 
+  
+   // Obtener la fecha de hoy en formato ISO (AAAA-MM-DD)
+   const fechaHoy = new Date().toISOString().split('T')[0];
+
   const fnObtenerDatos = async () => {
     if (location.state && location.state.id) {
       await axios.get('http://127.0.0.1:8000/api/cita', {
@@ -198,28 +202,31 @@ function RegistrarCitaCliente() {
         </li>
         <p></p>
         <li>
-          <TextField
-            required
-            id="outlined-required"
-            label="Fecha"
-            name="fecha"
-            type="date"
-            value={cita.fecha}
-            onChange={(event) => handleGuardar(event, event.target.value, "fecha")}
-          />
-        </li>
+      <TextField
+        required
+        id="outlined-required"
+        label="Fecha"
+        name="fecha"
+        type="date"
+        value={cita.fecha}
+        onChange={handleGuardar}
+        // Establecer el atributo min con la fecha de hoy
+        inputProps={{ min: fechaHoy }}
+      />
+    </li>
         <p></p>
         <li>
-          <TextField
-            required
-            id="outlined-required"
-            label="Hora"
-            name="hora"
-            type="time"
-            value={cita.hora}
-            onChange={(event) => handleGuardar(event, event.target.value, "hora")}
-          />
-        </li>
+      <TextField
+        required
+        id="outlined-required"
+        label="Fecha"
+        name="fecha"
+        type="date"
+        value={cita.fecha}
+        onChange={handleGuardar}
+        inputProps={{ min: fechaHoy }}
+      />
+    </li>
         <p></p>
         <Button
           variant="contained"
