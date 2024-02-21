@@ -8,6 +8,14 @@ import { Link } from 'react-router-dom';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 
 const Farmacia = () => {
+
+  const calcularTotal = () => {
+    let total = 0;
+    carrito.forEach(producto => {
+      total += producto.quantity * producto.price;
+    });
+    return total;
+  };
   const estiloEncabezado = {
     backgroundColor: 'blue',
     padding: '20px',
@@ -164,26 +172,27 @@ const Farmacia = () => {
           </div>
         </Modal>
       )}
-      {mostrarCarrito && (
-        <div style={{ position: 'fixed', top: '60px', right: '20px', backgroundColor: 'white', padding: '10px', zIndex: 1001 }}>
-          {carrito.length === 0 ? (
-            <p>El carrito está vacío</p>
-          ) : (
-            carrito.map((producto, index) => (
-              <div key={index}>
-                <h3>{producto.nom_producto}</h3>
-                <p>{producto.descripcion}</p>
-                <p>Cantidad: {producto.quantity}</p>
-                <p>Precio Total: ${producto.quantity * producto.price}</p>
-                <Button onClick={() => removeFromCart(producto.id)}>Eliminar</Button>
-              </div>
-            ))
-          )}
-          {carrito.length > 0 && (
-            <Button onClick={handleBuy}>Comprar</Button>
-          )}
-        </div>
-      )}
+  {mostrarCarrito && (
+  <div style={{ position: 'fixed', top: '60px', right: '20px', backgroundColor: 'white', padding: '10px', zIndex: 1001 }}>
+    {carrito.length === 0 ? (
+      <p>El carrito está vacío</p>
+    ) : (
+      <>
+        {carrito.map((producto, index) => (
+          <div key={index}>
+            <h3>{producto.nom_producto}</h3>
+            <p>{producto.descripcion}</p>
+            <p>Cantidad: {producto.quantity}</p>
+            <p>Precio Total: ${producto.quantity * producto.price}</p>
+            <Button onClick={() => removeFromCart(producto.id)}>Eliminar</Button>
+          </div>
+        ))}
+        <p>Total a pagar: ${calcularTotal()}</p>
+        <Button onClick={handleBuy}>Comprar</Button>
+      </>
+    )}
+  </div>
+)}
       <div style={estiloProductosContainer}>
         {sortedProducts.map((producto) => (
           <div key={producto.id} style={estiloProducto}>

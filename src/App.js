@@ -59,7 +59,7 @@ function App() {
     <Route path="/cliente" element={token == null ? <Inicio /> :<HomeClienteComponent/>}/>
     <Route path="/Verclientes" element={token == null ? <Inicio /> :<VerClientesComponent/>}/>
     <Route path="/registrarCita" element={token == null ? <Inicio /> :<RegistraCitaCliente/>}/>
-    <Route path="/verqr" element={token == null ? <Inicio /> :<VerQrComponent/>}/>
+    <Route path="/verqr" element={<VerQrComponent/>}/>
     <Route path="/farmaciacliente" element={token == null ? <Inicio /> :<ClienteFarmacia/>}/>
     </Routes>
 
