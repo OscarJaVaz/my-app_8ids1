@@ -74,7 +74,7 @@ const HomeClienteComponent = () => {
         )}
         <p></p>
         <a onClick={() => handleClick("/farmaciacliente")}>
-          <img src={farmacia} alt="Farmacia" />
+          <img src={farmacia} alt="/clienteFarmacia"/>
           <span>Farmacia</span>
         </a>
         <a onClick={() => handleClick("/registrarCita")}>
