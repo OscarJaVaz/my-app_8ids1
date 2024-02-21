@@ -2,7 +2,10 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Snackbar from '@mui/material/Snackbar';
 import MuiAlert from '@mui/material/Alert';
-import CircularProgress from '@mui/material/CircularProgress'; // Importar componente de rueda de carga
+import CircularProgress from '@mui/material/CircularProgress';
+import IconButton from '@mui/material/IconButton';
+import Visibility from '@mui/icons-material/Visibility';
+import VisibilityOff from '@mui/icons-material/VisibilityOff';
 
 const Registrar = () => {
   const [mostrarMensaje, setMostrarMensaje] = useState(true);
@@ -16,7 +19,8 @@ const Registrar = () => {
   const [mensajeValidacion, setMensajeValidacion] = useState('');
   const [contrasenaValida, setContrasenaValida] = useState(false);
   const [openAlert, setOpenAlert] = useState(false);
-  const [showLoader, setShowLoader] = useState(false); // Estado para controlar la visualización de la rueda de carga
+  const [showLoader, setShowLoader] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   const cerrarMensaje = () => {
     setMostrarMensaje(false);
@@ -31,15 +35,13 @@ const Registrar = () => {
       return;
     }
 
-    // Validar que todos los campos estén completados
     if (!nombre || !apellido || !email || !telefono || !domicilio || !contrasena || !confirmarContrasena) {
       setMensajeValidacion('Todos los campos son obligatorios');
       return;
     }
 
-    // Restablecer mensaje de validación
     setMensajeValidacion('');
-    setShowLoader(true); // Mostrar la rueda de carga al enviar el formulario
+    setShowLoader(true);
 
     try {
       const response = await fetch('http://127.0.0.1:8000/api/cliente/crear', {
@@ -58,22 +60,17 @@ const Registrar = () => {
       });
 
       if (response.ok) {
-        // Mostrar Snackbar de Material-UI con mensaje de registro exitoso
         setOpenAlert(true);
-        // Redirigir al usuario a la vista del cliente
         navigate('/');
       } else {
-        // Manejar el caso de error en la respuesta de la API
         console.error('Error al guardar el cliente');
       }
     } catch (error) {
-      // Manejar errores de red u otros errores
       console.error('Error:', error);
     } finally {
-      setShowLoader(false); // Ocultar la rueda de carga después de recibir la respuesta del servido
+      setShowLoader(false);
     }
 
-    // Restablecer los campos del formulario
     setNombre('');
     setApellido('');
     setEmail('');
@@ -114,6 +111,10 @@ const Registrar = () => {
 
   const handleCloseAlert = () => {
     setOpenAlert(false);
+  };
+
+  const handleTogglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
   };
 
   return (
@@ -162,13 +163,23 @@ const Registrar = () => {
             style={styles.input}
             placeholder="Domicilio"
           />
-          <input
-            type="password"
-            value={contrasena}
-            onChange={handleContrasenaChange}
-            style={{ ...styles.input, color: contrasenaValida ? 'green' : 'inherit' }}
-            placeholder="Contraseña"
-          />
+
+          <div style={{ position: 'relative' }}>
+            <input
+              type={showPassword ? 'text' : 'password'}
+              value={contrasena}
+              onChange={handleContrasenaChange}
+              style={{ ...styles.input, color: contrasenaValida ? 'green' : 'inherit' }}
+              placeholder="Contraseña"
+            />
+            <IconButton
+              style={{ position: 'absolute', top: '50%', right: '10px', transform: 'translateY(-50%)', cursor: 'pointer' }}
+              onClick={handleTogglePasswordVisibility}
+            >
+              {showPassword ? <VisibilityOff /> : <Visibility />}
+            </IconButton>
+          </div>
+
           <input
             type="password"
             value={confirmarContrasena}

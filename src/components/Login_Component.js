@@ -3,6 +3,12 @@ import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
 import Snackbar from '@mui/material/Snackbar';
 import TextField from '@mui/material/TextField';
+
+import IconButton from '@mui/material/IconButton';
+import InputAdornment from '@mui/material/InputAdornment';
+import Visibility from '@mui/icons-material/Visibility';
+import VisibilityOff from '@mui/icons-material/VisibilityOff';
+
 import Alert from '@mui/material/Alert';
 import CircularProgress from '@mui/material/CircularProgress';
 import axios from 'axios';
@@ -11,6 +17,37 @@ import { useNavigate } from 'react-router-dom';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import miImagen from '../components/assets/simbolo_doc.png';
 
+// Nuevo componente PasswordField
+const PasswordField = ({ password, handlePasswordChange }) => {
+  const [showPassword, setShowPassword] = useState(false);
+
+  const handleClickShowPassword = () => {
+    setShowPassword(!showPassword);
+  };
+
+  return (
+    <TextField
+      label="Contraseña"
+      type={showPassword ? 'text' : 'password'}
+      name="password"
+      value={password}
+      onChange={handlePasswordChange}
+      variant="outlined"
+      InputProps={{
+        endAdornment: (
+          <InputAdornment position="end">
+            <IconButton onClick={handleClickShowPassword}>
+              {showPassword ? <VisibilityOff /> : <Visibility />}
+            </IconButton>
+          </InputAdornment>
+        ),
+      }}
+      style={{ borderRadius: '20px', backgroundColor: '#ffffff', color: '#000000' }}
+    />
+  );
+};
+
+// Componente Login_Component con PasswordField integrado
 const Login_Component = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -100,7 +137,9 @@ const Login_Component = () => {
         ) : (
           <>
             <img src={miImagen} alt="Avatar Doctor" style={{ float: 'right', height: '50vh', marginTop: '50px' }} />
-            <Stack spacing={2} direction="column">
+
+
+            <Stack spacing={2} direction="column" alignItems="center">
               <Stack spacing={2} sx={{ width: 300, marginTop: '50px', backgroundColor: '#E1E3EA', padding: '20px', borderRadius: '20px' }}>
                 <h1 style={{ fontSize: '40px', textAlign: 'center', color: '#000000' }}>BIENVENIDO</h1>
                 <TextField
@@ -108,17 +147,10 @@ const Login_Component = () => {
                   name="email"
                   value={email}
                   onChange={handleEmailChange}
-                  style={{ borderRadius: '20px', backgroundColor: '#ffffff', color: '#000000' }}
+                  sx={{ borderRadius: '20px', backgroundColor: '#ffffff', color: '#000000', marginBottom: '10px' }}
                 />
-                <TextField
-                  label="Password"
-                  type="password"
-                  name="password"
-                  value={password}
-                  onChange={handlePasswordChange}
-                  variant="outlined"
-                  style={{ borderRadius: '20px', backgroundColor: '#ffffff', color: '#000000' }}
-                />
+                {/* Uso del componente PasswordField */}
+                <PasswordField password={password} handlePasswordChange={handlePasswordChange} />
               </Stack>
               <Stack direction="row" sx={{ justifyContent: 'center' }}>
                 <Button
@@ -154,15 +186,37 @@ const Login_Component = () => {
                   Usuario o contraseña incorrectos
                 </Alert>
               )}
-              <div>
-                <input type="radio" id="admin" name="role" value="administrador" checked={selectedRole === 'administrador'} onChange={handleRoleChange} />
-                <label htmlFor="admin">Administrador</label>
-              </div>
-              <div>
-                <input type="radio" id="client" name="role" value="cliente" checked={selectedRole === 'cliente'} onChange={handleRoleChange} />
-                <label htmlFor="client">Cliente</label>
+              <div style={{ display: 'flex', flexDirection: 'column', marginTop: '10px', alignItems: 'center' }}>
+                <label style={{ fontSize: '26px', marginBottom: '5px' }}>Selecciona el Rol:</label>
+                <div style={{ display: 'flex', alignItems: 'center' }}>
+                  <input
+                    type="radio"
+                    id="admin"
+                    name="role"
+                    value="administrador"
+                    checked={selectedRole === 'administrador'}
+                    onChange={handleRoleChange}
+                    style={{ marginRight: '5px' }}
+                  />
+                  <label htmlFor="admin" style={{ fontSize: '14px' }}>Administrador</label>
+                </div>
+                <div style={{ display: 'flex', alignItems: 'center', marginTop: '5px' }}>
+                  <input
+                    type="radio"
+                    id="client"
+                    name="role"
+                    value="cliente"
+                    checked={selectedRole === 'cliente'}
+                    onChange={handleRoleChange}
+                    style={{ marginRight: '5px' }}
+                  />
+                  <label htmlFor="client" style={{ fontSize: '14px' }}>Cliente</label>
+                </div>
               </div>
             </Stack>
+
+
+
           </>
         )}
         <div style={{ position: 'absolute', top: 540, right: 20 }}></div>

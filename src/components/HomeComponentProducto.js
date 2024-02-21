@@ -157,8 +157,8 @@ const styles = {
   },
   buttonContainer: {
     position: 'absolute',
-    top: 540,
-    right: 1006,
+    top: '65%',  
+    right: '47%',  
   },
   button: {
     backgroundColor: 'red',
