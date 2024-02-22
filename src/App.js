@@ -53,10 +53,10 @@ function App() {
     <Route path="/login" element={<Login_Component />} />
     <Route path="/aviso" element={<AvisoComponent />} />
     <Route path="/menu" element={<MenuComponent />} />
+    <Route path="/cliente" element={<HomeClienteComponent />} />
     <Route path="/farmacia" element={token == null ? <Inicio /> :<Farmacia/>}/>
     <Route path="/homeproducto" element={token == null ? <Inicio /> :<HomeComponentProducto />}/>
     <Route path="/producto/nuevo" element={token == null ? <Inicio /> :<ProductoComponent/>}/>
-    <Route path="/cliente" element={token == null ? <Inicio /> :<HomeClienteComponent/>}/>
     <Route path="/Verclientes" element={token == null ? <Inicio /> :<VerClientesComponent/>}/>
     <Route path="/registrarCita" element={token == null ? <Inicio /> :<RegistraCitaCliente/>}/>
     <Route path="/verqr" element={<VerQrComponent/>}/>
