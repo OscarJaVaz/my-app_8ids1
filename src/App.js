@@ -45,22 +45,24 @@ function App() {
     <Route path="/doctor/nuevo" element={token == null ? <Inicio /> :<DoctorComponent />}/>
     <Route path="/homeenfermedad" element={token == null ? <Inicio /> :<HomeComponentEnfermedad />}/>
     <Route path="/enfermedad/nuevo" element={token == null ? <Inicio /> :<EnfermedadComponent />}/>
-    <Route path="/homecita" element={token == null ? <Inicio /> :<HomeComponentCita />}/>
     <Route path="/cita/nuevo" element={token == null ? <Inicio /> :<CitaComponent />}/>
     <Route path="/inicio" element={token == null ? <Inicio /> :<Inicio/>}/>
     <Route path="/" element={<Inicio />}/>
+    <Route path="/homecita" element={<HomeComponentCita />} />
     <Route path="/registrar" element={<Registrar />} />
     <Route path="/login" element={<Login_Component />} />
     <Route path="/aviso" element={<AvisoComponent />} />
     <Route path="/menu" element={<MenuComponent />} />
-    <Route path="/cliente" element={<HomeClienteComponent />} />
-    <Route path="/farmacia" element={token == null ? <Inicio /> :<Farmacia/>}/>
-    <Route path="/homeproducto" element={token == null ? <Inicio /> :<HomeComponentProducto />}/>
-    <Route path="/producto/nuevo" element={token == null ? <Inicio /> :<ProductoComponent/>}/>
-    <Route path="/Verclientes" element={token == null ? <Inicio /> :<VerClientesComponent/>}/>
-    <Route path="/registrarCita" element={token == null ? <Inicio /> :<RegistraCitaCliente/>}/>
+    <Route path="/menu" element={<MenuComponent />} />
+    <Route path="/farmacia" element={<Farmacia />} />
+    <Route path="/homeproducto" element={<HomeComponentProducto />} />
+    <Route path="/producto/nuevo" element={<ProductoComponent />} />
+    <Route path="/Verclientes" element={<VerClientesComponent />} />
+    <Route path="/registrarCita" element={<RegistraCitaCliente />} />
     <Route path="/verqr" element={<VerQrComponent/>}/>
-    <Route path="/farmaciacliente" element={token == null ? <Inicio /> :<ClienteFarmacia/>}/>
+    <Route path="/farmaciacliente" element={<ClienteFarmacia/>}/>
+    <Route path="/cliente" element={<HomeClienteComponent/>}/>
+    
     </Routes>
 
 );//

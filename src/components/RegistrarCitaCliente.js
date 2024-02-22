@@ -13,7 +13,6 @@ import Cita from './assets/cita2.png';
 import Modal from '@mui/material/Modal';
 import Backdrop from '@mui/material/Backdrop';
 import Fade from '@mui/material/Fade';
-import html2canvas from 'html2canvas';
 
 function RegistrarCitaCliente() {
   const navigate = useNavigate();
@@ -34,11 +33,8 @@ function RegistrarCitaCliente() {
   const [openModal, setOpenModal] = useState(false);
   const [qrData, setQRData] = useState('');
   const [confirmacionVisible, setConfirmacionVisible] = useState(false);
-  const [botonesHabilitados, setBotonesHabilitados] = useState(false); 
-
-  
-   // Obtener la fecha de hoy en formato ISO (AAAA-MM-DD)
-   const fechaHoy = new Date().toISOString().split('T')[0];
+    // Obtener la fecha de hoy en formato ISO (AAAA-MM-DD)
+    const fechaHoy = new Date().toISOString().split('T')[0];
 
   const fnObtenerDatos = async () => {
     if (location.state && location.state.id) {
@@ -70,12 +66,12 @@ function RegistrarCitaCliente() {
       });
   };
 
-  const handleGuardar = (event, value, fieldName) => {
+  const handleGuardar = (event, value) => {
     const { name, value: fieldValue } = event.target;
     const newValue = value || fieldValue;
     setCita((prevState) => ({
       ...prevState,
-      [fieldName]: newValue,
+      [name]: newValue,
     }));
   };
 
@@ -83,7 +79,6 @@ function RegistrarCitaCliente() {
     const qrCodeData = JSON.stringify(cita);
     setQRData(qrCodeData);
     setOpenModal(true);
-    setBotonesHabilitados(false); 
   };
 
   const GuardarDatos = async () => {
@@ -106,17 +101,6 @@ function RegistrarCitaCliente() {
 
   const handleCloseModal = () => {
     setOpenModal(false);
-  };
-
-  const handleDownloadQR = () => {
-    html2canvas(document.querySelector("#qrCodeContainer")).then(canvas => {
-      const imgData = canvas.toDataURL('image/png');
-      const link = document.createElement('a');
-      link.download = 'codigo_qr.png';
-      link.href = imgData;
-      link.click();
-      setBotonesHabilitados(true); 
-    });
   };
 
   useEffect(() => {
@@ -159,7 +143,7 @@ function RegistrarCitaCliente() {
             label="Paciente"
             name="paciente"
             value={cita.paciente}
-            onChange={(event, value) => handleGuardar(event, value?.nombre, "paciente")}
+            onChange={(event, value) => handleGuardar(event, value?.nombre)}
           />
         </li>
         <p></p>
@@ -171,10 +155,11 @@ function RegistrarCitaCliente() {
               <TextField
                 {...params}
                 required
+                id="combo-box-demo"
                 label="Doctor"
                 name="doctor"
                 value={cita.doctor}
-                onChange={(event, value) => handleGuardar(event, value?.nombre, "doctor")}
+                onChange={(event, value) => handleGuardar(event, value?.nombre)}
               />
             )}
             value={doctores.find((d) => d.nombre === cita.doctor) || null}
@@ -190,10 +175,11 @@ function RegistrarCitaCliente() {
               <TextField
                 {...params}
                 required
+                id="combo-box-demo"
                 label="Enfermedad"
                 name="enfermedad"
                 value={cita.enfermedad}
-                onChange={(event, value) => handleGuardar(event, value?.nombre, "enfermedad")}
+                onChange={(event, value) => handleGuardar(event, value?.nombre)}
               />
             )}
             value={enfermedades.find((e) => e.nombre === cita.enfermedad) || null}
@@ -202,31 +188,31 @@ function RegistrarCitaCliente() {
         </li>
         <p></p>
         <li>
-      <TextField
-        required
-        id="outlined-required"
-        label="Fecha"
-        name="fecha"
-        type="date"
-        value={cita.fecha}
-        onChange={handleGuardar}
-        // Establecer el atributo min con la fecha de hoy
-        inputProps={{ min: fechaHoy }}
-      />
-    </li>
+          <TextField
+            required
+            id="outlined-required"
+            label="Fecha"
+            name="fecha"
+            type="date"
+            value={cita.fecha}
+            onChange={handleGuardar}
+            // Establecer el atributo min con la fecha de hoy
+            inputProps={{ min: fechaHoy }}
+          />
+        </li>
         <p></p>
         <li>
-      <TextField
-        required
-        id="outlined-required"
-        label="Fecha"
-        name="fecha"
-        type="date"
-        value={cita.fecha}
-        onChange={handleGuardar}
-        inputProps={{ min: fechaHoy }}
-      />
-    </li>
+          <TextField
+            required
+            id="outlined-required"
+            label="Hora"
+            name="hora"
+            type="time"
+            value={cita.hora}
+            onChange={handleGuardar}
+
+          />
+        </li>
         <p></p>
         <Button
           variant="contained"
@@ -264,15 +250,10 @@ function RegistrarCitaCliente() {
           }}
         >
           <Fade in={openModal}>
-            <div style={{ backgroundColor: '#fff', padding: '20px', borderRadius: '10px', maxWidth: '30vw', margin: 'auto', textAlign: 'center' }}>
-              <div id="qrCodeContainer">
-                <QRCode value={qrData} size={256} />
-              </div>
-              <div style={{ marginTop: '20px' }}>
-                <Button variant="contained" color="primary" onClick={GuardarDatos} style={{ marginRight: '10px', padding: '5px' }} disabled={!botonesHabilitados}>Registrar cita</Button>
-                <Button variant="contained" color="primary" onClick={handleCloseModal} style={{ marginRight: '10px', padding: '5px' }} disabled={!botonesHabilitados}>Cerrar</Button>
-                <Button variant="contained" color="primary" onClick={handleDownloadQR} style={{ padding: '5px' }}>Descargar QR</Button>
-              </div>
+            <div style={{ backgroundColor: '#fff', padding: '20px', borderRadius: '10px', maxWidth: '80vw', margin: 'auto' }}>
+              <QRCode value={qrData} size={256} />
+              <Button variant="contained" color="primary" onClick={handleCloseModal}>Cerrar</Button>
+              <Button variant="contained" color="primary" onClick={GuardarDatos}>Registrar cita</Button>
             </div>
           </Fade>
         </Modal>
