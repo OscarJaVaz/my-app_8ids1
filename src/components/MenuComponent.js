@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
 import CloseIcon from '@mui/icons-material/Close';
@@ -20,68 +20,71 @@ import Login_Component from './Login_Component';
 
 const MenuComponent = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const [menuVisible, setMenuVisible] = useState(true);
   const [citas, setCitas] = useState([]);
   const [username, setUsername] = useState('');
-  const [usernameLoaded, setUsernameLoaded] = useState(false); // Nuevo estado para verificar si el nombre de usuario se ha cargado correctamente
-
-  const toggleMenu = () => {
-    setMenuVisible(!menuVisible);
-  };
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [usernameLoaded, setUsernameLoaded] = useState(false);
 
   useEffect(() => {
-
     setUsername(secureLocalStorage.getItem('username')); 
-    setUsernameLoaded(true); 
+    setUsernameLoaded(true);
 
-    async function fetchData() {
-      try {
-        const response = await axios.get('http://127.0.0.1:8000/api/citas');
-        setCitas(response.data);
-      } catch (error) {
-        console.error('Error fetching citas:', error);
-      }
-    }
-
-    fetchData();
-
-    // Obtener el nombre de usuario
+    // Verificar si el usuario está logueado
     const storedUsername = secureLocalStorage.getItem('username');
-    
     if (storedUsername) {
       setUsername(storedUsername);
-      setUsernameLoaded(true);
+      setIsLoggedIn(true);
     }
 
-    // Evitar que el usuario retroceda usando el botón del navegador
+    // Evitar que el usuario retroceda usando el botón del navegador si no está logueado
     const handleBackButton = (event) => {
-      event.preventDefault();
-      window.history.pushState(null, '', window.location.pathname);
+      if (!isLoggedIn && location.pathname !== '/login') {
+        event.preventDefault();
+        navigate('/login');
+      }
     };
 
-    window.history.pushState(null, '', window.location.pathname); // Reemplazar la entrada actual en el historial
     window.addEventListener('popstate', handleBackButton);
 
     return () => {
       window.removeEventListener('popstate', handleBackButton);
     };
-  }, []);
+  }, [isLoggedIn, location.pathname]);
+
+  const toggleMenu = () => {
+    setMenuVisible(!menuVisible);
+  };
 
   const handleClick = (path) => {
     navigate(path);
   };
 
+  const handleLogout = () => {
+    const confirmLogout = window.confirm("¿Estás seguro de que quieres salir?");
+    if (confirmLogout) {
+      secureLocalStorage.clear();
+      setIsLoggedIn(false);
+      navigate("/");
+    }
+  };
+
+  if (!isLoggedIn && location.pathname !== '/login') {
+    return <Login_Component />;
+  }
+
   return (
     <div className={`menu-container ${menuVisible ? 'menu-visible' : 'menu-hidden'}`}>
       <div className="sidebar" style={{ overflowY: 'auto' }}>
-  <h2 style={{ margin: 0 ,color:'white', textAlign:'center'}}>BIENVENIDO</h2>
-  <br></br>
-  <AccountCircleIcon style={{ marginRight: '5px', color:'white'}} />
-  {usernameLoaded ? (
-            <span style={{ color: 'white' }}>{username}</span>
-          ) : (
-            <span>Loading...</span> // Mostrar un mensaje de carga mientras se carga el nombre de usuario
-          )}
+        <h2 style={{ margin: 0 ,color:'white', textAlign:'center'}}>BIENVENIDO</h2>
+        <br></br>
+        <AccountCircleIcon style={{ marginRight: '5px', color:'white'}} />
+        {usernameLoaded ? (
+          <span style={{ color: 'white' }}>{username}</span>
+        ) : (
+          <span>Loading...</span>
+        )}
         <p></p>
         <a onClick={() => handleClick("/home")}>
           <img src={paciente} alt="Pacientes" />
@@ -111,11 +114,7 @@ const MenuComponent = () => {
           <img src={farmacia} alt="ClientesRegistrados" />
           <span>Ver usuarios registrados</span>
         </a>
-        <a onClick={() => handleClick("/verqr")}>
-          <img src={farmacia} alt="Qr"/>
-          <span>Escanear Qr</span>
-        </a>
-        <a onClick={() => handleClick("/")}>
+        <a onClick={handleLogout}>
           <img src={salir} alt="Salir" />
           <span>Salir</span>
         </a>
