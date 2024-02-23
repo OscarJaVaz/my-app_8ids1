@@ -1,19 +1,18 @@
 import logo from './logo.svg';
 import './App.css';
 import { Route, Routes } from 'react-router-dom';
-import Login_Component from './components//Login_Component';
-import HomeComponent from './components//HomeComponent';
-import { useState } from 'react';
-import { useEffect } from 'react';
+import Login_Component from './components/Login_Component';
+import HomeComponent from './components/HomeComponent';
+import { useState, useEffect } from 'react';
 import secureLocalStorage from 'react-secure-storage';
 import PacienteComponent from './components/PacienteComponent';
-import HomeComponentDoctor from './components//HomeComponentDoctor';
-import DoctorComponent from './components//DoctorComponent';
+import HomeComponentDoctor from './components/HomeComponentDoctor';
+import DoctorComponent from './components/DoctorComponent';
 import HomeComponentEnfermedad from './components/HomeComponentEnfermedad';
-import EnfermedadComponent from './components//EnfermedadComponent';
-import MenuComponent from './components//MenuComponent';
+import EnfermedadComponent from './components/EnfermedadComponent';
+import MenuComponent from './components/MenuComponent';
 import HomeComponentCita from './components/HomeComponentCita';
-import CitaComponent from './components//CitaComponent';
+import CitaComponent from './components/CitaComponent';
 import AvisoComponent from './components/AvisoComponent';
 import Inicio from './components/Inicio';
 import Registrar from './components/Registrar';
@@ -23,20 +22,18 @@ import HomeComponentProducto from './components/HomeComponentProducto';
 import HomeClienteComponent from './components/HomeClienteComponent';
 import VerClientesComponent from './components/VerClientesComponent';
 import RegistraCitaCliente from './components/RegistrarCitaCliente';
-import { ViewQuiltRounded } from '@mui/icons-material';
 import VerQrComponent from './components/VerQrComponent';
 import ClienteFarmacia from './components/ClienteFarmacia';
 import VistaCompra from './components/VistaCompra';
 
 
-
 function App() {   
   const [token, setToken] = useState(null);
 
-  useEffect(()=>{
-    console.log('Render')
+  useEffect(() => {
+    console.log('Render');
     setToken(secureLocalStorage.getItem('token'));
-  },[]);
+  }, []);
   
   return (
 
@@ -67,7 +64,7 @@ function App() {
     <Route path="/vistaCompra" element={<VistaCompra/>}/>
     
     </Routes>
-
-);//
+  );
 }
+
 export default App;
