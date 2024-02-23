@@ -4,10 +4,12 @@ import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import SearchIcon from '@mui/icons-material/Search';
 import Button from '@mui/material/Button';
 import Modal from '@mui/material/Modal';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom'; // Importa Link y useNavigate
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 
 const ClienteFarmacia = () => {
+  const navigate = useNavigate(); // Inicializa useNavigate
+
   const estiloEncabezado = {
     backgroundColor: 'blue',
     padding: '20px',
@@ -96,7 +98,10 @@ const ClienteFarmacia = () => {
   };
 
   const handleBuy = () => {
-    console.log('Comprando productos:', carrito);
+    // Redirigir a la vista de compra al hacer clic en comprar
+    // Utilizamos el método navigate de useNavigate para navegar a la vista de compra
+    // Asegúrate de reemplazar '/vistaCompra' con la ruta real de tu vista de compra
+    navigate("/vistaCompra");
   };
 
   const filteredProducts = productos.filter(producto => {
