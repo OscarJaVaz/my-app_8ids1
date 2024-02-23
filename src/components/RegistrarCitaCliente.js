@@ -14,6 +14,7 @@ import Modal from '@mui/material/Modal';
 import Backdrop from '@mui/material/Backdrop';
 import Fade from '@mui/material/Fade';
 import html2canvas from 'html2canvas';
+import Alert from '@mui/material/Alert';
 
 function RegistrarCitaCliente() {
   const navigate = useNavigate();
@@ -34,6 +35,7 @@ function RegistrarCitaCliente() {
   const [openModal, setOpenModal] = useState(false);
   const [qrData, setQRData] = useState('');
   const [confirmacionVisible, setConfirmacionVisible] = useState(false);
+  const [fechaValida, setFechaValida] = useState(true); // Estado para validar fecha
 
   const fnObtenerDatos = async () => {
     if (location.state && location.state.id) {
@@ -68,10 +70,20 @@ function RegistrarCitaCliente() {
   const handleGuardar = (event, value) => {
     const { name, value: fieldValue } = event.target;
     const newValue = value || fieldValue;
+
     setCita((prevState) => ({
       ...prevState,
       [name]: newValue,
     }));
+
+    // Validar si la fecha seleccionada no es anterior a la fecha actual
+    const selectedDate = new Date(newValue);
+    const currentDate = new Date();
+    if (selectedDate < currentDate) {
+      setFechaValida(false);
+    } else {
+      setFechaValida(true);
+    }
   };
 
   const generarQR = () => {
@@ -129,6 +141,23 @@ function RegistrarCitaCliente() {
     );
   };
 
+  const getCurrentDate = () => {
+    const today = new Date();
+    const year = today.getFullYear();
+    let month = today.getMonth() + 1;
+    let day = today.getDate();
+  
+    // Agregar un cero delante del mes y el día si son menores que 10
+    if (month < 10) {
+      month = `0${month}`;
+    }
+    if (day < 10) {
+      day = `0${day}`;
+    }
+  
+    return `${year}-${month}-${day}`;
+  };
+  
   return (
     <div
       style={{
@@ -205,8 +234,12 @@ function RegistrarCitaCliente() {
             type="date"
             value={cita.fecha}
             onChange={handleGuardar}
+            inputProps={{ min: getCurrentDate() }} // Establecer la fecha mínima
           />
+
+         
         </li>
+        
         <p></p>
         <li>
           <TextField
@@ -225,10 +258,11 @@ function RegistrarCitaCliente() {
           style={{ backgroundColor: 'green', marginRight: '10px' }}
           onClick={generarQR}
           startIcon={<SaveIcon />}
-          disabled={!camposCompletos()}
+          disabled={!camposCompletos() || !fechaValida} // Deshabilitar si los campos no están completos o la fecha no es válida
         >
           Generar QR
         </Button>
+
 
         <br /><br />
         <Button
