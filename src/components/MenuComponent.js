@@ -114,6 +114,10 @@ const MenuComponent = () => {
           <img src={farmacia} alt="ClientesRegistrados" />
           <span>Ver usuarios registrados</span>
         </a>
+        <a onClick={() => handleClick("/verqr")}>
+          <img src={farmacia} alt="ClientesRegistrados" />
+          <span>Ver Qr</span>
+        </a>
         <a onClick={handleLogout}>
           <img src={salir} alt="Salir" />
           <span>Salir</span>

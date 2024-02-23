@@ -26,6 +26,8 @@ import RegistraCitaCliente from './components/RegistrarCitaCliente';
 import { ViewQuiltRounded } from '@mui/icons-material';
 import VerQrComponent from './components/VerQrComponent';
 import ClienteFarmacia from './components/ClienteFarmacia';
+import VistaCompra from './components/VistaCompra';
+
 
 
 function App() {   
@@ -62,6 +64,7 @@ function App() {
     <Route path="/verqr" element={<VerQrComponent/>}/>
     <Route path="/farmaciacliente" element={<ClienteFarmacia/>}/>
     <Route path="/cliente" element={<HomeClienteComponent/>}/>
+    <Route path="/vistaCompra" element={<VistaCompra/>}/>
     
     </Routes>
 
