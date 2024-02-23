@@ -93,7 +93,7 @@ const Login_Component = () => {
       if (selectedRole === 'administrador') {
         response = await axios.post('http://127.0.0.1:8000/api/login', { email, password });
       } else {
-        response = await axios.post('http://127.0.0.1:8000/api/logincliente', { email, password });
+        response = await axios.post('http://127.0.0.1:8000/api/logincliente', { email: email, contrasena: password });
       }
 
       console.log('Validando Acceso..');
