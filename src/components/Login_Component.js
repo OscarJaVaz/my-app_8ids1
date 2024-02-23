@@ -3,12 +3,10 @@ import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
 import Snackbar from '@mui/material/Snackbar';
 import TextField from '@mui/material/TextField';
-
 import IconButton from '@mui/material/IconButton';
 import InputAdornment from '@mui/material/InputAdornment';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
-
 import Alert from '@mui/material/Alert';
 import CircularProgress from '@mui/material/CircularProgress';
 import axios from 'axios';
@@ -93,12 +91,12 @@ const Login_Component = () => {
       if (selectedRole === 'administrador') {
         response = await axios.post('http://127.0.0.1:8000/api/login', { email, password });
       } else {
-        response = await axios.post('http://127.0.0.1:8000/api/logincliente', { email, password });
+        response = await axios.post('http://127.0.0.1:8000/api/logincliente', { email: email, contrasena: password });
       }
 
       console.log('Validando Acceso..');
       console.log(response.data);
-      if (response.data.token !== '') {
+      if (response.data.token != '') {
         console.log('OK');
         secureLocalStorage.setItem('token', response.data.token);
         secureLocalStorage.setItem('username', response.data.nombre); // Almacenar el nombre de usuario
@@ -111,10 +109,13 @@ const Login_Component = () => {
           navigate('/cliente'); // Redirigir a la ventana de cliente
         }
       } else {
-        setUserNotFoundError(true);
+        setUserNotFoundError(true); // Marcar error de usuario no encontrado
+        setOpen(false); // Ocultar el mensaje de ingreso exitoso
       }
     } catch (error) {
       console.error(error);
+      setUserNotFoundError(true); // Marcar error de usuario no encontrado en caso de error de red
+      setOpen(false); // Ocultar el mensaje de ingreso exitoso
     }
 
     setEmail('');
@@ -137,7 +138,6 @@ const Login_Component = () => {
         ) : (
           <>
             <img src={miImagen} alt="Avatar Doctor" style={{ float: 'right', height: '50vh', marginTop: '50px' }} />
-
 
             <Stack spacing={2} direction="column" alignItems="center">
               <Stack spacing={2} sx={{ width: 300, marginTop: '50px', backgroundColor: '#E1E3EA', padding: '20px', borderRadius: '20px' }}>
@@ -214,9 +214,6 @@ const Login_Component = () => {
                 </div>
               </div>
             </Stack>
-
-
-
           </>
         )}
         <div style={{ position: 'absolute', top: 540, right: 20 }}></div>
