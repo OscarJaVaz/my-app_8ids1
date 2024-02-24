@@ -16,13 +16,13 @@ const HomeClienteComponent = () => {
   const [citas, setCitas] = useState([]);
   const [username, setUsername] = useState('');
   const [usernameLoaded, setUsernameLoaded] = useState(false);
+  const [greeting, setGreeting] = useState('');
 
   const toggleMenu = () => {
     setMenuVisible(!menuVisible);
   };
 
   useEffect(() => {
-
     setUsername(secureLocalStorage.getItem('username')); 
     setUsernameLoaded(true); 
 
@@ -52,6 +52,16 @@ const HomeClienteComponent = () => {
     window.history.pushState(null, '', window.location.pathname);
     window.addEventListener('popstate', handleBackButton);
 
+    // Determinar el saludo según la hora del día
+    const currentHour = new Date().getHours();
+    if (currentHour >= 5 && currentHour < 12) {
+      setGreeting('Buenos días');
+    } else if (currentHour >= 12 && currentHour < 18) {
+      setGreeting('Buenas tardes');
+    } else {
+      setGreeting('Buenas noches');
+    }
+
     return () => {
       window.removeEventListener('popstate', handleBackButton);
     };
@@ -64,14 +74,9 @@ const HomeClienteComponent = () => {
   return (
     <div className={`menu-container ${menuVisible ? 'menu-visible' : 'menu-hidden'}`}>
       <div className="sidebar" style={{ overflowY: 'auto' }}>
-        <h2 style={{ margin: 0 ,color:'white', textAlign:'center'}}>BIENVENIDO</h2>
+        <h2 style={{ margin: 0 ,color:'white', textAlign:'center'}}> {greeting}, {usernameLoaded ? username : 'Usuario'} </h2>
         <br></br>
         <AccountCircleIcon style={{ marginRight: '5px', color:'white'}} />
-        {usernameLoaded ? (
-          <span style={{ color: 'white' }}>{username}</span>
-        ) : (
-          <span>Loading...</span>
-        )}
         <p></p>
         <a onClick={() => handleClick("/farmaciacliente")}>
           <img src={farmacia} alt="/clienteFarmacia"/>
