@@ -3,7 +3,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
 import CloseIcon from '@mui/icons-material/Close';
-import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import paciente from './assets/paciente.png';
 import doctor from './assets/doctor.png';
 import enfermedad from './assets/enfermedad.png';
@@ -17,6 +17,7 @@ import esLocale from '@fullcalendar/core/locales/es';
 import axios from 'axios';
 import secureLocalStorage from 'react-secure-storage';
 import Login_Component from './Login_Component';
+import { VictoryBar, VictoryChart, VictoryAxis, VictoryTheme } from 'victory';
 
 const MenuComponent = () => {
   const navigate = useNavigate();
@@ -27,6 +28,8 @@ const MenuComponent = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [usernameLoaded, setUsernameLoaded] = useState(false);
   const [greeting, setGreeting] = useState('');
+  const [enfermedadesData, setEnfermedadesData] = useState([]);
+  const [showGraph, setShowGraph] = useState(false);
 
   useEffect(() => {
     setUsername(secureLocalStorage.getItem('username')); 
@@ -80,6 +83,43 @@ const MenuComponent = () => {
       navigate("/");
     }
   };
+
+  const obtenerEnfermedades = async () => {
+    try {
+      const response = await axios.get('http://127.0.0.1:8000/api/enfermedades');
+      const enfermedades = response.data;
+      const enfermedadesLabels = enfermedades.map(enfermedad => enfermedad.nombre ? enfermedad.nombre : 'Nombre Desconocido');
+      const enfermedadesCounts = enfermedades.map(enfermedad => enfermedad.citas ? enfermedad.citas.length : 0);
+      
+      setEnfermedadesData({
+        labels: enfermedadesLabels,
+        datasets: [{
+          label: 'Enfermedades',
+          data: enfermedadesCounts,
+          backgroundColor: 'rgba(255, 99, 132, 0.2)', // Color de fondo de las barras
+          borderColor: 'rgba(255, 99, 132, 1)', // Color del borde de las barras
+          borderWidth: 1
+        }]
+      });
+    } catch (error) {
+      console.error('Error al obtener las enfermedades:', error);
+    }
+  };
+
+  const obtenerCitas = async () => {
+    try {
+      const response = await axios.get('http://127.0.0.1:8000/api/citas');
+      const citasData = response.data;
+      setCitas(citasData);
+    } catch (error) {
+      console.error('Error al obtener las citas:', error);
+    }
+  };
+
+  useEffect(() => {
+    obtenerEnfermedades();
+    obtenerCitas();
+  }, []);
 
   if (!isLoggedIn && location.pathname !== '/login') {
     return <Login_Component />;
@@ -143,6 +183,40 @@ const MenuComponent = () => {
               date: cita.fecha 
             }))}
           />
+        </div>
+        <div className="chart-container">
+          {citas.length > 0 && (
+            <>
+              <div style={{ textAlign: 'center', marginBottom: '10px' }}>
+                <IconButton onClick={() => setShowGraph(!showGraph)} aria-label="Ver gráfica">
+                  <KeyboardArrowDownIcon style={{ transform: showGraph ? 'rotate(180deg)' : 'rotate(0deg)' }} />
+                </IconButton>
+                <span>Ver gráfica</span>
+              </div>
+              {showGraph && (
+                <VictoryChart
+                  domainPadding={20}
+                  theme={VictoryTheme.material}
+                  width={400}
+                  height={200} // Adjusted height to make it smaller
+                >
+                  <VictoryAxis
+                    tickValues={enfermedadesData.labels}
+                    style={{
+                      tickLabels: { angle: -45, textAnchor: 'end' },
+                    }}
+                  />
+                  <VictoryAxis dependentAxis />
+                  <VictoryBar
+                    data={enfermedadesData.datasets[0].data.map((count, index) => ({
+                      x: enfermedadesData.labels[index],
+                      y: count,
+                    }))}
+                  />
+                </VictoryChart>
+              )}
+            </>
+          )}
         </div>
       </div>
     </div>
