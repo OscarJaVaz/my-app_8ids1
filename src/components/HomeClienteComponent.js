@@ -76,7 +76,7 @@ const HomeClienteComponent = () => {
       <div className="sidebar" style={{ overflowY: 'auto' }}>
         <h2 style={{ margin: 0 ,color:'white', textAlign:'center'}}> {greeting}, {usernameLoaded ? username : 'Usuario'} </h2>
         <br></br>
-        <AccountCircleIcon style={{ marginRight: '5px', color:'white'}} />
+        
         <p></p>
         <a onClick={() => handleClick("/farmaciacliente")}>
           <img src={farmacia} alt="/clienteFarmacia"/>

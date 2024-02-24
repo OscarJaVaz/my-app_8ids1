@@ -187,7 +187,7 @@ const Login_Component = () => {
                 </Alert>
               )}
               <div style={{ display: 'flex', flexDirection: 'column', marginTop: '10px', alignItems: 'center' }}>
-                <label style={{ fontSize: '26px', marginBottom: '5px' }}>Selecciona el Rol:</label>
+                <label style={{ fontSize: '26px', marginBottom: '5px' }}>Identificate:</label>
                 <div style={{ display: 'flex', alignItems: 'center' }}>
                   <input
                     type="radio"
