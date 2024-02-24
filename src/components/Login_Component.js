@@ -15,7 +15,6 @@ import { useNavigate } from 'react-router-dom';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import miImagen from '../components/assets/simbolo_doc.png';
 
-// Nuevo componente PasswordField
 const PasswordField = ({ password, handlePasswordChange }) => {
   const [showPassword, setShowPassword] = useState(false);
 
@@ -40,12 +39,11 @@ const PasswordField = ({ password, handlePasswordChange }) => {
           </InputAdornment>
         ),
       }}
-      style={{ borderRadius: '20px', backgroundColor: '#ffffff', color: '#000000' }}
+      sx={{ borderRadius: '20px', backgroundColor: '#ffffff', color: '#000000' }}
     />
   );
 };
 
-// Componente Login_Component con PasswordField integrado
 const Login_Component = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -53,14 +51,10 @@ const Login_Component = () => {
   const [emptyFieldsError, setEmptyFieldsError] = useState(false);
   const [userNotFoundError, setUserNotFoundError] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [selectedRole, setSelectedRole] = useState('administrador'); // Por defecto, se selecciona Administrador
+  const [selectedRole, setSelectedRole] = useState('administrador');
 
-  const handleEmailChange = (event) => {
-    setEmail(event.target.value);
-  };
-
-  const handlePasswordChange = (event) => {
-    setPassword(event.target.value);
+  const handleInputChange = (event, setState) => {
+    setState(event.target.value);
   };
 
   const handleRoleChange = (event) => {
@@ -87,35 +81,28 @@ const Login_Component = () => {
     setLoading(true);
 
     try {
-      let response;
-      if (selectedRole === 'administrador') {
-        response = await axios.post('http://127.0.0.1:8000/api/login', { email, password });
-      } else {
-        response = await axios.post('http://127.0.0.1:8000/api/logincliente', { email: email, contrasena: password });
-      }
+      const response = await axios.post(
+        selectedRole === 'administrador' ? 'http://127.0.0.1:8000/api/login' : 'http://127.0.0.1:8000/api/logincliente',
+        selectedRole === 'administrador' ? { email, password } : { email: email, contrasena: password }
+      );
 
       console.log('Validando Acceso..');
       console.log(response.data);
-      if (response.data.token != '') {
+
+      if (response.data.token !== '') {
         console.log('OK');
         secureLocalStorage.setItem('token', response.data.token);
-        secureLocalStorage.setItem('username', response.data.nombre); // Almacenar el nombre de usuario
+        secureLocalStorage.setItem('username', response.data.nombre);
         setOpen(true);
-        if (selectedRole === 'administrador') {
-          // Si el usuario seleccionó Administrador
-          navigate('/menu'); // Redirigir a la ventana de administrador
-        } else {
-          // Si el usuario seleccionó Cliente
-          navigate('/cliente'); // Redirigir a la ventana de cliente
-        }
+        navigate(selectedRole === 'administrador' ? '/menu' : '/cliente');
       } else {
-        setUserNotFoundError(true); // Marcar error de usuario no encontrado
-        setOpen(false); // Ocultar el mensaje de ingreso exitoso
+        setUserNotFoundError(true);
+        setOpen(false);
       }
     } catch (error) {
       console.error(error);
-      setUserNotFoundError(true); // Marcar error de usuario no encontrado en caso de error de red
-      setOpen(false); // Ocultar el mensaje de ingreso exitoso
+      setUserNotFoundError(true);
+      setOpen(false);
     }
 
     setEmail('');
@@ -123,100 +110,127 @@ const Login_Component = () => {
     setLoading(false);
   };
 
-  return (
-    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '90vh' }}>
-      <div
-        style={{
-          borderRadius: '20px',
-          backgroundColor: '#E1E3EA',
-          padding: '10px',
-          textAlign: 'center',
-        }}
-      >
-        {loading ? (
-          <CircularProgress /> // Mostrar CircularProgress cuando loading es true
-        ) : (
-          <>
-            <img src={miImagen} alt="Avatar Doctor" style={{ float: 'right', height: '50vh', marginTop: '50px' }} />
+  const handleNavigation = (path) => {
+    navigate(path);
+  };
 
-            <Stack spacing={2} direction="column" alignItems="center">
-              <Stack spacing={2} sx={{ width: 300, marginTop: '50px', backgroundColor: '#E1E3EA', padding: '20px', borderRadius: '20px' }}>
-                <h1 style={{ fontSize: '40px', textAlign: 'center', color: '#000000' }}>BIENVENIDO</h1>
-                <TextField
-                  label="Usuario"
-                  name="email"
-                  value={email}
-                  onChange={handleEmailChange}
-                  sx={{ borderRadius: '20px', backgroundColor: '#ffffff', color: '#000000', marginBottom: '10px' }}
+  return (
+    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '90vh', backgroundColor: '#48A3FF' }}>
+      <div style={{ display: 'flex', backgroundColor: '#FFFFFF', borderRadius: '20px', overflow: 'hidden' }}>
+        <div style={{ padding: '20px', textAlign: 'center' }}>
+          <Stack spacing={2} sx={{ width: 400, marginTop: '50px', backgroundColor: '#FFFFFF', padding: '20px', borderRadius: '20px', textAlign: 'center' }}>
+            <h1 style={{ fontSize: '40px', color: '#000000' }}>Iniciar Sesión</h1>
+            <TextField
+              label="Usuario"
+              name="email"
+              value={email}
+              onChange={(e) => handleInputChange(e, setEmail)}
+              sx={{ borderRadius: '20px', backgroundColor: '#ffffff', color: '#000000', marginBottom: '10px' }}
+            />
+            <PasswordField password={password} handlePasswordChange={(e) => handleInputChange(e, setPassword)} />
+            <Stack direction="row" sx={{ justifyContent: 'center', marginTop: '10px' }}>
+              <Button
+                variant="contained"
+                sx={{
+                  fontFamily: 'sans-serif',
+                  fontWeight: 'bold',
+                  backgroundColor: '#3F51B5',
+                  color: '#ffffff',
+                  width: '300px',
+                  '&:hover': {
+                    backgroundColor: '#4CAF50',
+                  },
+                }}
+                onClick={fnLogin}
+                disabled={!email || !password}
+              >
+                <span>Entrar</span>
+                <LockOutlinedIcon style={{ marginLeft: '5px' }} />
+              </Button>
+            </Stack>
+            <Stack direction="row" sx={{ justifyContent: 'center', marginBottom: '10px', color: '#000000' }}>
+              <span style={{ fontSize: '14px' }}>¿Es tu primera vez? </span>
+              <span
+                style={{ fontSize: '14px', textDecoration: 'underline', cursor: 'pointer', fontWeight: 'bold' }}
+                onClick={() => handleNavigation('/registrar')}
+              >
+                Regístrate aquí
+              </span>
+            </Stack>
+            <Snackbar
+              open={open}
+              autoHideDuration={6000}
+              onClose={handleClose}
+              sx={{
+                bottom: '0%',
+                right: '50%',
+                transform: 'translate(230%, -660%)',
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}
+            >
+              <Alert severity="success">Ingreso exitoso</Alert>
+            </Snackbar>
+            {emptyFieldsError && (
+              <Alert severity="error" onClose={() => setEmptyFieldsError(false)}>
+                Verifica la información
+              </Alert>
+            )}
+            {userNotFoundError && (
+              <Alert severity="error" onClose={() => setUserNotFoundError(false)}>
+                Usuario o contraseña incorrectos
+              </Alert>
+            )}
+            <div style={{ display: 'flex', flexDirection: 'column', marginTop: '10px', alignItems: 'center', color: '#000000', fontWeight: 'bold' }}>
+              <label style={{ fontSize: '26px', marginBottom: '5px' }}>Identificate:</label>
+              <div style={{ display: 'flex', alignItems: 'center' }}>
+                <input
+                  type="radio"
+                  id="admin"
+                  name="role"
+                  value="administrador"
+                  checked={selectedRole === 'administrador'}
+                  onChange={handleRoleChange}
+                  style={{ marginRight: '5px' }}
                 />
-                {/* Uso del componente PasswordField */}
-                <PasswordField password={password} handlePasswordChange={handlePasswordChange} />
-              </Stack>
-              <Stack direction="row" sx={{ justifyContent: 'center' }}>
+                <label htmlFor="admin" style={{ fontSize: '14px' }}>Administrador</label>
+              </div>
+              <div style={{ display: 'flex', alignItems: 'center', marginTop: '5px' }}>
+                <input
+                  type="radio"
+                  id="client"
+                  name="role"
+                  value="cliente"
+                  checked={selectedRole === 'cliente'}
+                  onChange={handleRoleChange}
+                  style={{ marginRight: '5px' }}
+                />
+                <label htmlFor="client" style={{ fontSize: '14px' }}>Cliente</label>
+              </div>
+              <div style={{ alignSelf: 'flex-end', marginRight: '100px', marginTop: '50px', marginBottom: '20px' }}>
                 <Button
                   variant="contained"
-                  sx={{ fontFamily: 'sans-serif', fontWeight: 'bold', backgroundColor: '#8A8D95', color: '#ffffff' }}
-                  onClick={fnLogin}
+                  sx={{
+                    fontFamily: 'sans-serif',
+                    fontWeight: 'bold',
+                    backgroundColor: '#FFC107',
+                    color: '#ffffff',
+                    width: '200px',
+                    '&:hover': {
+                      backgroundColor: '#FF5252',
+                    },
+                  }}
+                  onClick={() => handleNavigation('/')}
                 >
-                  ENTRAR
+                  <span>Regresar</span>
                 </Button>
-              </Stack>
-              <br />
-              <Snackbar
-                open={open}
-                autoHideDuration={6000}
-                onClose={handleClose}
-                sx={{
-                  bottom: '0%',
-                  right: '50%',
-                  transform: 'translate(230%, -660%)',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                }}
-              >
-                <Alert severity="success">Ingreso exitoso</Alert>
-              </Snackbar>
-              {emptyFieldsError && (
-                <Alert severity="error" onClose={() => setEmptyFieldsError(false)}>
-                  Verifica la información
-                </Alert>
-              )}
-              {userNotFoundError && (
-                <Alert severity="error" onClose={() => setUserNotFoundError(false)}>
-                  Usuario o contraseña incorrectos
-                </Alert>
-              )}
-              <div style={{ display: 'flex', flexDirection: 'column', marginTop: '10px', alignItems: 'center' }}>
-                <label style={{ fontSize: '26px', marginBottom: '5px' }}>Identificate:</label>
-                <div style={{ display: 'flex', alignItems: 'center' }}>
-                  <input
-                    type="radio"
-                    id="admin"
-                    name="role"
-                    value="administrador"
-                    checked={selectedRole === 'administrador'}
-                    onChange={handleRoleChange}
-                    style={{ marginRight: '5px' }}
-                  />
-                  <label htmlFor="admin" style={{ fontSize: '14px' }}>Administrador</label>
-                </div>
-                <div style={{ display: 'flex', alignItems: 'center', marginTop: '5px' }}>
-                  <input
-                    type="radio"
-                    id="client"
-                    name="role"
-                    value="cliente"
-                    checked={selectedRole === 'cliente'}
-                    onChange={handleRoleChange}
-                    style={{ marginRight: '5px' }}
-                  />
-                  <label htmlFor="client" style={{ fontSize: '14px' }}>Cliente</label>
-                </div>
               </div>
-            </Stack>
-          </>
-        )}
-        <div style={{ position: 'absolute', top: 540, right: 20 }}></div>
+            </div>
+          </Stack>
+        </div>
+        <div style={{ marginLeft: '20px', alignSelf: 'flex-end', marginBottom: '20px' }}>
+          <img src={miImagen} alt="Avatar Doctor" style={{ height: '50vh', marginTop: '50px' }} />
+        </div>
       </div>
     </div>
   );

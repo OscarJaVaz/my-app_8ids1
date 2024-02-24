@@ -16,7 +16,7 @@ import Doctor2 from './assets/doc2.jpg';
 
 function DoctorComponent() {
   const location = useLocation();
-  
+
 
   const [doctor, setDoctor] = useState({
     id: 0,
@@ -28,32 +28,66 @@ function DoctorComponent() {
 
   const [loading, setLoading] = useState(false);
 
-  const fnObtenerDatos=async()=>{
-    await axios.get('http://127.0.0.1:8000/api/doctor',{
-      params:{
+  const fnObtenerDatos = async () => {
+    await axios.get('http://127.0.0.1:8000/api/doctor', {
+      params: {
         id: location.state.id
       }
-    }).then((response)=>{
+    }).then((response) => {
       console.log(response.data)
       setDoctor(response.data)
       setLoading(false)
     })
   }
 
+
+  const [nssError, setNssError] = useState('');
+
+  const [isGuardarDisabled, setIsGuardarDisabled] = useState(false);
+
+
+
   //GUARDAR DATOS
   //Se vueleve a utilizar la setPaciente((prevState)) para recopilar los datos de paciente
   //name represente el nombre del campo y value se utiliza para el nuevo valo ingresado
   const handleGuardar = (event) => {
     const { name, value } = event.target;
-    setDoctor((prevState) => ({
-      ...prevState,
-      [name]: value,
-    }));
+  
+    // Si el nombre es "cedula" y la longitud del valor es mayor a 8, recortarlo a 8 dígitos
+    if (name === 'cedula' && value.length > 8) {
+      setDoctor((prevState) => ({
+        ...prevState,
+        [name]: value.slice(0, 8),
+      }));
+    } else {
+      setDoctor((prevState) => ({
+        ...prevState,
+        [name]: value,
+      }));
+    }
+  
+    if (name === 'cedula') {
+      if (!isValidCedula(value) || value.length < 7) {
+        setNssError('Cédula inválida. Debe tener de 7 a 8 dígitos.');
+        setIsGuardarDisabled(true);
+      } else {
+        setNssError('');
+        setIsGuardarDisabled(false);
+      }
+    }
   };
+  
+
+  const isValidCedula = (cedula) => {
+    return /^\d{7,8}$/.test(cedula);
+  };
+
+
+
   const GuardarDatos = async () => {
     setLoading(true);
-      await axios.post('http://127.0.0.1:8000/api/doctor/crear', doctor);
-      console.log('Datos guardados correctamente');
+    await axios.post('http://127.0.0.1:8000/api/doctor/crear', doctor);
+    console.log('Datos guardados correctamente');
     {
       setLoading(false);
       navigate("/homedoctor");
@@ -61,9 +95,9 @@ function DoctorComponent() {
   };
   const navigate = useNavigate();
   //ELIMINAR DATOS
-  const eliminarDatos = async () => { 
+  const eliminarDatos = async () => {
     setLoading(true);
-    await axios.post('http://127.0.0.1:8000/api/doctor/borrar',doctor);
+    await axios.post('http://127.0.0.1:8000/api/doctor/borrar', doctor);
     console.log('Datos eliminados correctamente');
     setLoading(false);
     navigate("/homedoctor");
@@ -86,40 +120,41 @@ function DoctorComponent() {
       fnObtenerDatos();
     }
   }, []);
-  
+
   const regresar = async () => {
     navigate('/homedoctor');
   };
 
-    // Función para verificar si todos los campos están completos
-    const camposCompletos = () => {
-      return (
-        doctor.nombre.trim() !== '' &&
-        String(doctor.cedula).trim() !== '' &&
-        doctor.contacto.trim() !== '' &&
-        doctor.domicilio.trim() !== ''
-      );
-    };
+  // Función para verificar si todos los campos están completos
+  const camposCompletos = () => {
+    return (
+      doctor.nombre.trim() !== '' &&
+      String(doctor.cedula).trim() !== '' &&
+      doctor.contacto.trim() !== '' &&
+      doctor.domicilio.trim() !== ''
+    );
+  };
+
 
   return (
     <div
-    style={{
-      display: 'flex',
-      flexDirection: 'column',
-      justifyContent: 'center',
-      alignItems: 'center',
-      height: '120vh',
-      width: '450px',
-      background: '#DEDFEF',
-      borderRadius: '50px',
-      margin: 'auto',  
-      marginTop: '20px',
-    }}
-  >
-    <h1 style={{ marginBottom: '10px' }}>Doctores</h1>
-    <img src={Doctor} style={{ height: '18%', width: '25%' }} />
+      style={{
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center',
+        height: '120vh',
+        width: '450px',
+        background: '#DEDFEF',
+        borderRadius: '50px',
+        margin: 'auto',
+        marginTop: '20px',
+      }}
+    >
+      <h1 style={{ marginBottom: '10px' }}>Doctores</h1>
+      <img src={Doctor} style={{ height: '18%', width: '25%' }} />
       <ul style={{ listStyleType: 'none', textAlign: 'center', padding: 0 }}>
-        <p></p>           
+        <p></p>
         <li>
           <TextField
             required
@@ -139,8 +174,11 @@ function DoctorComponent() {
             name="cedula"
             value={doctor.cedula}
             onChange={handleGuardar}
+            error={!!nssError}
+            helperText={nssError}
           />
         </li>
+
         <p></p>
         <li>
           <TextField
@@ -164,25 +202,25 @@ function DoctorComponent() {
           />
         </li>
         <p></p>
-        <Button 
-        variant="contained" 
-        style={{ backgroundColor: 'green', marginRight: '10px' }} 
-        onClick={GuardarDatos}
-        startIcon={<SaveIcon />} 
-        disabled={!camposCompletos()} >
+        <Button
+          variant="contained"
+          style={{ backgroundColor: 'green', marginRight: '10px' }}
+          onClick={GuardarDatos}
+          startIcon={<SaveIcon />}
+          disabled={!camposCompletos() || isGuardarDisabled} >
           Guardar
         </Button>
 
-        <Button 
-        variant="contained" 
-        style={{ backgroundColor: 'red' }}
-        onClick={eliminarDatos} 
-        startIcon={<DeleteIcon />} 
-        disabled={!camposCompletos()} >
+        <Button
+          variant="contained"
+          style={{ backgroundColor: 'red' }}
+          onClick={eliminarDatos}
+          startIcon={<DeleteIcon />}
+          disabled={!camposCompletos()} >
           Eliminar
         </Button>
-        
-        <br/><br/>
+
+        <br /><br />
         <Button
           variant="contained"
           style={{ backgroundColor: '#F66E10' }}
@@ -192,13 +230,13 @@ function DoctorComponent() {
           Regresar
         </Button>
 
-        <br/><br/>
+        <br /><br />
         {loading ? <Box sx={{ width: '100%' }}>
-         <LinearProgress />
-        </Box> :''}
+          <LinearProgress />
+        </Box> : ''}
       </ul>
     </div>
-    
+
   );
 }
 export default DoctorComponent;

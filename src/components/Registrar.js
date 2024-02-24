@@ -6,6 +6,10 @@ import CircularProgress from '@mui/material/CircularProgress';
 import IconButton from '@mui/material/IconButton';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
+import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import Button from '@mui/material/Button';
+import miImagen from '../components/assets/simbolo_doc.png';
 
 const Registrar = () => {
   const [mostrarMensaje, setMostrarMensaje] = useState(true);
@@ -35,7 +39,7 @@ const Registrar = () => {
       return;
     }
 
-    if (!nombre || !apellido || !email || !telefono || !domicilio || !contrasena || !confirmarContrasena) {
+    if (![nombre, apellido, email, telefono, domicilio, contrasena, confirmarContrasena].every(Boolean)) {
       setMensajeValidacion('Todos los campos son obligatorios');
       return;
     }
@@ -92,20 +96,10 @@ const Registrar = () => {
 
   const validarContrasena = (valor) => {
     let mensaje = '';
-    if (!/[A-Z]/.test(valor)) {
-      mensaje += 'Debe contener al menos una mayúscula. ';
-    }
-    if (!/[a-z]/.test(valor)) {
-      mensaje += 'Debe contener al menos una minúscula. ';
-    }
-    if (!/[0-9]/.test(valor)) {
-      mensaje += 'Debe contener al menos un número. ';
-    }
-    if (valor.length >= 8) {
-      setContrasenaValida(true);
-    } else {
-      setContrasenaValida(false);
-    }
+    if (!/[A-Z]/.test(valor)) mensaje += 'Debe contener al menos una mayúscula. ';
+    if (!/[a-z]/.test(valor)) mensaje += 'Debe contener al menos una minúscula. ';
+    if (!/[0-9]/.test(valor)) mensaje += 'Debe contener al menos un número. ';
+    setContrasenaValida(valor.length >= 8);
     setMensajeValidacion(mensaje);
   };
 
@@ -117,8 +111,22 @@ const Registrar = () => {
     setShowPassword(!showPassword);
   };
 
+  const isBotonRegistrarDisabled = () => {
+    return !(
+      nombre &&
+      apellido &&
+      email &&
+      telefono &&
+      domicilio &&
+      contrasena &&
+      confirmarContrasena &&
+      contrasenaValida &&
+      contrasena === confirmarContrasena
+    );
+  };
+
   return (
-    <div style={styles.container}>
+    <div style={{ ...styles.container, backgroundColor: '#48A3FF' }}>
       <div style={styles.mensajeContainer}>
         {mostrarMensaje && (
           <div style={styles.mensaje}>
@@ -128,6 +136,10 @@ const Registrar = () => {
       </div>
       <div style={styles.formularioContainer}>
         <form onSubmit={handleSubmit} style={styles.formulario}>
+          <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+            <img src={miImagen} alt="Avatar Doctor" style={{ height: '10vh' }} />
+          </div>
+
           <input
             type="text"
             value={nombre}
@@ -152,7 +164,7 @@ const Registrar = () => {
           <input
             type="tel"
             value={telefono}
-            onChange={(e) => setTelefono(e.target.value)}
+            onChange={(e) => setTelefono(e.target.value.replace(/\D/, ''))}
             style={styles.input}
             placeholder="Teléfono"
           />
@@ -164,12 +176,12 @@ const Registrar = () => {
             placeholder="Domicilio"
           />
 
-          <div style={{ position: 'relative' }}>
+          <div style={{ position: 'relative', marginBottom: '10px' }}>
             <input
               type={showPassword ? 'text' : 'password'}
               value={contrasena}
               onChange={handleContrasenaChange}
-              style={{ ...styles.input, color: contrasenaValida ? 'green' : 'inherit' }}
+              style={{ ...styles.input, color: contrasenaValida ? 'green' : 'inherit', marginBottom: '0' }}
               placeholder="Contraseña"
             />
             <IconButton
@@ -188,15 +200,48 @@ const Registrar = () => {
             placeholder="Confirmar Contraseña"
           />
           {mensajeValidacion && (
-            <p style={styles.mensajeValidacion}>{mensajeValidacion}</p>
+            <p style={{ ...styles.mensajeValidacion, color: mensajeValidacion.includes('coinciden') ? 'green' : 'red' }}>
+              {mensajeValidacion}
+            </p>
           )}
-          {showLoader ? ( // Mostrar la rueda de carga si showLoader es true
-            <CircularProgress style={{ margin: 'auto' }} />
+          {showLoader ? (
+            <CircularProgress style={{ margin: 'auto', color: 'green' }} />
           ) : (
-            <button style={styles.botonSubmit} type="submit">Registrar</button>
+            <Button
+              variant="contained"
+              sx={{
+                backgroundColor: '#4870FF',
+                color: 'white',
+                borderRadius: '5px',
+                marginTop: '10px',
+                '&:hover': {
+                  backgroundColor: '#4CAF50',
+                },
+              }}
+              type="submit"
+              disabled={isBotonRegistrarDisabled()}
+            >
+              <CheckCircleOutlineIcon style={{ marginRight: '5px', display: 'inline-block', verticalAlign: 'middle' }} />
+              Registrar
+            </Button>
           )}
           <br></br>
-          <button style={styles.cerrarMensajeButton} onClick={regresar}>Regresar</button>
+          <Button
+            variant="contained"
+            sx={{
+              backgroundColor: '#FFBF48',
+              color: 'white',
+              borderRadius: '5px',
+              marginTop: '10px',
+              '&:hover': {
+                backgroundColor: '#FF0000',
+              },
+            }}
+            onClick={regresar}
+          >
+            <ArrowBackIcon style={{ marginRight: '5px', display: 'inline-block', verticalAlign: 'middle' }} />
+            Regresar
+          </Button>
         </form>
       </div>
       <Snackbar open={openAlert} autoHideDuration={6000} onClose={handleCloseAlert}>
@@ -223,7 +268,7 @@ const styles = {
     backgroundColor: '#f0f0f0',
     padding: '10px',
     border: '2px solid #33cccc',
-    borderRadius: '5px',
+    borderRadius: '10px',
     width: '400px',
     display: 'flex',
     alignItems: 'center',
@@ -250,32 +295,21 @@ const styles = {
     flexDirection: 'column',
     backgroundColor: '#fff',
     padding: '20px',
-    borderRadius: '8px',
+    borderRadius: '12px',
     boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.1)',
   },
   input: {
-    width: '100%',
+    width: '95%',
     padding: '10px',
     borderRadius: '5px',
     border: '1px solid #ddd',
     fontSize: '16px',
     marginBottom: '10px',
+    marginTop: '5px',
   },
   mensajeValidacion: {
-    color: 'red',
     fontSize: '14px',
     marginBottom: '10px',
-  },
-  botonSubmit: {
-    backgroundColor: '#4CAF50',
-    color: 'white',
-    border: 'none',
-    borderRadius: '5px',
-    padding: '12px 20px',
-    textDecoration: 'none',
-    cursor: 'pointer',
-    fontSize: '16px',
-    textAlign: 'center',
   },
 };
 
