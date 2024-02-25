@@ -126,11 +126,11 @@ const Registrar = () => {
   };
 
   return (
-    <div style={{ ...styles.container, backgroundColor: '#48A3FF' }}>
+    <div style={{ ...styles.container, background: 'linear-gradient(#48A3FF, #ffffff)'}}>
       <div style={styles.mensajeContainer}>
         {mostrarMensaje && (
           <div style={styles.mensaje}>
-            <p style={styles.mensajeTexto}>¡Bienvenido al Registro del Consultorio Medico!</p>
+            <p style={{ ...styles.mensajeTexto, textAlign: 'center', margin: '0 auto' }}>¡Bienvenido al Registro del Consultorio Médico!</p>
           </div>
         )}
       </div>
@@ -267,7 +267,7 @@ const styles = {
   mensaje: {
     backgroundColor: '#f0f0f0',
     padding: '10px',
-    border: '2px solid #33cccc',
+    border: '2px solid #ffffff',
     borderRadius: '10px',
     width: '400px',
     display: 'flex',
@@ -275,12 +275,13 @@ const styles = {
     justifyContent: 'space-between',
   },
   mensajeTexto: {
-    color: '#33cccc',
+    color: '#1172D8',
     fontWeight: 'bold',
+    textAlign: 'center',
     margin: 0,
   },
   cerrarMensajeButton: {
-    backgroundColor: '#33cccc',
+    backgroundColor: '#1172D8',
     color: '#fff',
     border: 'none',
     padding: '10px 20px',

@@ -83,7 +83,7 @@ const Login_Component = () => {
     try {
       const response = await axios.post(
         selectedRole === 'administrador' ? 'http://127.0.0.1:8000/api/login' : 'http://127.0.0.1:8000/api/logincliente',
-        selectedRole === 'administrador' ? { email, password } : { email: email, contrasena: password }
+        selectedRole === 'administrador' ? { email, password } : { email, contrasena: password }
       );
 
       console.log('Validando Acceso..');
@@ -115,10 +115,10 @@ const Login_Component = () => {
   };
 
   return (
-    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '90vh', backgroundColor: '#48A3FF' }}>
+    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh', background: 'linear-gradient(#48A3FF, #ffffff)' }}>
       <div style={{ display: 'flex', backgroundColor: '#FFFFFF', borderRadius: '20px', overflow: 'hidden' }}>
-        <div style={{ padding: '20px', textAlign: 'center' }}>
-          <Stack spacing={2} sx={{ width: 400, marginTop: '50px', backgroundColor: '#FFFFFF', padding: '20px', borderRadius: '20px', textAlign: 'center' }}>
+        <div style={{ padding: '2px', textAlign: 'center' }}>
+          <Stack spacing={2} sx={{ width: 400, marginTop: '10px', backgroundColor: '#FFFFFF', padding: '20px', borderRadius: '20px', textAlign: 'center' }}>
             <h1 style={{ fontSize: '40px', color: '#000000' }}>Iniciar Sesión</h1>
             <TextField
               label="Usuario"
