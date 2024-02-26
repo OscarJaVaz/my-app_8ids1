@@ -1,5 +1,8 @@
 import React, { useState } from 'react';
 import { useLocation } from 'react-router-dom';
+import Slider from 'react-slick';
+import 'slick-carousel/slick/slick.css';
+import 'slick-carousel/slick/slick-theme.css';
 import Cards from 'react-credit-cards';
 import 'react-credit-cards/es/styles-compiled.css';
 
@@ -87,6 +90,15 @@ const VistaCompra = () => {
     setCarrito(updatedCart);
   };
 
+  // Configuración del carrusel
+  const sliderSettings = {
+    dots: true,
+    infinite: true,
+    speed: 500,
+    slidesToShow: 3,
+    slidesToScroll: 1
+  };
+
   // Calcular el total del precio de los productos en el carrito
   const totalPrecio = carrito.reduce((total, producto) => total + (producto.quantity * producto.price), 0);
 
@@ -94,9 +106,9 @@ const VistaCompra = () => {
     <div className="layout">
       <div className="col-md-6">
         <h2 className='vistacompra'>Detalles del pedido</h2>
-        <ul>
+        <Slider {...sliderSettings}>
           {carrito.map((producto, index) => (
-            <li key={index} className="carrito-item">
+            <div key={index} className="carrito-item">
               <h3>{producto.nom_producto}</h3>
               <img src={producto.imagen} alt={producto.nom_producto} className="carrito-imagen" />
               <p>Descripción: {producto.descripcion}</p>
@@ -107,9 +119,9 @@ const VistaCompra = () => {
               </p>
               <p>Precio Total: ${producto.quantity * producto.price}</p>
               <button onClick={() => removeFromCart(producto.id)} className="btn-eliminar">Eliminar</button>
-            </li>
+            </div>
           ))}
-        </ul>
+        </Slider>
         {/* Mostrar el total del precio */}
         <p className="total-price">Precio total: ${totalPrecio}</p>
       </div>
