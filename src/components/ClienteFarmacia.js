@@ -79,18 +79,32 @@ const ClienteFarmacia = () => {
     fetchProductos();
   }, []);
 
+  // Recuperar el carrito del almacenamiento local al cargar la página
+  useEffect(() => {
+    const storedCart = localStorage.getItem('carrito');
+    if (storedCart) {
+      setCarrito(JSON.parse(storedCart));
+    }
+  }, []);
+
+  // Actualizar el almacenamiento local cuando el carrito cambie
+  useEffect(() => {
+    localStorage.setItem('carrito', JSON.stringify(carrito));
+  }, [carrito]);
+
   const addToCart = () => {
     const updatedCart = [...carrito];
     const existingItemIndex = updatedCart.findIndex(item => item.id === selectedProduct.id);
     if (existingItemIndex !== -1) {
       updatedCart[existingItemIndex].quantity += quantity;
+      setCarrito(updatedCart);
     } else {
-      updatedCart.push({ ...selectedProduct, quantity });
+      setCarrito([...updatedCart, { ...selectedProduct, quantity }]);
     }
-    setCarrito(updatedCart);
     setSelectedProduct(null);
     setQuantity(1);
   };
+  
 
   const removeFromCart = (productId) => {
     const updatedCart = carrito.filter(item => item.id !== productId);
@@ -98,10 +112,7 @@ const ClienteFarmacia = () => {
   };
 
   const handleBuy = () => {
-    // Redirigir a la vista de compra al hacer clic en comprar
-    // Utilizamos el método navigate de useNavigate para navegar a la vista de compra
-    // Asegúrate de reemplazar '/vistaCompra' con la ruta real de tu vista de compra
-    navigate("/vistaCompra");
+    navigate("/vistaCompra", { state: { carrito } });
   };
 
   const filteredProducts = productos.filter(producto => {
