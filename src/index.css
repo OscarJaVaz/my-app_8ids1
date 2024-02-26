@@ -37,11 +37,16 @@ body {
   
 }
 
-h2 {
-  font-size: 2em;
-  margin-bottom: 20px;
-  color: #333;
-  text-align: center;
+.vistacompra{
+  font-size: 2rem; /* Tamaño grande de la fuente para hacerlo resaltante */
+  color: #305edb; /* Un color verde que es asociado a menudo con precios en tiendas */
+  font-weight: bold; /* Negrita para darle peso visual */
+  margin: 20px 0; /* Espacio arriba y abajo del párrafo */
+  padding: 10px; /* Espacio interno para que no se vea apretado */
+  border-radius: 5px; /* Bordes redondeados para suavizar la estética */
+  background-color: #f8f8f8; /* Un fondo sutil para resaltar el texto */
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1); /* Sombra suave para añadir profundidad */
+  display: inline-block; /* Hacer que el fondo solamente rodee al texto */
 }
 
 ul {
@@ -52,7 +57,10 @@ ul {
 
 li {
   background: #f9f9f9;
-  border: 1px solid #6b6868;
+  border-radius: 5px; /* Bordes redondeados para suavizar la estética */
+  background-color: #f8f8f8; /* Un fondo sutil para resaltar el texto */
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1); /* Sombra suave para añadir profundidad */
+  display: inline-block; /* Hacer que el fondo solamente rodee al texto */
   padding: 15px;
   margin-bottom: 15px;
   border-radius: 8px;
@@ -75,10 +83,13 @@ li p {
 
 .card {
   background: #fff;
-  border: 1px solid #dedede;
-  border-radius: 8px;
+  
+  
   padding: 20px;
   margin-top: 20px;
+  border-radius: 5px; /* Bordes redondeados para suavizar la estética */
+  background-color: #f8f8f8; /* Un fondo sutil para resaltar el texto */
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1); /* Sombra suave para añadir profundidad */
 }
 
 .card-body {
@@ -479,3 +490,35 @@ button {
   width: 100%;
 }
 
+/*BOTONES PARA INCREMENTAR O BAJAR DISEÑO*/
+.carrito-item {
+  list-style: none;
+  margin-bottom: 20px;
+}
+
+.carrito-imagen {
+  width: 100px;
+  height: 100px;
+  margin-right: 10px;
+}
+
+.btn-cantidad {
+  background-color: #f2f2f2;
+  border: 1px solid #ddd;
+  padding: 5px 10px;
+  margin: 0 5px;
+}
+
+.btn-eliminar {
+  background-color: #ff6347; /* O el color que prefieras */
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  cursor: pointer;
+  margin-top: 10px; /* Espacio adicional arriba del botón */
+}
+
+.btn-cantidad:hover,
+.btn-eliminar:hover {
+  opacity: 0.8;
+}

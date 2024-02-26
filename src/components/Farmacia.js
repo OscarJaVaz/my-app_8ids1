@@ -173,7 +173,7 @@ const Farmacia = () => {
         </Modal>
       )}
   {mostrarCarrito && (
-  <div style={{ position: 'fixed', top: '60px', right: '20px', backgroundColor: 'white', padding: '10px', zIndex: 1001 }}>
+  <div style={{ position: 'absolute', top: '60px', right: '20px', backgroundColor: 'white', padding: '10px', zIndex: 1001, maxHeight: '80vh', overflowY: 'auto', width: '300px' }}>
     {carrito.length === 0 ? (
       <p>El carrito está vacío</p>
     ) : (
@@ -193,6 +193,8 @@ const Farmacia = () => {
     )}
   </div>
 )}
+
+
       <div style={estiloProductosContainer}>
         {sortedProducts.map((producto) => (
           <div key={producto.id} style={estiloProducto}>

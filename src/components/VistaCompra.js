@@ -19,6 +19,8 @@ const VistaCompra = () => {
     country: '',
   });
 
+  const [carrito, setCarrito] = useState(state ? [...state.carrito] : []);
+
   const handleInputChange = (e) => {
     setPaymentDetails({
       ...paymentDetails,
@@ -67,21 +69,44 @@ const VistaCompra = () => {
   const [showModal, setShowModal] = useState(false);
   const [showPaymentForm, setShowPaymentForm] = useState(false);
 
+  const handleQuantityChange = (productId, newQuantity) => {
+    if (newQuantity <= 0) {
+      // Eliminar el producto del carrito si la cantidad es menor o igual a cero
+      const updatedCart = carrito.filter(item => item.id !== productId);
+      setCarrito(updatedCart);
+    } else {
+      const updatedCart = carrito.map(item =>
+        item.id === productId ? { ...item, quantity: newQuantity } : item
+      );
+      setCarrito(updatedCart);
+    }
+  };
+
+  const removeFromCart = (productId) => {
+    const updatedCart = carrito.filter(item => item.id !== productId);
+    setCarrito(updatedCart);
+  };
+
   // Calcular el total del precio de los productos en el carrito
-  const totalPrecio = state && state.carrito.reduce((total, producto) => total + (producto.quantity * producto.price), 0);
+  const totalPrecio = carrito.reduce((total, producto) => total + (producto.quantity * producto.price), 0);
 
   return (
     <div className="layout">
       <div className="col-md-6">
-        <h2>Detalles del Pedido</h2>
+        <h2 className='vistacompra'>Detalles del pedido</h2>
         <ul>
-          {state && state.carrito.map((producto, index) => (
-            <li key={index}>
+          {carrito.map((producto, index) => (
+            <li key={index} className="carrito-item">
               <h3>{producto.nom_producto}</h3>
-              <img src={producto.imagen} alt={producto.nom_producto} style={{ width: '100px', height: '100px' }} />
+              <img src={producto.imagen} alt={producto.nom_producto} className="carrito-imagen" />
               <p>Descripción: {producto.descripcion}</p>
-              <p>Cantidad: {producto.quantity}</p>
+              <p>Cantidad:
+                <button onClick={() => handleQuantityChange(producto.id, producto.quantity - 1)} className="btn-cantidad">-</button>
+                {producto.quantity}
+                <button onClick={() => handleQuantityChange(producto.id, producto.quantity + 1)} className="btn-cantidad">+</button>
+              </p>
               <p>Precio Total: ${producto.quantity * producto.price}</p>
+              <button onClick={() => removeFromCart(producto.id)} className="btn-eliminar">Eliminar</button>
             </li>
           ))}
         </ul>
