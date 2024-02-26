@@ -287,7 +287,7 @@ function RegistrarCitaCliente() {
         <p></p>
         <li>
           <TextField
-            label="Número de teléfono"
+            label="Número de teléfono que tenga Whatsapp"
             name="phoneNumber"
             value={phoneNumber}
             onChange={(event) => setPhoneNumber(event.target.value)}
