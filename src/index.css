@@ -34,6 +34,7 @@ body {
   max-width: 50%;
   padding: 15px;
   box-sizing: border-box;
+  
 }
 
 h2 {
@@ -46,11 +47,12 @@ h2 {
 ul {
   list-style: none;
   padding: 0;
+  
 }
 
 li {
   background: #f9f9f9;
-  border: 1px solid #e1e1e1;
+  border: 1px solid #6b6868;
   padding: 15px;
   margin-bottom: 15px;
   border-radius: 8px;
@@ -81,6 +83,7 @@ li p {
 
 .card-body {
   margin: 0 auto;
+  
 }
 
 .btn {
@@ -147,7 +150,7 @@ li p {
 /* Styling for the form controls */
 .form-control {
   display: block;
-  width: 100%;
+  width: 90%;
   padding: 0.75rem 1.25rem;
   font-size: 1rem;
   line-height: 1.25;
@@ -187,14 +190,14 @@ li p {
 /* Styling the Button */
 .btn-success {
   color: #fff;
-  background-color: #28a745;
-  border-color: #28a745;
+  background-color: #305edb;
+  border-color: #305edb;
 }
 
 .btn-success:hover {
   color: #fff;
-  background-color: #218838;
-  border-color: #1e7e34;
+  background-color: #3051ad;
+  border-color: #2f4991;
 }
 
 .btn-block {
@@ -260,8 +263,25 @@ code {
 
 
 
+/*PRECIO TOTAL DESIGN*/
+.total-price {
+  font-size: 2rem; /* Tamaño grande de la fuente para hacerlo resaltante */
+  color: #305edb; /* Un color verde que es asociado a menudo con precios en tiendas */
+  font-weight: bold; /* Negrita para darle peso visual */
+  margin: 20px 0; /* Espacio arriba y abajo del párrafo */
+  padding: 10px; /* Espacio interno para que no se vea apretado */
+  border-radius: 5px; /* Bordes redondeados para suavizar la estética */
+  background-color: #f8f8f8; /* Un fondo sutil para resaltar el texto */
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1); /* Sombra suave para añadir profundidad */
+  display: inline-block; /* Hacer que el fondo solamente rodee al texto */
+}
 
+/* Considera usar una fuente de Google Fonts para un aspecto más personalizado */
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@700&display=swap');
 
+.total-price {
+  font-family: 'Roboto', sans-serif;
+}
 
 
 

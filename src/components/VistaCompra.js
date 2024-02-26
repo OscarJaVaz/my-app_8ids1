@@ -67,6 +67,9 @@ const VistaCompra = () => {
   const [showModal, setShowModal] = useState(false);
   const [showPaymentForm, setShowPaymentForm] = useState(false);
 
+  // Calcular el total del precio de los productos en el carrito
+  const totalPrecio = state && state.carrito.reduce((total, producto) => total + (producto.quantity * producto.price), 0);
+
   return (
     <div className="layout">
       <div className="col-md-6">
@@ -82,6 +85,8 @@ const VistaCompra = () => {
             </li>
           ))}
         </ul>
+        {/* Mostrar el total del precio */}
+        <p className="total-price">Precio total: ${totalPrecio}</p>
       </div>
       <div className="col-md-6">
         {!showPaymentForm ? (
