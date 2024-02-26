@@ -63,21 +63,21 @@ const Inicio = () => {
         </Card>
 
 
-        <Card style={{ width: '280px',height:'250px',backgroundColor:'#5EA9FD', position: 'absolute', top: '81%', left: '41%', transform: 'translate(-50%, -50%)', zIndex: 1 }}>
+        <Card style={{ width: '280px',height:'250px',backgroundColor:'#5EA9FD', position: 'absolute', top: '81%', left: '42%', transform: 'translate(-50%, -50%)', zIndex: 1 }}>
           <CardContent>
             <h2>Ayuda en linea</h2>
             <p></p>
           </CardContent>
         </Card>
 
-        <Card style={{ width: '280px',height:'250px',backgroundColor:'#0077FC', position: 'absolute', top: '81%', left: '62%', transform: 'translate(-50%, -50%)', zIndex: 1 }}>
+        <Card style={{ width: '280px',height:'250px',backgroundColor:'#0077FC', position: 'absolute', top: '81%', left: '64%', transform: 'translate(-50%, -50%)', zIndex: 1 }}>
           <CardContent>
             <h2>Consulta</h2>
             <p></p>
           </CardContent>
         </Card> 
         
-        <Card style={{ width: '280px',height:'250px',backgroundColor:'#5EA9FD', position: 'absolute', top: '81%', left: '83%', transform: 'translate(-50%, -50%)', zIndex: 1 }}>
+        <Card style={{ width: '280px',height:'250px',backgroundColor:'#5EA9FD', position: 'absolute', top: '81%', left: '86%', transform: 'translate(-50%, -50%)', zIndex: 1 }}>
           <CardContent>
             <h2>Ayuda en linea</h2>
             <p></p>
