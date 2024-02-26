@@ -24,15 +24,222 @@ body {
 
 .layout {
   display: flex;
-  align-items: center;
   justify-content: center;
-  min-height: 100vh;
+  align-items: flex-start;
+  padding: 20px;
+}
+
+.col-md-6 {
+  flex: 0 0 50%;
+  max-width: 50%;
+  padding: 15px;
+  box-sizing: border-box;
+}
+
+h2 {
+  font-size: 2em;
+  margin-bottom: 20px;
+  color: #333;
+  text-align: center;
+}
+
+ul {
+  list-style: none;
+  padding: 0;
+}
+
+li {
+  background: #f9f9f9;
+  border: 1px solid #e1e1e1;
+  padding: 15px;
+  margin-bottom: 15px;
+  border-radius: 8px;
+}
+
+li h3 {
+  margin-top: 0;
+  color: #24292e;
+}
+
+li img {
+  display: block;
+  margin-bottom: 10px;
+}
+
+li p {
+  margin: 5px 0;
+  color: #666;
 }
 
 .card {
-  display: inline-block;
-  border-radius: 10px;
-  box-shadow: 0 0 10px #dadada;
+  background: #fff;
+  border: 1px solid #dedede;
+  border-radius: 8px;
+  padding: 20px;
+  margin-top: 20px;
+}
+
+.card-body {
+  margin: 0 auto;
+}
+
+.btn {
+  border: none;
+  padding: 10px 15px;
+  border-radius: 5px;
+  margin-top: 10px;
+  cursor: pointer;
+}
+
+.btn-primary {
+  margin-top: 250px; 
+  background-color: #007bff;
+  color: white;
+}
+
+.btn-success {
+  background-color: #28a745;
+  color: white;
+}
+
+.btn-lg {
+  padding: 10px 20px;
+  font-size: 1.25em;
+}
+
+.btn-block {
+  display: block;
+  width: 100%;
+}
+
+.form-control {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  margin-bottom: 15px;
+  font-size: 16px;
+}
+
+.form-group label {
+  display: block;
+  font-size: 1rem;
+  margin-bottom: .5rem;
+  color: #495057;
+  transition: all 0.3s;
+  font-weight: 600; /* Makes the text slightly bolder */
+}
+
+.form-group input:focus + label {
+  color: #007bff; /* Changes label color when input is focused */
+}
+
+.form-group input {
+  transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out;
+}
+
+.form-group input:focus {
+  border-color: #80bdff;
+  outline: 0;
+  box-shadow: 0 0 0 0.2rem rgba(0,123,255,.25);
+}
+
+/* Styling for the form controls */
+.form-control {
+  display: block;
+  width: 100%;
+  padding: 0.75rem 1.25rem;
+  font-size: 1rem;
+  line-height: 1.25;
+  color: #495057;
+  background-color: #fff;
+  background-clip: padding-box;
+  border: 1px solid #ced4da;
+  border-radius: 0.25rem;
+  transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+}
+
+/* Hover state for the form inputs for additional interactivity */
+.form-group input:hover {
+  border-color: #a8a8a8;
+}
+
+/* Style for containers of inputs */
+.form-row {
+  margin-right: -15px;
+  margin-left: -15px;
+}
+
+.form-row > .col-md-6 {
+  padding-right: 15px;
+  padding-left: 15px;
+  margin-bottom: 15px; /* Adds space between the form controls */
+}
+
+/* Responsive behavior for smaller devices */
+@media (max-width: 576px) {
+  .form-row > .col-md-6 {
+    flex: 0 0 100%;
+    max-width: 100%;
+  }
+}
+
+/* Styling the Button */
+.btn-success {
+  color: #fff;
+  background-color: #28a745;
+  border-color: #28a745;
+}
+
+.btn-success:hover {
+  color: #fff;
+  background-color: #218838;
+  border-color: #1e7e34;
+}
+
+.btn-block {
+  display: block;
+  width: 100%;
+}
+
+.btn-lg {
+  padding: 0.5rem 1rem;
+  font-size: 1.25rem;
+  line-height: 1.5;
+  border-radius: 0.3rem;
+}
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 999;
+}
+
+.modal {
+  background: white;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+}
+
+@media only screen and (max-width: 768px) {
+  .layout {
+    flex-direction: column;
+  }
+
+  .col-md-6 {
+    flex: 0 0 100%;
+    max-width: 100%;
+  }
 }
 
 code {
