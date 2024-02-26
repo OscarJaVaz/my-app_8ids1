@@ -25,7 +25,7 @@ const NavigationButton = ({ label, onClick, icon, fontSize }) => (
     {label}
   </Button>
 );
-
+//x
 const Inicio = () => {
   const navigate = useNavigate();
 
