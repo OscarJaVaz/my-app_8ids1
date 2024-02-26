@@ -65,11 +65,11 @@ const VistaCompra = () => {
 
   // Estado para controlar la visibilidad de la modal
   const [showModal, setShowModal] = useState(false);
+  const [showPaymentForm, setShowPaymentForm] = useState(false);
 
   return (
-    <div>
-      {/* Sección de detalles del pedido */}
-      <div>
+    <div className="layout">
+      <div className="col-md-6">
         <h2>Detalles del Pedido</h2>
         <ul>
           {state && state.carrito.map((producto, index) => (
@@ -83,125 +83,76 @@ const VistaCompra = () => {
           ))}
         </ul>
       </div>
-      {/* Fin de la sección de detalles del pedido */}
-      {/* Sección de dirección */}
-      <div className="direccion-seccion">
-        <h5>Dirección</h5>
-        <div className="form-group">
-          <label htmlFor="postalCode">Código Postal</label>
-          <input
-            type="text"
-            name="postalCode"
-            id="postalCode"
-            maxLength="5"
-            className="form-control"
-            onChange={handlePostalCodeChange}
-          />
-        </div>
-        <div className="form-group">
-          <label htmlFor="address">Dirección</label>
-          <input
-            type="text"
-            name="address"
-            id="address"
-            value={paymentDetails.address}
-            className="form-control"
-            readOnly
-          />
-        </div>
-        <div className="form-group">
-          <label htmlFor="city">Ciudad</label>
-          <input
-            type="text"
-            name="city"
-            id="city"
-            value={paymentDetails.city}
-            className="form-control"
-            readOnly
-          />
-        </div>
-        <div className="form-group">
-          <label htmlFor="country">País</label>
-          <input
-            type="text"
-            name="country"
-            id="country"
-            value={paymentDetails.country}
-            className="form-control"
-            readOnly
-          />
-        </div>
-      </div>
-      {/* Fin de la sección de dirección */}
-      {/* Formulario de pago */}
-      <div className="card">
-        <div className="card-body">
-          <Cards
-            number={paymentDetails.number}
-            name={paymentDetails.name}
-            expiry={paymentDetails.expiry}
-            cvc={paymentDetails.cvc}
-            focused={paymentDetails.focus}
-          />
-          <form>
-            <div className="form-group">
-              <label htmlFor="number">Número de la tarjeta</label>
-              <input
-                type="text"
-                name="number"
-                id="number"
-                maxLength="16"
-                className="form-control"
-                onChange={handleInputChange}
-                onFocus={handleFocusChange}
+      <div className="col-md-6">
+        {!showPaymentForm ? (
+          <button onClick={() => setShowPaymentForm(true)} type="button" className="btn btn-primary btn-lg btn-block">Continuar con el Pago</button>
+        ) : (
+          <div className="card">
+            <div className="card-body">
+              <Cards
+                number={paymentDetails.number}
+                name={paymentDetails.name}
+                expiry={paymentDetails.expiry}
+                cvc={paymentDetails.cvc}
+                focused={paymentDetails.focus}
               />
+              <form>
+                <div className="form-group">
+                  <label htmlFor="number">Número de la tarjeta</label>
+                  <input
+                    type="text"
+                    name="number"
+                    id="number"
+                    maxLength="16"
+                    className="form-control"
+                    onChange={handleInputChange}
+                    onFocus={handleFocusChange}
+                  />
+                </div>
+                <div className="form-group">
+                  <label htmlFor="name">Nombre</label>
+                  <input
+                    type="text"
+                    name="name"
+                    id="name"
+                    maxLength="30"
+                    className="form-control"
+                    onChange={handleInputChange}
+                    onFocus={handleFocusChange}
+                  />
+                </div>
+                <div className="form-row">
+                  <div className="form-group col-md-6">
+                    <label htmlFor="expiry">Fecha de expiración</label>
+                    <input
+                      type="text"
+                      name="expiry"
+                      id="expiry"
+                      maxLength="4"
+                      className="form-control"
+                      onChange={handleInputChange}
+                      onFocus={handleFocusChange}
+                    />
+                  </div>
+                  <div className="form-group col-md-6">
+                    <label htmlFor="cvc">CVC</label>
+                    <input
+                      type="text"
+                      name="cvc"
+                      id="cvc"
+                      maxLength="4"
+                      className="form-control"
+                      onChange={handleInputChange}
+                      onFocus={handleFocusChange}
+                    />
+                  </div>
+                </div>
+                <button onClick={processPayment} type="button" className="btn btn-success btn-block btn-lg">Pagar</button>
+              </form>
             </div>
-            <div className="form-group">
-              <label htmlFor="name">Nombre</label>
-              <input
-                type="text"
-                name="name"
-                id="name"
-                maxLength="30"
-                className="form-control"
-                onChange={handleInputChange}
-                onFocus={handleFocusChange}
-              />
-            </div>
-            <div className="form-row">
-              <div className="form-group col-md-6">
-                <label htmlFor="expiry">Fecha de expiración</label>
-                <input
-                  type="text"
-                  name="expiry"
-                  id="expiry"
-                  maxLength="4"
-                  className="form-control"
-                  onChange={handleInputChange}
-                  onFocus={handleFocusChange}
-                />
-              </div>
-              <div className="form-group col-md-6">
-                <label htmlFor="cvc">CVC</label>
-                <input
-                  type="text"
-                  name="cvc"
-                  id="cvc"
-                  maxLength="4"
-                  className="form-control"
-                  onChange={handleInputChange}
-                  onFocus={handleFocusChange}
-                />
-              </div>
-            </div>
-            {/* Botón de pago */}
-            <button onClick={processPayment} type="button" className="btn btn-success btn-block btn-lg">Pagar</button>
-            {/* Fin del botón de pago */}
-          </form>
-        </div>
+          </div>
+        )}
       </div>
-      {/* Fin del formulario de pago */}
-      {/* Modal */}
       {showModal && (
         <div>
           <div className="modal-overlay" onClick={() => setShowModal(false)}></div>
@@ -211,7 +162,6 @@ const VistaCompra = () => {
           </div>
         </div>
       )}
-      {/* Fin de Modal */}
     </div>
   );
 };
