@@ -53,7 +53,7 @@ const VistaCompra = () => {
       setPaymentDetails({
         ...paymentDetails,
         postalCode,
-        address: 'Bosque de avellano',
+        address: 'Calle Cerrada 20 de Noviembre',
         city: 'Tecámac',
         country: 'México',
       });
@@ -71,6 +71,17 @@ const VistaCompra = () => {
   // Estado para controlar la visibilidad de la modal
   const [showModal, setShowModal] = useState(false);
   const [showPaymentForm, setShowPaymentForm] = useState(false);
+  const [showAddressForm, setShowAddressForm] = useState(false);
+
+  const handleContinueToPayment = () => {
+    setShowAddressForm(true);
+  };
+
+  const handleAddressFormSubmit = () => {
+    // Aquí puedes agregar la lógica para validar y procesar los datos de dirección
+    setShowAddressForm(false);
+    setShowPaymentForm(true);
+  };
 
   const handleQuantityChange = (productId, newQuantity) => {
     if (newQuantity <= 0) {
@@ -126,9 +137,69 @@ const VistaCompra = () => {
         <p className="total-price">Precio total: ${totalPrecio}</p>
       </div>
       <div className="col-md-6">
-        {!showPaymentForm ? (
-          <button onClick={() => setShowPaymentForm(true)} type="button" className="btn btn-primary btn-lg btn-block">Continuar con el Pago</button>
-        ) : (
+        {!showPaymentForm && !showAddressForm && (
+          <button onClick={handleContinueToPayment} type="button" className="btn btn-primary btn-lg btn-block">Continuar con el Pago</button>
+        )}
+        {showAddressForm && (
+          <div className="alert alert-info" role="alert">
+            <h4 className="alert-heading">Ingresa tu dirección</h4>
+            <form onSubmit={handleAddressFormSubmit}>
+              <div className="form-group">
+                <label htmlFor="address">Dirección</label>
+                <input
+                  type="text"
+                  name="address"
+                  id="address"
+                  className="form-control"
+                  value={paymentDetails.address}
+                  onChange={handleInputChange}
+                  required
+                />
+              </div>
+              <div className="form-row">
+                <div className="form-group col-md-6">
+                  <label htmlFor="postalCode">Código Postal</label>
+                  <input
+                    type="text"
+                    name="postalCode"
+                    id="postalCode"
+                    className="form-control"
+                    value={paymentDetails.postalCode}
+                    onChange={handleInputChange}
+                    onBlur={handlePostalCodeChange}
+                    required
+                  />
+                </div>
+                <div className="form-group col-md-6">
+                  <label htmlFor="city">Ciudad</label>
+                  <input
+                    type="text"
+                    name="city"
+                    id="city"
+                    className="form-control"
+                    value={paymentDetails.city}
+                    onChange={handleInputChange}
+                    required
+                  />
+                </div>
+              </div>
+              <div className="form-group">
+                <label htmlFor="country">País</label>
+                <input
+                  type="text"
+                  name="country"
+                  id="country"
+                  className="form-control"
+                  value={paymentDetails.country}
+                  onChange={handleInputChange}
+                  required
+                />
+              </div>
+              <button type="submit" className="btn btn-success btn-block btn-lg">Continuar con el Pago</button>
+            </form>
+          </div>
+        )}
+        {showPaymentForm && (
           <div className="card">
             <div className="card-body">
               <Cards
