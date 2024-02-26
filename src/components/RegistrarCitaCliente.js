@@ -13,6 +13,8 @@ import Backdrop from '@mui/material/Backdrop';
 import Fade from '@mui/material/Fade';
 import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
+import htmlToImage from 'html-to-image';
+import { toBlob } from 'html-to-image';
 
 function RegistrarCitaCliente() {
   const navigate = useNavigate();
@@ -100,21 +102,24 @@ function RegistrarCitaCliente() {
   };
 
   const descargarQR = () => {
-    const qrBlob = new Blob([qrData], { type: 'application/json' });
-    const qrUrl = URL.createObjectURL(qrBlob);
-    const link = document.createElement('a');
-    link.download = 'codigo_qr.png';
-    link.href = qrUrl;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-    URL.revokeObjectURL(qrUrl);
-    setOpenModal(false);
-    setConfirmacionVisible(true);
-    setTimeout(() => {
-      navigate('/cliente');
-    }, 5000);
+    const qrCodeContainer = document.getElementById('qrCodeContainer');
+    
+    toBlob(qrCodeContainer)
+      .then(function (blob) {
+        const link = document.createElement('a');
+        link.download = 'CodigoQr_Cita.png';
+        link.href = URL.createObjectURL(blob);
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        setOpenModal(false);
+        setConfirmacionVisible(true);
+        setTimeout(() => {
+          navigate('/cliente');
+        }, 5000);
+      });
   };
+  
 
   const regresar = () => {
     navigate('/cliente');
