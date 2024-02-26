@@ -286,13 +286,15 @@ function RegistrarCitaCliente() {
         </li>
         <p></p>
         <li>
-          <TextField
-            label="Número de teléfono que tenga Whatsapp"
-            name="phoneNumber"
-            value={phoneNumber}
-            onChange={(event) => setPhoneNumber(event.target.value)}
-          />
-        </li>
+  <TextField
+    label="Número de teléfono que tenga Whatsapp"
+    name="phoneNumber"
+    value={phoneNumber}
+    onChange={(event) => setPhoneNumber(event.target.value)}
+    sx={{ width: '800%', maxWidth: '330px' }} // Ajusta el ancho máximo según sea necesario
+  />
+</li>
+
         <p></p>
         <Button
           variant="contained"
