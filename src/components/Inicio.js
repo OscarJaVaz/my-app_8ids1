@@ -8,7 +8,7 @@ import CardContent from '@mui/material/CardContent';
 import fondo from '../components/assets/fondo2.jpg';
 import fondo2 from '../components/assets/fondo5.png';
 import logo1 from '../components/assets/logo1.png';
-import corazon from '../components/assets/corazon.png';
+
 import Carousel from 'react-material-ui-carousel'; 
 
 const NavigationButton = ({ label, onClick, icon, fontSize }) => (
@@ -55,32 +55,29 @@ const Inicio = () => {
           <img src={fondo2} alt="Fondo 2" style={{ width: '100%', height: '100%' }} />
         </Carousel>
       
-        <Card style={{ width: '280px',height:'310px',backgroundColor:'#0077FC', position: 'absolute', top: '76%', left: '20%', transform: 'translate(-50%, -50%)', zIndex: 1 }}>
+        <Card style={{ width: '280px',height:'250px',backgroundColor:'#0077FC', position: 'absolute', top: '81%', left: '20%', transform: 'translate(-50%, -50%)', zIndex: 1 }}>
           <CardContent>
-          <div style={{ display: 'flex', alignItems: 'center', width: '100%', boxSizing: 'border-box', margin: 0, position: 'fixed', top: 10, left: 20 }}>
-          <img src={corazon} alt="Logo" style={{ width: '110px', marginRight: '20px' }} />
-        </div>
             <h2>Ritmo Cardiaco</h2>
             <p></p>
           </CardContent>
         </Card>
 
 
-        <Card style={{ width: '280px',height:'310px',backgroundColor:'#5EA9FD', position: 'absolute', top: '76%', left: '41%', transform: 'translate(-50%, -50%)', zIndex: 1 }}>
+        <Card style={{ width: '280px',height:'250px',backgroundColor:'#5EA9FD', position: 'absolute', top: '81%', left: '41%', transform: 'translate(-50%, -50%)', zIndex: 1 }}>
           <CardContent>
             <h2>Ayuda en linea</h2>
             <p></p>
           </CardContent>
         </Card>
 
-        <Card style={{ width: '280px',height:'310px',backgroundColor:'#0077FC', position: 'absolute', top: '76%', left: '62%', transform: 'translate(-50%, -50%)', zIndex: 1 }}>
+        <Card style={{ width: '280px',height:'250px',backgroundColor:'#0077FC', position: 'absolute', top: '81%', left: '62%', transform: 'translate(-50%, -50%)', zIndex: 1 }}>
           <CardContent>
             <h2>Consulta</h2>
             <p></p>
           </CardContent>
         </Card> 
         
-        <Card style={{ width: '280px',height:'310px',backgroundColor:'#5EA9FD', position: 'absolute', top: '76%', left: '83%', transform: 'translate(-50%, -50%)', zIndex: 1 }}>
+        <Card style={{ width: '280px',height:'250px',backgroundColor:'#5EA9FD', position: 'absolute', top: '81%', left: '83%', transform: 'translate(-50%, -50%)', zIndex: 1 }}>
           <CardContent>
             <h2>Ayuda en linea</h2>
             <p></p>
