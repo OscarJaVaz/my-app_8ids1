@@ -36,6 +36,7 @@ function RegistrarCitaCliente() {
   const [qrData, setQRData] = useState('');
   const [confirmacionVisible, setConfirmacionVisible] = useState(false);
   const [fechaValida, setFechaValida] = useState(true); // Estado para validar fecha
+  const [phoneNumber, setPhoneNumber] = useState('');
 
   const fnObtenerDatos = async () => {
     if (location.state && location.state.id) {
@@ -92,6 +93,39 @@ function RegistrarCitaCliente() {
     setOpenModal(true);
   };
 
+  const enviarQRWhatsApp = async () => {
+    // Obtener el contenedor del código QR
+    const qrContainer = document.querySelector("#qrCodeContainer");
+    
+    const canvas = await html2canvas(qrContainer);
+    const qrImageData = canvas.toDataURL('image/png');
+    
+  
+    const downloadLink = document.createElement('a');
+    downloadLink.href = qrImageData;
+    downloadLink.download = 'codigo_qr.png';
+    
+    
+    document.body.appendChild(downloadLink);
+    
+    
+    downloadLink.click();
+    
+    
+    document.body.removeChild(downloadLink);
+    
+   
+    const fullPhoneNumber = `52${phoneNumber}`;
+    
+    // Generar el enlace de WhatsApp con el número de teléfono y el archivo adjunto
+    const whatsappLink = `https://api.whatsapp.com/send/?phone=${fullPhoneNumber}&text=Hola! el código QR para tu cita se ha descargado en tu dispositivo, Gracias por tu regsitro, no olvides mostrar el Qr de tu cita en el consultorio
+     .&media=${qrImageData}`;
+    
+    // Abrir el enlace de WhatsApp en una nueva pestaña
+    window.open(whatsappLink, '_blank');
+};
+
+
   const GuardarDatos = async () => {
     setLoading(true);
     await axios.post('http://127.0.0.1:8000/api/cita/crear', {
@@ -104,6 +138,7 @@ function RegistrarCitaCliente() {
     setTimeout(() => {
       navigate('/cliente');
     }, 2000);
+    enviarQRWhatsApp(); // Llama a la función enviarQRWhatsApp después de guardar los datos de la cita
   };
 
   const regresar = () => {
@@ -146,7 +181,7 @@ function RegistrarCitaCliente() {
     const year = today.getFullYear();
     let month = today.getMonth() + 1;
     let day = today.getDate();
-  
+
     // Agregar un cero delante del mes y el día si son menores que 10
     if (month < 10) {
       month = `0${month}`;
@@ -154,10 +189,10 @@ function RegistrarCitaCliente() {
     if (day < 10) {
       day = `0${day}`;
     }
-  
+
     return `${year}-${month}-${day}`;
   };
-  
+
   return (
     <div
       style={{
@@ -214,7 +249,7 @@ function RegistrarCitaCliente() {
                 {...params}
                 required
                 id="combo-box-demo"
-                label="Enfermedad"
+                label="Sintomas"
                 name="enfermedad"
                 value={cita.enfermedad}
                 onChange={(event, value) => handleGuardar(event, value?.nombre)}
@@ -236,10 +271,7 @@ function RegistrarCitaCliente() {
             onChange={handleGuardar}
             inputProps={{ min: getCurrentDate() }} // Establecer la fecha mínima
           />
-
-         
         </li>
-        
         <p></p>
         <li>
           <TextField
@@ -253,6 +285,15 @@ function RegistrarCitaCliente() {
           />
         </li>
         <p></p>
+        <li>
+          <TextField
+            label="Número de teléfono"
+            name="phoneNumber"
+            value={phoneNumber}
+            onChange={(event) => setPhoneNumber(event.target.value)}
+          />
+        </li>
+        <p></p>
         <Button
           variant="contained"
           style={{ backgroundColor: 'green', marginRight: '10px' }}
@@ -262,8 +303,6 @@ function RegistrarCitaCliente() {
         >
           Generar QR
         </Button>
-
-
         <br /><br />
         <Button
           variant="contained"
@@ -273,7 +312,6 @@ function RegistrarCitaCliente() {
         >
           Regresar
         </Button>
-
         <br /><br />
         {loading ? <Box sx={{ width: '100%' }}>
           <LinearProgress />
@@ -295,9 +333,16 @@ function RegistrarCitaCliente() {
                 <QRCode value={qrData} size={256} />
               </div>
               <div style={{ marginTop: '20px' }}>
-                <Button variant="contained" color="primary" onClick={GuardarDatos} style={{ marginRight: '10px',padding: '5px' }} >Registrar cita</Button>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  onClick={GuardarDatos} // Llama a la función GuardarDatos en lugar de enviarQRWhatsApp
+                  style={{ marginRight: '10px', padding: '5px' }}
+                >
+                  Registrar cita
+                </Button>
                 <Button variant="contained" color="primary" onClick={handleCloseModal} style={{ marginRight: '10px', padding: '5px' }}>Cerrar</Button>
-                <Button variant="contained" color="primary" onClick={handleDownloadQR} style={{ padding: '5px' }}>Descargar QR</Button>
+               
               </div>
             </div>
           </Fade>
@@ -315,7 +360,7 @@ function RegistrarCitaCliente() {
           <Fade in={confirmacionVisible}>
             <div style={{ backgroundColor: '#fff', padding: '20px', borderRadius: '10px', maxWidth: '80vw', margin: 'auto' }}>
               <h2 id="transition-modal-title">¡Cita registrada!</h2>
-              <p id="transition-modal-description">¡Tu cita se ha registrado exitosamente!</p>
+              <p id="transition-modal-description">¡Tu cita se ha registrada exitosamente!</p>
             </div>
           </Fade>
         </Modal>
