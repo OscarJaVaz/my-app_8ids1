@@ -142,7 +142,8 @@ const VistaCompra = () => {
         )}
         {showAddressForm && (
           <div className="alert alert-info" role="alert">
-            <h4 className="alert-heading">Ingresa tu dirección</h4>
+            <h4 className="alert-heading" style={{ color: '#305edb', marginBottom: '20px', fontWeight: 'bold', fontSize: '24px' }}>Ingresa tus datos domiciliarios</h4>
+
             <form onSubmit={handleAddressFormSubmit}>
               <div className="form-group">
                 <label htmlFor="address">Dirección</label>
