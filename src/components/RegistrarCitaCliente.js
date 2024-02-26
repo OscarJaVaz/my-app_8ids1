@@ -103,7 +103,7 @@ function RegistrarCitaCliente() {
     const qrBlob = new Blob([qrData], { type: 'application/json' });
     const qrUrl = URL.createObjectURL(qrBlob);
     const link = document.createElement('a');
-    link.download = 'codigo_qr.json';
+    link.download = 'codigo_qr.png';
     link.href = qrUrl;
     document.body.appendChild(link);
     link.click();
