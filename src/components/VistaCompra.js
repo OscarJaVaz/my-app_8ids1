@@ -54,16 +54,14 @@ const VistaCompra = () => {
         ...paymentDetails,
         postalCode,
         address: 'Calle Cerrada 20 de Noviembre',
-        city: 'Tecámac',
-        country: 'México',
+        municipio: 'Tecámac',
       });
     } else {
       setPaymentDetails({
         ...paymentDetails,
         postalCode,
         address: '',
-        city: '',
-        country: '',
+        municipio: '',
       });
     }
   };
@@ -104,7 +102,7 @@ const VistaCompra = () => {
   // Configuración del carrusel
   const sliderSettings = {
     dots: true,
-    infinite: true,
+    infinite: false,
     speed: 500,
     slidesToShow: 3,
     slidesToScroll: 1
@@ -145,18 +143,7 @@ const VistaCompra = () => {
             <h4 className="alert-heading" style={{ color: '#305edb', marginBottom: '20px', fontWeight: 'bold', fontSize: '24px' }}>Ingresa tus datos domiciliarios</h4>
 
             <form onSubmit={handleAddressFormSubmit}>
-              <div className="form-group">
-                <label htmlFor="address">Dirección</label>
-                <input
-                  type="text"
-                  name="address"
-                  id="address"
-                  className="form-control"
-                  value={paymentDetails.address}
-                  onChange={handleInputChange}
-                  required
-                />
-              </div>
+             
               <div className="form-row">
                 <div className="form-group col-md-6">
                   <label htmlFor="postalCode">Código Postal</label>
@@ -171,31 +158,45 @@ const VistaCompra = () => {
                     required
                   />
                 </div>
+                <div className="form-group">
                 <div className="form-group col-md-6">
-                  <label htmlFor="city">Ciudad</label>
+                <label htmlFor="address">Dirección</label>
+                <input
+                  type="text"
+                  name="address"
+                  id="address"
+                  className="form-control"
+                  value={paymentDetails.address}
+                  onChange={handleInputChange}
+                  required
+                />
+              </div>
+              </div>
+                <div className="form-group col-md-6">
+                  <label htmlFor="city">Municipio</label>
                   <input
                     type="text"
                     name="city"
                     id="city"
                     className="form-control"
-                    value={paymentDetails.city}
+                    value={paymentDetails.municipio}
+                    onChange={handleInputChange}
+                    required
+                  />
+                </div>
+                <div className="form-group col-md-6">
+                  <label htmlFor="city">Referencia</label>
+                  <input
+                    type="text"
+                    name="referencia"
+                    id="referencia"
+                    className="form-control"
                     onChange={handleInputChange}
                     required
                   />
                 </div>
               </div>
-              <div className="form-group">
-                <label htmlFor="country">País</label>
-                <input
-                  type="text"
-                  name="country"
-                  id="country"
-                  className="form-control"
-                  value={paymentDetails.country}
-                  onChange={handleInputChange}
-                  required
-                />
-              </div>
+            
               <button type="submit" className="btn btn-success btn-block btn-lg">Continuar con el Pago</button>
             </form>
           </div>
@@ -224,7 +225,7 @@ const VistaCompra = () => {
                   />
                 </div>
                 <div className="form-group">
-                  <label htmlFor="name">Nombre</label>
+                  <label htmlFor="name">Nombre del Titular</label>
                   <input
                     type="text"
                     name="name"
