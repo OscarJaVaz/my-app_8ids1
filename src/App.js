@@ -27,6 +27,7 @@ import ClienteFarmacia from './components/ClienteFarmacia';
 import VistaCompra from './components/VistaCompra';
 
 
+
 function App() {   
   const [token, setToken] = useState(null);
 
@@ -62,6 +63,7 @@ function App() {
     <Route path="/farmaciacliente" element={<ClienteFarmacia/>}/>
     <Route path="/cliente" element={<HomeClienteComponent/>}/>
     <Route path="/vistaCompra" element={<VistaCompra/>}/>
+    
     
     </Routes>
   );

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import Button from '@mui/material/Button';
 import QRCode from 'react-qr-code';
@@ -6,15 +6,13 @@ import axios from 'axios';
 import Box from '@mui/material/Box';
 import LinearProgress from '@mui/material/LinearProgress';
 import SaveIcon from '@mui/icons-material/Save';
+import Autocomplete from '@mui/material/Autocomplete';
+import TextField from '@mui/material/TextField';
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import Cita from './assets/cita2.png';
 import Modal from '@mui/material/Modal';
 import Backdrop from '@mui/material/Backdrop';
 import Fade from '@mui/material/Fade';
-import TextField from '@mui/material/TextField';
-import Autocomplete from '@mui/material/Autocomplete';
-import htmlToImage from 'html-to-image';
-import { toBlob } from 'html-to-image';
 
 function RegistrarCitaCliente() {
   const navigate = useNavigate();
@@ -34,9 +32,7 @@ function RegistrarCitaCliente() {
   const [enfermedades, setEnfermedades] = useState([]);
   const [openModal, setOpenModal] = useState(false);
   const [qrData, setQRData] = useState('');
-  const [confirmacionVisible, setConfirmacionVisible] = useState(false);
-  const [fechaValida, setFechaValida] = useState(true);
-  const [contadorDescarga, setContadorDescarga] = useState(5);
+  const [contador, setContador] = useState(5);
 
   const fnObtenerDatos = async () => {
     if (location.state && location.state.id) {
@@ -71,55 +67,27 @@ function RegistrarCitaCliente() {
   const handleGuardar = (event, value) => {
     const { name, value: fieldValue } = event.target;
     const newValue = value || fieldValue;
-
     setCita((prevState) => ({
       ...prevState,
       [name]: newValue,
     }));
-
-    const selectedDate = new Date(newValue);
-    const currentDate = new Date();
-    if (selectedDate < currentDate) {
-      setFechaValida(false);
-    } else {
-      setFechaValida(true);
-    }
   };
 
   const generarQR = () => {
     const qrCodeData = JSON.stringify(cita);
     setQRData(qrCodeData);
     setOpenModal(true);
-    setContadorDescarga(5); // Reiniciar el contador
-    const downloadTimer = setInterval(() => {
-      setContadorDescarga((prevContador) => prevContador - 1);
-    }, 1000);
-
-    setTimeout(() => {
-      clearInterval(downloadTimer);
-      descargarQR(); // Descargar el QR después de 5 segundos
-    }, 5000);
   };
 
-  const descargarQR = () => {
-    const qrCodeContainer = document.getElementById('qrCodeContainer');
-    
-    toBlob(qrCodeContainer)
-      .then(function (blob) {
-        const link = document.createElement('a');
-        link.download = 'CodigoQr_Cita.png';
-        link.href = URL.createObjectURL(blob);
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-        setOpenModal(false);
-        setConfirmacionVisible(true);
-        setTimeout(() => {
-          navigate('/cliente');
-        }, 5000);
-      });
+  const GuardarDatos = async () => {
+    setLoading(true);
+    await axios.post('http://127.0.0.1:8000/api/cita/crear', {
+      ...cita,
+      codigo_qr: qrData
+    });
+    console.log('Datos guardados correctamente');
+    setLoading(false);
   };
-  
 
   const regresar = () => {
     navigate('/cliente');
@@ -136,6 +104,23 @@ function RegistrarCitaCliente() {
     fnObtenerEnfermedades();
   }, []);
 
+  useEffect(() => {
+    let intervalo;
+    if (openModal) {
+      intervalo = setInterval(() => {
+        setContador((prevContador) => prevContador - 1);
+      }, 1000);
+    }
+    return () => clearInterval(intervalo);
+  }, [openModal]);
+
+  useEffect(() => {
+    if (contador === 0) {
+      GuardarDatos();
+      navigate('/cliente');
+    }
+  }, [contador]);
+
   const camposCompletos = () => {
     return (
       cita.paciente.trim() !== '' &&
@@ -144,22 +129,6 @@ function RegistrarCitaCliente() {
       cita.fecha.trim() !== '' &&
       cita.hora.trim() !== ''
     );
-  };
-
-  const getCurrentDate = () => {
-    const today = new Date();
-    const year = today.getFullYear();
-    let month = today.getMonth() + 1;
-    let day = today.getDate();
-
-    if (month < 10) {
-      month = `0${month}`;
-    }
-    if (day < 10) {
-      day = `0${day}`;
-    }
-
-    return `${year}-${month}-${day}`;
   };
 
   return (
@@ -218,7 +187,7 @@ function RegistrarCitaCliente() {
                 {...params}
                 required
                 id="combo-box-demo"
-                label="Sintomas"
+                label="Enfermedad"
                 name="enfermedad"
                 value={cita.enfermedad}
                 onChange={(event, value) => handleGuardar(event, value?.nombre)}
@@ -238,7 +207,6 @@ function RegistrarCitaCliente() {
             type="date"
             value={cita.fecha}
             onChange={handleGuardar}
-            inputProps={{ min: getCurrentDate() }}
           />
         </li>
         <p></p>
@@ -259,10 +227,11 @@ function RegistrarCitaCliente() {
           style={{ backgroundColor: 'green', marginRight: '10px' }}
           onClick={generarQR}
           startIcon={<SaveIcon />}
-          disabled={!camposCompletos() || !fechaValida}
+          disabled={!camposCompletos()}
         >
-          Generar QR
+          Guardar Cita
         </Button>
+
         <br /><br />
         <Button
           variant="contained"
@@ -272,6 +241,7 @@ function RegistrarCitaCliente() {
         >
           Regresar
         </Button>
+
         <br /><br />
         {loading ? <Box sx={{ width: '100%' }}>
           <LinearProgress />
@@ -288,30 +258,15 @@ function RegistrarCitaCliente() {
           }}
         >
           <Fade in={openModal}>
-            <div style={{ backgroundColor: '#fff', padding: '20px', borderRadius: '10px', maxWidth: '30vw', margin: 'auto', textAlign: 'center' }}>
-              <div id="qrCodeContainer">
-                <QRCode value={qrData} size={256} />
-              </div>
-              <div style={{ marginTop: '20px' }}>
-                <p>Tu QR se descargará en {contadorDescarga} segundos.</p>
-              </div>
-            </div>
-          </Fade>
-        </Modal>
-        <Modal
-          open={confirmacionVisible}
-          aria-labelledby="transition-modal-title"
-          aria-describedby="transition-modal-description"
-          closeAfterTransition
-          BackdropComponent={Backdrop}
-          BackdropProps={{
-            timeout: 500,
-          }}
-        >
-          <Fade in={confirmacionVisible}>
             <div style={{ backgroundColor: '#fff', padding: '20px', borderRadius: '10px', maxWidth: '80vw', margin: 'auto' }}>
-              <h2 id="transition-modal-title">¡Cita registrada!</h2>
-              <p id="transition-modal-description">¡Tu cita se ha registrado exitosamente!</p>
+              {openModal && (
+                <div>
+                  <p>Tu descarga del QR se realizará en {contador} segundos</p>
+                </div>
+              )}
+              <QRCode value={qrData} />
+              <Button variant="contained" color="primary" onClick={regresar}>Cerrar</Button>
+              
             </div>
           </Fade>
         </Modal>
