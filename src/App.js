@@ -26,7 +26,7 @@ import VerQrComponent from './components/VerQrComponent';
 import ClienteFarmacia from './components/ClienteFarmacia';
 import VistaCompra from './components/VistaCompra';
 
-
+//
 function App() {   
   const [token, setToken] = useState(null);
 
