@@ -36,6 +36,7 @@ function RegistrarCitaCliente() {
   const [qrData, setQRData] = useState('');
   const [confirmacionVisible, setConfirmacionVisible] = useState(false);
   const [fechaValida, setFechaValida] = useState(true); // Estado para validar fecha
+  const [descargaHabilitada, setDescargaHabilitada] = useState(false); // Estado para habilitar la descarga
 
   const fnObtenerDatos = async () => {
     if (location.state && location.state.id) {
@@ -122,6 +123,7 @@ function RegistrarCitaCliente() {
       link.href = imgData;
       link.click();
     });
+    setDescargaHabilitada(true); // Habilitar la descarga
   };
 
   useEffect(() => {
@@ -236,10 +238,7 @@ function RegistrarCitaCliente() {
             onChange={handleGuardar}
             inputProps={{ min: getCurrentDate() }} // Establecer la fecha mínima
           />
-
-         
         </li>
-        
         <p></p>
         <li>
           <TextField
@@ -262,8 +261,6 @@ function RegistrarCitaCliente() {
         >
           Generar QR
         </Button>
-
-
         <br /><br />
         <Button
           variant="contained"
@@ -273,7 +270,6 @@ function RegistrarCitaCliente() {
         >
           Regresar
         </Button>
-
         <br /><br />
         {loading ? <Box sx={{ width: '100%' }}>
           <LinearProgress />
@@ -295,7 +291,7 @@ function RegistrarCitaCliente() {
                 <QRCode value={qrData} size={256} />
               </div>
               <div style={{ marginTop: '20px' }}>
-                <Button variant="contained" color="primary" onClick={GuardarDatos} style={{ marginRight: '10px',padding: '5px' }} >Registrar cita</Button>
+                <Button variant="contained" color="primary" onClick={GuardarDatos} style={{ marginRight: '10px',padding: '5px' }} disabled={!descargaHabilitada}>Registrar cita</Button>
                 <Button variant="contained" color="primary" onClick={handleCloseModal} style={{ marginRight: '10px', padding: '5px' }}>Cerrar</Button>
                 <Button variant="contained" color="primary" onClick={handleDownloadQR} style={{ padding: '5px' }}>Descargar QR</Button>
               </div>
@@ -315,7 +311,7 @@ function RegistrarCitaCliente() {
           <Fade in={confirmacionVisible}>
             <div style={{ backgroundColor: '#fff', padding: '20px', borderRadius: '10px', maxWidth: '80vw', margin: 'auto' }}>
               <h2 id="transition-modal-title">¡Cita registrada!</h2>
-              <p id="transition-modal-description">¡Tu cita se ha registrado exitosamente!</p>
+              <p id="transition-modal-description">¡Tu cita se ha registrada exitosamente!</p>
             </div>
           </Fade>
         </Modal>
