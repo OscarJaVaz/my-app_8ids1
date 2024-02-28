@@ -6,15 +6,15 @@ import axios from 'axios';
 import Box from '@mui/material/Box';
 import LinearProgress from '@mui/material/LinearProgress';
 import SaveIcon from '@mui/icons-material/Save';
+import Autocomplete from '@mui/material/Autocomplete';
+import TextField from '@mui/material/TextField';
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import Cita from './assets/cita2.png';
 import Modal from '@mui/material/Modal';
 import Backdrop from '@mui/material/Backdrop';
 import Fade from '@mui/material/Fade';
-import TextField from '@mui/material/TextField';
-import Autocomplete from '@mui/material/Autocomplete';
-import htmlToImage from 'html-to-image';
-import { toBlob } from 'html-to-image';
+import html2canvas from 'html2canvas';
+import Alert from '@mui/material/Alert';
 
 function RegistrarCitaCliente() {
   const navigate = useNavigate();
@@ -35,8 +35,7 @@ function RegistrarCitaCliente() {
   const [openModal, setOpenModal] = useState(false);
   const [qrData, setQRData] = useState('');
   const [confirmacionVisible, setConfirmacionVisible] = useState(false);
-  const [fechaValida, setFechaValida] = useState(true);
-  const [contadorDescarga, setContadorDescarga] = useState(5);
+  const [fechaValida, setFechaValida] = useState(true); // Estado para validar fecha
 
   const fnObtenerDatos = async () => {
     if (location.state && location.state.id) {
@@ -77,6 +76,7 @@ function RegistrarCitaCliente() {
       [name]: newValue,
     }));
 
+    // Validar si la fecha seleccionada no es anterior a la fecha actual
     const selectedDate = new Date(newValue);
     const currentDate = new Date();
     if (selectedDate < currentDate) {
@@ -90,36 +90,21 @@ function RegistrarCitaCliente() {
     const qrCodeData = JSON.stringify(cita);
     setQRData(qrCodeData);
     setOpenModal(true);
-    setContadorDescarga(5); // Reiniciar el contador
-    const downloadTimer = setInterval(() => {
-      setContadorDescarga((prevContador) => prevContador - 1);
-    }, 1000);
+  };
 
+  const GuardarDatos = async () => {
+    setLoading(true);
+    await axios.post('http://127.0.0.1:8000/api/cita/crear', {
+      ...cita,
+      codigo_qr: qrData
+    });
+    console.log('Datos guardados correctamente');
+    setLoading(false);
+    setConfirmacionVisible(true);
     setTimeout(() => {
-      clearInterval(downloadTimer);
-      descargarQR(); // Descargar el QR después de 5 segundos
-    }, 5000);
+      navigate('/cliente');
+    }, 2000);
   };
-
-  const descargarQR = () => {
-    const qrCodeContainer = document.getElementById('qrCodeContainer');
-    
-    toBlob(qrCodeContainer)
-      .then(function (blob) {
-        const link = document.createElement('a');
-        link.download = 'CodigoQr_Cita.png';
-        link.href = URL.createObjectURL(blob);
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-        setOpenModal(false);
-        setConfirmacionVisible(true);
-        setTimeout(() => {
-          navigate('/cliente');
-        }, 5000);
-      });
-  };
-  
 
   const regresar = () => {
     navigate('/cliente');
@@ -127,6 +112,16 @@ function RegistrarCitaCliente() {
 
   const handleCloseModal = () => {
     setOpenModal(false);
+  };
+
+  const handleDownloadQR = () => {
+    html2canvas(document.querySelector("#qrCodeContainer")).then(canvas => {
+      const imgData = canvas.toDataURL('image/png');
+      const link = document.createElement('a');
+      link.download = 'codigo_qr.png';
+      link.href = imgData;
+      link.click();
+    });
   };
 
   useEffect(() => {
@@ -151,17 +146,18 @@ function RegistrarCitaCliente() {
     const year = today.getFullYear();
     let month = today.getMonth() + 1;
     let day = today.getDate();
-
+  
+    // Agregar un cero delante del mes y el día si son menores que 10
     if (month < 10) {
       month = `0${month}`;
     }
     if (day < 10) {
       day = `0${day}`;
     }
-
+  
     return `${year}-${month}-${day}`;
   };
-
+  
   return (
     <div
       style={{
@@ -218,7 +214,7 @@ function RegistrarCitaCliente() {
                 {...params}
                 required
                 id="combo-box-demo"
-                label="Sintomas"
+                label="Enfermedad"
                 name="enfermedad"
                 value={cita.enfermedad}
                 onChange={(event, value) => handleGuardar(event, value?.nombre)}
@@ -238,9 +234,12 @@ function RegistrarCitaCliente() {
             type="date"
             value={cita.fecha}
             onChange={handleGuardar}
-            inputProps={{ min: getCurrentDate() }}
+            inputProps={{ min: getCurrentDate() }} // Establecer la fecha mínima
           />
+
+         
         </li>
+        
         <p></p>
         <li>
           <TextField
@@ -259,10 +258,12 @@ function RegistrarCitaCliente() {
           style={{ backgroundColor: 'green', marginRight: '10px' }}
           onClick={generarQR}
           startIcon={<SaveIcon />}
-          disabled={!camposCompletos() || !fechaValida}
+          disabled={!camposCompletos() || !fechaValida} // Deshabilitar si los campos no están completos o la fecha no es válida
         >
           Generar QR
         </Button>
+
+
         <br /><br />
         <Button
           variant="contained"
@@ -272,6 +273,7 @@ function RegistrarCitaCliente() {
         >
           Regresar
         </Button>
+
         <br /><br />
         {loading ? <Box sx={{ width: '100%' }}>
           <LinearProgress />
@@ -293,7 +295,9 @@ function RegistrarCitaCliente() {
                 <QRCode value={qrData} size={256} />
               </div>
               <div style={{ marginTop: '20px' }}>
-                <p>Tu QR se descargará en {contadorDescarga} segundos.</p>
+                <Button variant="contained" color="primary" onClick={GuardarDatos} style={{ marginRight: '10px',padding: '5px' }} >Registrar cita</Button>
+                <Button variant="contained" color="primary" onClick={handleCloseModal} style={{ marginRight: '10px', padding: '5px' }}>Cerrar</Button>
+                <Button variant="contained" color="primary" onClick={handleDownloadQR} style={{ padding: '5px' }}>Descargar QR</Button>
               </div>
             </div>
           </Fade>
