@@ -181,7 +181,7 @@ const MenuComponent = () => {
         </a>
         <a onClick={() => handleClick("/homeenfermedad")}>
           <img src={enfermedad} alt="Enfermedades" />
-          <span>Enfermedades</span>
+          <span>Sintomas</span>
         </a>
         <a onClick={() => handleClick("/homecita")}>
           <img src={cita} alt="Citas" />
@@ -197,15 +197,15 @@ const MenuComponent = () => {
         </a>
         <a onClick={() => handleClick("/Verclientes")}>
           <img src={farmacia} alt="ClientesRegistrados" />
-          <span>Ver usuarios registrados</span>
+          <span>Generar receta</span>
         </a>
         <a onClick={() => handleClick("/verqr")}>
           <img src={farmacia} alt="ClientesRegistrados" />
-          <span>Ver Qr</span>
+          <span>Escanear QR Cita</span>
         </a>
         <a onClick={handleLogout}>
           <img src={salir} alt="Salir" />
-          <span>Salir</span>
+          <span>Cerrar sesi&oacute;n</span>
         </a>
       </div>
       <div className="content">
