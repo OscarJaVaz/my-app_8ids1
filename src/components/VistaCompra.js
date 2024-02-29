@@ -1,28 +1,53 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import { useLocation } from 'react-router-dom';
 import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
+import secureLocalStorage from 'react-secure-storage';
 import Cards from 'react-credit-cards';
 import 'react-credit-cards/es/styles-compiled.css';
 
 const VistaCompra = () => {
-  const location = useLocation();
-  const { state } = location;
+  const { state } = useLocation();
+  const nombresProductos = state ? state.nombreProductos : [];
+  const cantidades = state ? state.cantidades : [];
 
   const [paymentDetails, setPaymentDetails] = useState({
-    number: '',
-    name: '',
-    expiry: '',
+    nombre_cliente: '',
+    nombre_producto: nombresProductos.join(', '), // Concatenar los nombres de los productos
+    cantidad: cantidades.join(', '), // Concatenar las cantidades
+    total: 0,
+    cp: '',
+    direccion: '',
+    municipio: '',
+    referencia: '',
+    num_tarjeta: '',
+    nom_titular: '',
+    expiracion: '',
     cvc: '',
-    focus: '',
-    address: '',
-    postalCode: '',
-    city: '',
-    country: '',
   });
 
   const [carrito, setCarrito] = useState(state ? [...state.carrito] : []);
+  const [showModal, setShowModal] = useState(false);
+  const [showPaymentForm, setShowPaymentForm] = useState(false);
+  const [showAddressForm, setShowAddressForm] = useState(false);
+
+  useEffect(() => {
+    const storedUsername = secureLocalStorage.getItem('username');
+    if (storedUsername) {
+      setPaymentDetails(prevState => ({
+        ...prevState,
+        nombre_cliente: storedUsername
+      }));
+    }
+
+    const totalPrecio = carrito.reduce((total, producto) => total + (producto.quantity * producto.price), 0);
+    setPaymentDetails(prevState => ({
+      ...prevState,
+      total: totalPrecio
+    }));
+  }, [carrito]);
 
   const handleInputChange = (e) => {
     setPaymentDetails({
@@ -39,51 +64,43 @@ const VistaCompra = () => {
   };
 
   const processPayment = () => {
-    console.log('Payment Details:', JSON.stringify(paymentDetails));
-    // Aquí puedes agregar la lógica para procesar el pago
-    // Por ahora, solo mostraremos la modal
-    setShowModal(true);
-  };
-
-  const handlePostalCodeChange = (e) => {
-    const postalCode = e.target.value;
-    // Aquí implementamos la lógica para rellenar la información de la dirección
-    // Ejemplo de cómo podrías hacerlo
-    if (postalCode === '55773' || postalCode === '55755') {
-      setPaymentDetails({
+    if (
+      paymentDetails.cp &&
+      paymentDetails.direccion &&
+      paymentDetails.municipio &&
+      paymentDetails.referencia &&
+      paymentDetails.num_tarjeta &&
+      paymentDetails.nom_titular &&
+      paymentDetails.expiracion &&
+      paymentDetails.cvc
+    ) {
+      axios.post('http://127.0.0.1:8000/api/compra/crear', {
         ...paymentDetails,
-        postalCode,
-        address: 'Calle Cerrada 20 de Noviembre',
-        municipio: 'Tecámac',
+        carrito: carrito.map(item => ({ id: item.id, quantity: item.quantity })),
+      })
+      .then(response => {
+        console.log('Compra realizada con éxito:', response.data);
+        setShowModal(true);
+      })
+      .catch(error => {
+        console.error('Error al realizar la compra:', error);
       });
     } else {
-      setPaymentDetails({
-        ...paymentDetails,
-        postalCode,
-        address: '',
-        municipio: '',
-      });
+      console.error('Por favor completa todos los campos obligatorios.');
     }
   };
-
-  // Estado para controlar la visibilidad de la modal
-  const [showModal, setShowModal] = useState(false);
-  const [showPaymentForm, setShowPaymentForm] = useState(false);
-  const [showAddressForm, setShowAddressForm] = useState(false);
 
   const handleContinueToPayment = () => {
     setShowAddressForm(true);
   };
 
   const handleAddressFormSubmit = () => {
-    // Aquí puedes agregar la lógica para validar y procesar los datos de dirección
     setShowAddressForm(false);
     setShowPaymentForm(true);
   };
 
   const handleQuantityChange = (productId, newQuantity) => {
     if (newQuantity <= 0) {
-      // Eliminar el producto del carrito si la cantidad es menor o igual a cero
       const updatedCart = carrito.filter(item => item.id !== productId);
       setCarrito(updatedCart);
     } else {
@@ -99,7 +116,6 @@ const VistaCompra = () => {
     setCarrito(updatedCart);
   };
 
-  // Configuración del carrusel
   const sliderSettings = {
     dots: true,
     infinite: false,
@@ -107,9 +123,6 @@ const VistaCompra = () => {
     slidesToShow: 3,
     slidesToScroll: 1
   };
-
-  // Calcular el total del precio de los productos en el carrito
-  const totalPrecio = carrito.reduce((total, producto) => total + (producto.quantity * producto.price), 0);
 
   return (
     <div className="layout">
@@ -131,8 +144,7 @@ const VistaCompra = () => {
             </div>
           ))}
         </Slider>
-        {/* Mostrar el total del precio */}
-        <p className="total-price">Precio total: ${totalPrecio}</p>
+        <p className="total-price">Precio total: ${paymentDetails.total}</p>
       </div>
       <div className="col-md-6">
         {!showPaymentForm && !showAddressForm && (
@@ -141,40 +153,38 @@ const VistaCompra = () => {
         {showAddressForm && (
           <div className="alert alert-info" role="alert">
             <h4 className="alert-heading" style={{ color: '#305edb', marginBottom: '20px', fontWeight: 'bold', fontSize: '24px' }}>Ingresa tus datos domiciliarios</h4>
-
             <form onSubmit={handleAddressFormSubmit}>
               <div className="form-row">
                 <div className="form-group col-md-6">
-                  <label htmlFor="postalCode">Código Postal</label>
+                  <label htmlFor="cp">Código Postal</label>
                   <input
                     type="text"
-                    name="postalCode"
-                    id="postalCode"
+                    name="cp"
+                    id="cp"
                     className="form-control"
-                    value={paymentDetails.postalCode}
-                    onChange={handleInputChange}
-                    onBlur={handlePostalCodeChange}
-                    required
-                  />
-                </div>
-                <div className="form-group col-md-6">
-                  <label htmlFor="address">Dirección</label>
-                  <input
-                    type="text"
-                    name="address"
-                    id="address"
-                    className="form-control"
-                    value={paymentDetails.address}
+                    value={paymentDetails.cp}
                     onChange={handleInputChange}
                     required
                   />
                 </div>
                 <div className="form-group col-md-6">
-                  <label htmlFor="city">Municipio</label>
+                  <label htmlFor="direccion">Dirección</label>
                   <input
                     type="text"
-                    name="city"
-                    id="city"
+                    name="direccion"
+                    id="direccion"
+                    className="form-control"
+                    value={paymentDetails.direccion}
+                    onChange={handleInputChange}
+                    required
+                  />
+                </div>
+                <div className="form-group col-md-6">
+                  <label htmlFor="municipio">Municipio</label>
+                  <input
+                    type="text"
+                    name="municipio"
+                    id="municipio"
                     className="form-control"
                     value={paymentDetails.municipio}
                     onChange={handleInputChange}
@@ -197,69 +207,72 @@ const VistaCompra = () => {
             </form>
           </div>
         )}
+
         {showPaymentForm && (
-          <div className="card">
-            <div className="card-body">
-              <Cards
-                number={paymentDetails.number}
-                name={paymentDetails.name}
-                expiry={paymentDetails.expiry}
-                cvc={paymentDetails.cvc}
-                focused={paymentDetails.focus}
-              />
-              <form>
-                <div className="form-group">
-                  <label htmlFor="number">Número de la tarjeta</label>
-                  <input
-                    type="text"
-                    name="number"
-                    id="number"
-                    maxLength="16"
-                    className="form-control"
-                    onChange={handleInputChange}
-                    onFocus={handleFocusChange}
-                  />
-                </div>
-                <div className="form-group">
-                  <label htmlFor="name">Nombre del Titular</label>
-                  <input
-                    type="text"
-                    name="name"
-                    id="name"
-                    maxLength="30"
-                    className="form-control"
-                    onChange={handleInputChange}
-                    onFocus={handleFocusChange}
-                  />
-                </div>
-                <div className="form-row">
-                  <div className="form-group col-md-6">
-                    <label htmlFor="expiry">Fecha de expiración</label>
+          <div>
+            <Cards
+              number={paymentDetails.num_tarjeta}
+              name={paymentDetails.nom_titular}
+              expiry={paymentDetails.expiracion}
+              cvc={paymentDetails.cvc}
+              focused={paymentDetails.focus}
+            />
+            <div className="card">
+              <div className="card-body">
+                <form>
+                  <div className="form-group">
+                    <label htmlFor="num_tarjeta">Número de la tarjeta</label>
                     <input
                       type="text"
-                      name="expiry"
-                      id="expiry"
-                      maxLength="4"
+                      name="num_tarjeta"
+                      id="num_tarjeta"
+                      maxLength="16"
                       className="form-control"
                       onChange={handleInputChange}
                       onFocus={handleFocusChange}
                     />
                   </div>
-                  <div className="form-group col-md-6">
-                    <label htmlFor="cvc">CVC</label>
+                  <div className="form-group">
+                    <label htmlFor="nom_titular">Nombre del Titular</label>
                     <input
                       type="text"
-                      name="cvc"
-                      id="cvc"
-                      maxLength="4"
+                      name="nom_titular"
+                      id="nom_titular"
+                      maxLength="30"
                       className="form-control"
                       onChange={handleInputChange}
                       onFocus={handleFocusChange}
                     />
                   </div>
-                </div>
-                <button onClick={processPayment} type="button" className="btn btn-success btn-block btn-lg">Pagar</button>
-              </form>
+                  <div className="form-row">
+                    <div className="form-group col-md-6">
+                      <label htmlFor="expiracion">Fecha de expiración</label>
+                      <input
+                        type="text"
+                        name="expiracion"
+                        id="expiracion"
+                        maxLength="4"
+                        className="form-control"
+                        onChange={handleInputChange}
+                        onFocus={handleFocusChange}
+                      />
+                    </div>
+                    <div className="form-group col-md-6">
+                      <label htmlFor="cvc">CVC</label>
+                      <input
+                        type="text"
+                        name="cvc"
+                        id="cvc"
+                        maxLength="4"
+                        className="form-control"
+                        onChange={handleInputChange}
+                        onFocus={handleFocusChange}
+                      />
+                    </div>
+                  </div>
+                  <button onClick={processPayment} type="button" className="btn btn-success btn-block btn-lg">Pagar</button>
+                </form>
+              </div>
             </div>
           </div>
         )}

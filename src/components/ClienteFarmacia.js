@@ -4,11 +4,11 @@ import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import SearchIcon from '@mui/icons-material/Search';
 import Button from '@mui/material/Button';
 import Modal from '@mui/material/Modal';
-import { Link, useNavigate } from 'react-router-dom'; // Importa Link y useNavigate
+import { Link, useNavigate } from 'react-router-dom';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 
 const ClienteFarmacia = () => {
-  const navigate = useNavigate(); // Inicializa useNavigate
+  const navigate = useNavigate();
 
   const estiloEncabezado = {
     backgroundColor: 'blue',
@@ -65,6 +65,8 @@ const ClienteFarmacia = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [sortBy, setSortBy] = useState('');
   const [showSearchModal, setShowSearchModal] = useState(false);
+  const [nombreProductosSeleccionados, setNombreProductosSeleccionados] = useState([]);
+  const [cantidadesSeleccionadas, setCantidadesSeleccionadas] = useState([]);
 
   useEffect(() => {
     const fetchProductos = async () => {
@@ -79,32 +81,14 @@ const ClienteFarmacia = () => {
     fetchProductos();
   }, []);
 
-  // Recuperar el carrito del almacenamiento local al cargar la página
-  useEffect(() => {
-    const storedCart = localStorage.getItem('carrito');
-    if (storedCart) {
-      setCarrito(JSON.parse(storedCart));
-    }
-  }, []);
-
-  // Actualizar el almacenamiento local cuando el carrito cambie
-  useEffect(() => {
-    localStorage.setItem('carrito', JSON.stringify(carrito));
-  }, [carrito]);
-
   const addToCart = () => {
-    const updatedCart = [...carrito];
-    const existingItemIndex = updatedCart.findIndex(item => item.id === selectedProduct.id);
-    if (existingItemIndex !== -1) {
-      updatedCart[existingItemIndex].quantity += quantity;
-      setCarrito(updatedCart);
-    } else {
-      setCarrito([...updatedCart, { ...selectedProduct, quantity }]);
-    }
+    const updatedCarrito = [...carrito, { ...selectedProduct, quantity }];
+    setCarrito(updatedCarrito);
+    setNombreProductosSeleccionados([...nombreProductosSeleccionados, selectedProduct.nom_producto]);
+    setCantidadesSeleccionadas([...cantidadesSeleccionadas, quantity]);
     setSelectedProduct(null);
     setQuantity(1);
   };
-  
 
   const removeFromCart = (productId) => {
     const updatedCart = carrito.filter(item => item.id !== productId);
@@ -112,7 +96,13 @@ const ClienteFarmacia = () => {
   };
 
   const handleBuy = () => {
-    navigate("/vistaCompra", { state: { carrito } });
+    navigate("/vistaCompra", {
+      state: {
+        carrito,
+        nombreProductos: nombreProductosSeleccionados,
+        cantidades: cantidadesSeleccionadas
+      }
+    });
   };
 
   const filteredProducts = productos.filter(producto => {
