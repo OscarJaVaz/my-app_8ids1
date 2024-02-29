@@ -50,7 +50,11 @@ const MenuComponent = () => {
     const handleBackButton = (event) => {
       if (!isLoggedIn && location.pathname !== '/login') {
         event.preventDefault();
-        navigate('/login');
+        if (showPasswordPrompt) {
+          setShowPasswordPrompt(false); // Ocultar el formulario de contraseña si está visible
+        } else {
+          navigate('/login');
+        }
       }
     };
 
@@ -69,7 +73,7 @@ const MenuComponent = () => {
     return () => {
       window.removeEventListener('popstate', handleBackButton);
     };
-  }, [isLoggedIn, location.pathname]);
+  }, [isLoggedIn, location.pathname, showPasswordPrompt]);
 
   const toggleMenu = () => {
     setMenuVisible(!menuVisible);
@@ -77,7 +81,14 @@ const MenuComponent = () => {
 
   const handleClick = (path) => {
     if (path === '/homedoctor') {
-      setShowPasswordPrompt(true); // Mostrar el campo de contraseña al hacer clic en "Doctores"
+      // Mostrar alerta para ingresar contraseña
+      const enteredPassword = prompt('Ingrese la contraseña para acceder:');
+      if (enteredPassword === correctPassword) {
+        setAuthenticated(true);
+        navigate('/homedoctor');
+      } else {
+        alert('Contraseña incorrecta. Inténtalo de nuevo.');
+      }
     } else {
       navigate(path);
     }
@@ -143,7 +154,7 @@ const MenuComponent = () => {
   if (!authenticated && showPasswordPrompt) {
     return (
       <div>
-        <h2>Contacta al administrador</h2>
+        <h2>Ingrese la contraseña para acceder</h2>
         <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
         <button onClick={handlePasswordSubmit}>Enviar</button>
       </div>
