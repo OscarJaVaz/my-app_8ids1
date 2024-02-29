@@ -30,6 +30,10 @@ const MenuComponent = () => {
   const [greeting, setGreeting] = useState('');
   const [enfermedadesData, setEnfermedadesData] = useState([]);
   const [showGraph, setShowGraph] = useState(false);
+  const [showPasswordPrompt, setShowPasswordPrompt] = useState(false);
+  const [password, setPassword] = useState('');
+  const [authenticated, setAuthenticated] = useState(false);
+  const correctPassword = 'admin1'; // Cambia esto por tu contraseña
 
   useEffect(() => {
     setUsername(secureLocalStorage.getItem('username')); 
@@ -72,7 +76,11 @@ const MenuComponent = () => {
   };
 
   const handleClick = (path) => {
-    navigate(path);
+    if (path === '/homedoctor') {
+      setShowPasswordPrompt(true); // Mostrar el campo de contraseña al hacer clic en "Doctores"
+    } else {
+      navigate(path);
+    }
   };
 
   const handleLogout = () => {
@@ -121,6 +129,27 @@ const MenuComponent = () => {
     obtenerCitas();
   }, []);
 
+  const handlePasswordSubmit = () => {
+    if (password === correctPassword) {
+      setAuthenticated(true);
+      setShowPasswordPrompt(false);
+      navigate('/homedoctor');
+    } else {
+      alert('Contraseña incorrecta. Inténtalo de nuevo.');
+      setPassword('');
+    }
+  };
+
+  if (!authenticated && showPasswordPrompt) {
+    return (
+      <div>
+        <h2>Contacta al administrador</h2>
+        <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
+        <button onClick={handlePasswordSubmit}>Enviar</button>
+      </div>
+    );
+  }
+
   if (!isLoggedIn && location.pathname !== '/login') {
     return <Login_Component />;
   }
@@ -130,7 +159,6 @@ const MenuComponent = () => {
       <div className="sidebar" style={{ overflowY: 'auto' }}>
         <h2 style={{ margin: 0 ,color:'white', textAlign:'center'}}>{greeting}, {usernameLoaded ? username : 'Usuario'}</h2>
         <br></br>
-       
         <p></p>
         <a onClick={() => handleClick("/home")}>
           <img src={paciente} alt="Pacientes" />
