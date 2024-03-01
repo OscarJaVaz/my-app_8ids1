@@ -99,7 +99,7 @@ const GenerarRecetaComponent = () => {
         <div style={styles.container}>
             <h1 style={styles.title}>Generar Receta</h1>
             <div style={styles.clienteContainer}>
-                <label>Cliente Seleccionado:</label>
+                <label>Nombre del Paciente:</label>
                 <div>{clienteSeleccionado}</div>
             </div>
             <div style={styles.doctorContainer}>
@@ -113,15 +113,17 @@ const GenerarRecetaComponent = () => {
                 <div style={{ ...styles.signatureLine, width: `${signatureLineWidth}px` }}></div>
             </div>
             <div style={styles.recetaContainer}>
-                <label>Receta:</label>
+                <label style={styles.recetaLabel}>Diagnostico del paciente:</label>
                 <textarea
+                    style={styles.recetaTextarea}
                     rows="4"
                     cols="50"
                     value={receta}
                     onChange={handleInputChange}
-                    placeholder="Escribe la receta aquí..."
+                    placeholder="Escribe el diagnostico aquí"
                 ></textarea>
             </div>
+
 
             <div style={styles.datePickerContainer}>
                 <LocalizationProvider dateAdapter={AdapterDateFns}>
@@ -188,6 +190,22 @@ const styles = {
     },
     recetaContainer: {
         marginBottom: '20px',
+        width: '100%',
+    },
+    recetaLabel: {
+        marginBottom: '5px',
+        fontSize: '18px',
+        fontWeight: 'bold',
+        color: '#333',
+    },
+    recetaTextarea: {
+        width: '100%',
+        padding: '10px',
+        borderRadius: '8px',
+        border: '1px solid #ccc',
+        resize: 'vertical', // Permite redimensionar verticalmente solo
+        fontSize: '16px',
+        lineHeight: '1.5',
     },
     doctorContainer: {
         marginBottom: '20px',

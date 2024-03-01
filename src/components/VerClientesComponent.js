@@ -95,13 +95,7 @@ const VerClientesComponent = () => {
   return (
     <div style={styles.container}>
       <h1 style={styles.title}>Clientes Registrados</h1>
-      <TextField
-        label="Buscar cliente"
-        value={searchText}
-        onChange={(e) => setSearchText(e.target.value)}
-        variant="outlined"
-        margin="normal"
-      />
+
       <div>
         <SpeedDial
           ariaLabel="SpeedDial basic example"
