@@ -24,14 +24,14 @@ function RegistrarCitaCliente() {
     id: 0,
     paciente: '',
     doctor: '',
-    enfermedad: '',
+    sintomas: '',
     fecha: '',
     hora: ''
   });
 
   const [loading, setLoading] = useState(false);
   const [doctores, setDoctores] = useState([]);
-  const [enfermedades, setEnfermedades] = useState([]);
+  const [clientes, setEnfermedades] = useState([]);
   const [openModal, setOpenModal] = useState(false);
   const [qrData, setQRData] = useState('');
   const [confirmacionVisible, setConfirmacionVisible] = useState(false);
@@ -60,9 +60,9 @@ function RegistrarCitaCliente() {
         setDoctores(response.data);
       });
   };
-
-  const fnObtenerEnfermedades = async () => {
-    await axios.get('http://127.0.0.1:8000/api/enfermedades')
+  
+  const fnObtenerClientes = async () => {
+    await axios.get('http://127.0.0.1:8000/api/clientes')
       .then((response) => {
         setEnfermedades(response.data);
       });
@@ -130,14 +130,14 @@ function RegistrarCitaCliente() {
     console.log('Render');
     fnObtenerDatos();
     fnObtenerDoctores();
-    fnObtenerEnfermedades();
+    fnObtenerClientes();
   }, []);
 
   const camposCompletos = () => {
     return (
       cita.paciente.trim() !== '' &&
       cita.doctor.trim() !== '' &&
-      cita.enfermedad.trim() !== '' &&
+      cita.sintomas.trim() !== '' &&
       cita.fecha.trim() !== '' &&
       cita.hora.trim() !== ''
     );
@@ -179,11 +179,22 @@ function RegistrarCitaCliente() {
       <ul style={{ listStyleType: 'none', textAlign: 'center', padding: 0 }}>
         <p></p>
         <li>
-          <TextField
-            label="Paciente"
-            name="paciente"
-            value={cita.paciente}
-            onChange={(event, value) => handleGuardar(event, value?.nombre)}
+          <Autocomplete
+            options={clientes}
+            getOptionLabel={(option) => option.nombre}
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                required
+                id="combo-box-demo"
+                label="Paciente"
+                name="paciente"
+                value={cita.paciente}
+                onChange={(event, value) => handleGuardar(event, value?.nombre)}
+              />
+            )}
+            value={clientes.find((d) => d.nombre === cita.paciente) || null}
+            isOptionEqualToValue={(option, value) => option.id === value.id}
           />
         </li>
         <p></p>
@@ -200,6 +211,7 @@ function RegistrarCitaCliente() {
                 name="doctor"
                 value={cita.doctor}
                 onChange={(event, value) => handleGuardar(event, value?.nombre)}
+                
               />
             )}
             value={doctores.find((d) => d.nombre === cita.doctor) || null}
@@ -208,22 +220,11 @@ function RegistrarCitaCliente() {
         </li>
         <p></p>
         <li>
-          <Autocomplete
-            options={enfermedades}
-            getOptionLabel={(option) => option.nombre}
-            renderInput={(params) => (
-              <TextField
-                {...params}
-                required
-                id="combo-box-demo"
-                label="Enfermedad"
-                name="enfermedad"
-                value={cita.enfermedad}
-                onChange={(event, value) => handleGuardar(event, value?.nombre)}
-              />
-            )}
-            value={enfermedades.find((e) => e.nombre === cita.enfermedad) || null}
-            isOptionEqualToValue={(option, value) => option.id === value.id}
+          <TextField
+            label="Sintomas"
+            name="sintomas"
+            value={cita.sintomas}
+            onChange={handleGuardar}
           />
         </li>
         <p></p>
