@@ -49,9 +49,12 @@ const GenerarRecetaComponent = () => {
         doc.text(recetaLines, 15, recetaY + 35);
 
         // Fecha
+        const adjustedDate = selectedDate ? new Date(selectedDate.getTime() + selectedDate.getTimezoneOffset() * 60000) : null;
+        const selectedDateFormatted = adjustedDate ? `${adjustedDate.getUTCDate()}/${adjustedDate.getUTCMonth() + 1}/${adjustedDate.getUTCFullYear()}` : '';
         const fechaX = 100; // Posición horizontal para la fecha
         const fechaY = recetaY + 35 + recetaLines.length * 10 + 20; // Posición vertical inicial para la fecha
-        doc.text(`Fecha: ${dateText}`, fechaX, fechaY);
+        doc.text(`Fecha: ${selectedDateFormatted}`, fechaX, fechaY);
+
 
         // Línea para la firma del doctor
         doc.line(10, fechaY + 10, 10 + signatureLineWidth, fechaY + 10, null, 0.1);
@@ -127,7 +130,7 @@ const GenerarRecetaComponent = () => {
                         value={selectedDate}
                         onChange={handleDateChange}
                         minDate={new Date()} // Establece la fecha mínima como la fecha actual
-                        maxDate={new Date()} // Establece la fecha máxima como la fecha actual
+
                         renderInput={(params) => <TextField {...params} variant="outlined" />}
                     />
                 </LocalizationProvider>
