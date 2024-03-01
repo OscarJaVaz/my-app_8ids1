@@ -38,7 +38,7 @@ const GenerarRecetaComponent = () => {
         doc.text('Hospital', 10, 25);
 
         // Datos del cliente
-        doc.text(`Cliente: ${clienteSeleccionado}`, 10, 40);
+        doc.text(`Paciente: ${clienteSeleccionado}`, 10, 40);
 
         // Receta en recuadro con bordes estilo hospital
         const recetaY = 60; // Posición vertical inicial para la receta

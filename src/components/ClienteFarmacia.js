@@ -57,6 +57,19 @@ const ClienteFarmacia = () => {
     objectFit: 'cover',
   };
 
+  const estiloCarrito = {
+    position: 'fixed',
+    top: '60px',
+    right: '20px',
+    backgroundColor: 'white',
+    padding: '20px',
+    zIndex: 1001,
+    borderRadius: '10px',
+    boxShadow: '0 0 10px rgba(0, 0, 0, 0.1)',
+    maxHeight: '400px',
+    overflowY: 'auto',
+  };
+
   const [productos, setProductos] = useState([]);
   const [carrito, setCarrito] = useState([]);
   const [mostrarCarrito, setMostrarCarrito] = useState(false);
@@ -171,13 +184,19 @@ const ClienteFarmacia = () => {
         </Modal>
       )}
       {mostrarCarrito && (
-        <div style={{ position: 'fixed', top: '60px', right: '20px', backgroundColor: 'white', padding: '10px', zIndex: 1001 }}>
+        <div style={estiloCarrito}>
           {carrito.length === 0 ? (
             <p>El carrito está vacío</p>
           ) : (
             carrito.map((producto, index) => (
               <div key={index}>
                 <h3>{producto.nom_producto}</h3>
+                <img
+                  src={producto.imagen}
+                  alt={producto.nom_producto}
+                  className="producto-imagen"
+                  style={estiloImagen}
+                />
                 <p>{producto.descripcion}</p>
                 <p>Cantidad: {producto.quantity}</p>
                 <p>Precio Total: ${producto.quantity * producto.price}</p>
@@ -191,27 +210,31 @@ const ClienteFarmacia = () => {
         </div>
       )}
       <div style={estiloProductosContainer}>
-        {sortedProducts.map((producto) => (
-          <div key={producto.id} style={estiloProducto}>
-            <h2 style={{ color: 'red' }}>{producto.nom_producto}</h2>
-            <img
-              src={producto.imagen}
-              alt={producto.nom_producto}
-              className="producto-imagen"
-              style={estiloImagen}
-            />
-            <p>{producto.descripcion}</p>
-            <p style={{ color: 'blue' }}>${producto.price}</p>
-            <Button
-              variant="contained"
-              style={{ color: 'white', backgroundColor: 'blue' }}
-              startIcon={<ShoppingCartIcon />}
-              onClick={() => setSelectedProduct(producto)}
-            >
-              Ver Detalles
-            </Button>
-          </div>
-        ))}
+        {sortedProducts.length === 0 ? (
+          <p>No se encontraron productos que coincidan con la búsqueda.</p>
+        ) : (
+          sortedProducts.map((producto) => (
+            <div key={producto.id} style={estiloProducto}>
+              <h2 style={{ color: 'red' }}>{producto.nom_producto}</h2>
+              <img
+                src={producto.imagen}
+                alt={producto.nom_producto}
+                className="producto-imagen"
+                style={estiloImagen}
+              />
+              <p>{producto.descripcion}</p>
+              <p style={{ color: 'blue' }}>${producto.price}</p>
+              <Button
+                variant="contained"
+                style={{ color: 'white', backgroundColor: 'blue' }}
+                startIcon={<ShoppingCartIcon />}
+                onClick={() => setSelectedProduct(producto)}
+              >
+                Ver Detalles
+              </Button>
+            </div>
+          ))
+        )}
       </div>
       <Modal
         open={!!selectedProduct}
