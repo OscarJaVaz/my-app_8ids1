@@ -308,7 +308,7 @@ code {
 .sidebar {
   width: 200px;
   background-color: #333;
-  padding: 20px;
+  padding: 0px;
   transition: width 0.3s ease;
 }
 
@@ -331,6 +331,7 @@ code {
   display: flex;
   align-items: center;
   cursor: pointer;
+  margin-left: 10px;
 }
 
 .sidebar a img {
