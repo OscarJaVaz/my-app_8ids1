@@ -9,6 +9,7 @@ import { useNavigate } from 'react-router-dom';
 import Button from '@mui/material/Button';
 import Cita from './assets/citas.jpg';
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
+import TextField from '@mui/material/TextField';
 
 const CustomDataGrid = ({ className, ...other }) => (
   <div className={className}>
@@ -20,6 +21,9 @@ const actions = [{ icon: <FileCopyIcon />, name: 'Nuevo', key: 'new' }];
 
 const VerClientesComponent = () => {
   const navigate = useNavigate();
+  const [rows, setRows] = useState([]);
+  const [filteredRows, setFilteredRows] = useState([]);
+  const [searchText, setSearchText] = useState('');
 
   const handleFunction = (e, key) => {
     e.preventDefault();
@@ -32,12 +36,12 @@ const VerClientesComponent = () => {
   };
 
   const handleRowClick = (params) => {
-    console.log('Id:' + params.row.id);
-    console.log('Cliente: ' + params.row.clientes);
-    navigate('', {
+    const { id, nombre, apellido } = params.row;
+    console.log('Id:' + id);
+    console.log('Cliente: ' + nombre + ' ' + apellido);
+    navigate('/generarReceta', {
       state: {
-        id: params.row.id,
-        nombre: params.row.nombre,
+        nombre: nombre + ' ' + apellido // Enviar el nombre y los apellidos del cliente
       },
     });
   };
@@ -51,18 +55,27 @@ const VerClientesComponent = () => {
     { field: 'domicilio', headerName: 'Domicilio', width: 130 },
   ];
 
-  const [rows, setRows] = useState([]);
-
   const getData = async () => {
     const response = await axios.get('http://127.0.0.1:8000/api/clientes');
     console.log(response.data);
     setRows(response.data);
+    setFilteredRows(response.data);
   };
 
   useEffect(() => {
     console.log('Render');
     getData();
   }, []);
+
+  useEffect(() => {
+    setFilteredRows(
+      rows.filter(
+        (row) =>
+          row.nombre.toLowerCase().includes(searchText.toLowerCase()) ||
+          row.apellido.toLowerCase().includes(searchText.toLowerCase())
+      )
+    );
+  }, [searchText, rows]);
 
   const menu = () => {
     navigate('/menu');
@@ -81,7 +94,7 @@ const VerClientesComponent = () => {
 
   return (
     <div style={styles.container}>
-      <h1 style={styles.title}>Generar receta</h1>
+      <h1 style={styles.title}>Clientes Registrados</h1>
 
       <div>
         <SpeedDial
@@ -101,7 +114,7 @@ const VerClientesComponent = () => {
           ))}
         </SpeedDial>
         <DataGrid
-          rows={rows}
+          rows={filteredRows}
           columns={columns}
           components={{
             Table: CustomDataGrid,

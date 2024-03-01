@@ -118,7 +118,7 @@ function PacienteComponent() {
   }, [location.state.id]);
 
   const regresar = () => {
-    navigate('/home');
+    navigate('/Verclientes');
   };
 
   const camposCompletos = () => {
