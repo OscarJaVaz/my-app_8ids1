@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
@@ -9,6 +9,7 @@ import Cards from 'react-credit-cards';
 import 'react-credit-cards/es/styles-compiled.css';
 
 const VistaCompra = () => {
+  const navigate = useNavigate();
   const { state } = useLocation();
   const nombresProductos = state ? state.nombreProductos : [];
   const cantidades = state ? state.cantidades : [];
@@ -32,6 +33,7 @@ const VistaCompra = () => {
   const [showModal, setShowModal] = useState(false);
   const [showPaymentForm, setShowPaymentForm] = useState(false);
   const [showAddressForm, setShowAddressForm] = useState(false);
+  const [processingPayment, setProcessingPayment] = useState(false);
 
   useEffect(() => {
     const storedUsername = secureLocalStorage.getItem('username');
@@ -64,30 +66,38 @@ const VistaCompra = () => {
   };
 
   const processPayment = () => {
-    if (
-      paymentDetails.cp &&
-      paymentDetails.direccion &&
-      paymentDetails.municipio &&
-      paymentDetails.referencia &&
-      paymentDetails.num_tarjeta &&
-      paymentDetails.nom_titular &&
-      paymentDetails.expiracion &&
-      paymentDetails.cvc
-    ) {
-      axios.post('http://127.0.0.1:8000/api/compra/crear', {
-        ...paymentDetails,
-        carrito: carrito.map(item => ({ id: item.id, quantity: item.quantity })),
-      })
-      .then(response => {
-        console.log('Compra realizada con éxito:', response.data);
-        setShowModal(true);
-      })
-      .catch(error => {
-        console.error('Error al realizar la compra:', error);
-      });
-    } else {
-      console.error('Por favor completa todos los campos obligatorios.');
-    }
+    setProcessingPayment(true);
+    // Simulando un retraso para mostrar el proceso de pago
+    setTimeout(() => {
+      if (
+        paymentDetails.cp &&
+        paymentDetails.direccion &&
+        paymentDetails.municipio &&
+        paymentDetails.referencia &&
+        paymentDetails.num_tarjeta &&
+        paymentDetails.nom_titular &&
+        paymentDetails.expiracion &&
+        paymentDetails.cvc
+      ) {
+        axios.post('http://127.0.0.1:8000/api/compra/crear', {
+          ...paymentDetails,
+          carrito: carrito.map(item => ({ id: item.id, quantity: item.quantity })),
+        })
+        .then(response => {
+          console.log('Compra realizada con éxito:', response.data);
+          setShowModal(true);
+        })
+        .catch(error => {
+          console.error('Error al realizar la compra:', error);
+        })
+        .finally(() => {
+          setProcessingPayment(false);
+        });
+      } else {
+        console.error('Por favor completa todos los campos obligatorios.');
+        setProcessingPayment(false);
+      }
+    }, 2000); // Simulación de 2 segundos de proceso de pago
   };
 
   const handleContinueToPayment = () => {
@@ -270,7 +280,9 @@ const VistaCompra = () => {
                       />
                     </div>
                   </div>
-                  <button onClick={processPayment} type="button" className="btn btn-success btn-block btn-lg">Pagar</button>
+                  <button disabled={processingPayment} onClick={processPayment} type="button" className="btn btn-success btn-block btn-lg">
+                    {processingPayment ? "Procesando Pago..." : "Pagar"}
+                  </button>
                 </form>
               </div>
             </div>
@@ -281,8 +293,9 @@ const VistaCompra = () => {
         <div>
           <div className="modal-overlay" onClick={() => setShowModal(false)}></div>
           <div className="modal">
-            <h2>Tu pedido ha sido enviado</h2>
+            <h2>Pago Exitoso</h2>
             <p>Su pago se procesó correctamente.</p>
+            <button onClick={() => navigate('/farmaciacliente')} className="btn btn-primary">Continuar Comprando</button>
           </div>
         </div>
       )}
