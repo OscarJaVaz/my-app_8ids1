@@ -25,6 +25,7 @@ import RegistraCitaCliente from './components/RegistrarCitaCliente';
 import VerQrComponent from './components/VerQrComponent';
 import ClienteFarmacia from './components/ClienteFarmacia';
 import VistaCompra from './components/VistaCompra';
+import GenerarRecetaComponent from './components/GenerarRecetaComponent';
 
 //
 function App() {   
@@ -62,6 +63,7 @@ function App() {
     <Route path="/farmaciacliente" element={<ClienteFarmacia/>}/>
     <Route path="/cliente" element={<HomeClienteComponent/>}/>
     <Route path="/vistaCompra" element={<VistaCompra/>}/>
+    <Route path="/generarReceta" element={<GenerarRecetaComponent/>}/>
     
     </Routes>
   );
