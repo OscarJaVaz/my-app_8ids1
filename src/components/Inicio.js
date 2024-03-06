@@ -43,7 +43,7 @@ const Inicio = () => {
         <nav>
           <ul style={{ listStyleType: 'none', margin: 0, padding: 0 }}>
             <NavigationButton label='Iniciar sesión' onClick={() => handleNavigation('/login')} icon={<PersonIcon />} fontSize="15px" />
-            <NavigationButton label='Registrarse' onClick={() => handleNavigation('/registrar')} icon={<PersonIcon />} fontSize="15px" />
+            
             <NavigationButton label='Aviso de privacidad' onClick={() => handleNavigation("/aviso")} icon={<NotificationImportantIcon />} fontSize="15  px" />
           </ul>
         </nav>
