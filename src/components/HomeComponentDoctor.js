@@ -106,6 +106,11 @@ const HomeComponentDoctor = () => {
             />
           ))}
         </SpeedDial>
+        {rows.length === 0 && (
+        <div style={{ textAlign: 'center', padding: '20px' }}>
+          <p>No hay registros disponibles.</p>
+        </div>
+        )}
         <DataGrid
           rows={rows}
           columns={columns}

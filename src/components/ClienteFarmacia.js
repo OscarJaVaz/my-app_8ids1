@@ -4,11 +4,11 @@ import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import SearchIcon from '@mui/icons-material/Search';
 import Button from '@mui/material/Button';
 import Modal from '@mui/material/Modal';
-import { Link, useNavigate } from 'react-router-dom'; // Importa Link y useNavigate
+import { Link, useNavigate } from 'react-router-dom';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 
 const ClienteFarmacia = () => {
-  const navigate = useNavigate(); // Inicializa useNavigate
+  const navigate = useNavigate();
 
   const estiloEncabezado = {
     backgroundColor: 'blue',
@@ -57,6 +57,19 @@ const ClienteFarmacia = () => {
     objectFit: 'cover',
   };
 
+  const estiloCarrito = {
+    position: 'fixed',
+    top: '60px',
+    right: '20px',
+    backgroundColor: 'white',
+    padding: '20px',
+    zIndex: 1001,
+    borderRadius: '10px',
+    boxShadow: '0 0 10px rgba(0, 0, 0, 0.1)',
+    maxHeight: '400px',
+    overflowY: 'auto',
+  };
+
   const [productos, setProductos] = useState([]);
   const [carrito, setCarrito] = useState([]);
   const [mostrarCarrito, setMostrarCarrito] = useState(false);
@@ -65,6 +78,8 @@ const ClienteFarmacia = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [sortBy, setSortBy] = useState('');
   const [showSearchModal, setShowSearchModal] = useState(false);
+  const [nombreProductosSeleccionados, setNombreProductosSeleccionados] = useState([]);
+  const [cantidadesSeleccionadas, setCantidadesSeleccionadas] = useState([]);
 
   useEffect(() => {
     const fetchProductos = async () => {
@@ -79,32 +94,14 @@ const ClienteFarmacia = () => {
     fetchProductos();
   }, []);
 
-  // Recuperar el carrito del almacenamiento local al cargar la página
-  useEffect(() => {
-    const storedCart = localStorage.getItem('carrito');
-    if (storedCart) {
-      setCarrito(JSON.parse(storedCart));
-    }
-  }, []);
-
-  // Actualizar el almacenamiento local cuando el carrito cambie
-  useEffect(() => {
-    localStorage.setItem('carrito', JSON.stringify(carrito));
-  }, [carrito]);
-
   const addToCart = () => {
-    const updatedCart = [...carrito];
-    const existingItemIndex = updatedCart.findIndex(item => item.id === selectedProduct.id);
-    if (existingItemIndex !== -1) {
-      updatedCart[existingItemIndex].quantity += quantity;
-      setCarrito(updatedCart);
-    } else {
-      setCarrito([...updatedCart, { ...selectedProduct, quantity }]);
-    }
+    const updatedCarrito = [...carrito, { ...selectedProduct, quantity }];
+    setCarrito(updatedCarrito);
+    setNombreProductosSeleccionados([...nombreProductosSeleccionados, selectedProduct.nom_producto]);
+    setCantidadesSeleccionadas([...cantidadesSeleccionadas, quantity]);
     setSelectedProduct(null);
     setQuantity(1);
   };
-  
 
   const removeFromCart = (productId) => {
     const updatedCart = carrito.filter(item => item.id !== productId);
@@ -112,7 +109,13 @@ const ClienteFarmacia = () => {
   };
 
   const handleBuy = () => {
-    navigate("/vistaCompra", { state: { carrito } });
+    navigate("/vistaCompra", {
+      state: {
+        carrito,
+        nombreProductos: nombreProductosSeleccionados,
+        cantidades: cantidadesSeleccionadas
+      }
+    });
   };
 
   const filteredProducts = productos.filter(producto => {
@@ -181,13 +184,19 @@ const ClienteFarmacia = () => {
         </Modal>
       )}
       {mostrarCarrito && (
-        <div style={{ position: 'fixed', top: '60px', right: '20px', backgroundColor: 'white', padding: '10px', zIndex: 1001 }}>
+        <div style={estiloCarrito}>
           {carrito.length === 0 ? (
             <p>El carrito está vacío</p>
           ) : (
             carrito.map((producto, index) => (
               <div key={index}>
                 <h3>{producto.nom_producto}</h3>
+                <img
+                  src={producto.imagen}
+                  alt={producto.nom_producto}
+                  className="producto-imagen"
+                  style={estiloImagen}
+                />
                 <p>{producto.descripcion}</p>
                 <p>Cantidad: {producto.quantity}</p>
                 <p>Precio Total: ${producto.quantity * producto.price}</p>
@@ -201,27 +210,31 @@ const ClienteFarmacia = () => {
         </div>
       )}
       <div style={estiloProductosContainer}>
-        {sortedProducts.map((producto) => (
-          <div key={producto.id} style={estiloProducto}>
-            <h2 style={{ color: 'red' }}>{producto.nom_producto}</h2>
-            <img
-              src={producto.imagen}
-              alt={producto.nom_producto}
-              className="producto-imagen"
-              style={estiloImagen}
-            />
-            <p>{producto.descripcion}</p>
-            <p style={{ color: 'blue' }}>${producto.price}</p>
-            <Button
-              variant="contained"
-              style={{ color: 'white', backgroundColor: 'blue' }}
-              startIcon={<ShoppingCartIcon />}
-              onClick={() => setSelectedProduct(producto)}
-            >
-              Ver Detalles
-            </Button>
-          </div>
-        ))}
+        {sortedProducts.length === 0 ? (
+          <p>No se encontraron productos que coincidan con la búsqueda.</p>
+        ) : (
+          sortedProducts.map((producto) => (
+            <div key={producto.id} style={estiloProducto}>
+              <h2 style={{ color: 'red' }}>{producto.nom_producto}</h2>
+              <img
+                src={producto.imagen}
+                alt={producto.nom_producto}
+                className="producto-imagen"
+                style={estiloImagen}
+              />
+              <p>{producto.descripcion}</p>
+              <p style={{ color: 'blue' }}>${producto.price}</p>
+              <Button
+                variant="contained"
+                style={{ color: 'white', backgroundColor: 'blue' }}
+                startIcon={<ShoppingCartIcon />}
+                onClick={() => setSelectedProduct(producto)}
+              >
+                Ver Detalles
+              </Button>
+            </div>
+          ))
+        )}
       </div>
       <Modal
         open={!!selectedProduct}

@@ -46,7 +46,7 @@ const HomeComponentCita = () => {
     { field: 'id', headerName: 'ID', width: 70 },
     { field: 'paciente', headerName: 'Paciente', width: 130 },
     { field: 'doctor', headerName: 'Doctor', width: 130 },
-    { field: 'enfermedad', headerName: 'Enfermedad', width: 130 },
+    { field: 'sintomas', headerName: 'Sintomas', width: 130 },
     { field: 'fecha', headerName: 'Fecha', width: 130 },
     { field: 'hora', headerName: 'Hora', width: 130 },
   ];
@@ -100,6 +100,11 @@ const HomeComponentCita = () => {
             />
           ))}
         </SpeedDial>
+        {rows.length === 0 && (
+        <div style={{ textAlign: 'center', padding: '20px' }}>
+          <p>No hay registros disponibles.</p>
+        </div>
+        )}
         <DataGrid
           rows={rows}
           columns={columns}

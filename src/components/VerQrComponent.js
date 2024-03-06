@@ -96,8 +96,8 @@ const VerQrComponent = () => {
               <td style={{ padding: '5px' }}>{citaData.doctor}</td>
             </tr>
             <tr>
-              <td style={{ padding: '5px' }}>Enfermedad:</td>
-              <td style={{ padding: '5px' }}>{citaData.enfermedad}</td>
+              <td style={{ padding: '5px' }}>Sintomas:</td>
+              <td style={{ padding: '5px' }}>{citaData.sintomas}</td>
             </tr>
             <tr>
               <td style={{ padding: '5px' }}>Fecha:</td>

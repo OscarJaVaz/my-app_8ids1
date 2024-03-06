@@ -30,6 +30,10 @@ const MenuComponent = () => {
   const [greeting, setGreeting] = useState('');
   const [enfermedadesData, setEnfermedadesData] = useState([]);
   const [showGraph, setShowGraph] = useState(false);
+  const [showPasswordPrompt, setShowPasswordPrompt] = useState(false);
+  const [password, setPassword] = useState('');
+  const [authenticated, setAuthenticated] = useState(false);
+  const correctPassword = 'admin1'; // Cambia esto por tu contraseña
 
   useEffect(() => {
     setUsername(secureLocalStorage.getItem('username')); 
@@ -46,7 +50,11 @@ const MenuComponent = () => {
     const handleBackButton = (event) => {
       if (!isLoggedIn && location.pathname !== '/login') {
         event.preventDefault();
-        navigate('/login');
+        if (showPasswordPrompt) {
+          setShowPasswordPrompt(false); // Ocultar el formulario de contraseña si está visible
+        } else {
+          navigate('/login');
+        }
       }
     };
 
@@ -65,14 +73,25 @@ const MenuComponent = () => {
     return () => {
       window.removeEventListener('popstate', handleBackButton);
     };
-  }, [isLoggedIn, location.pathname]);
+  }, [isLoggedIn, location.pathname, showPasswordPrompt]);
 
   const toggleMenu = () => {
     setMenuVisible(!menuVisible);
   };
 
   const handleClick = (path) => {
-    navigate(path);
+    if (path === '/homedoctor') {
+      // Mostrar alerta para ingresar contraseña
+      const enteredPassword = prompt('Ingrese la contraseña para acceder:');
+      if (enteredPassword === correctPassword) {
+        setAuthenticated(true);
+        navigate('/homedoctor');
+      } else {
+        alert('Contraseña incorrecta. Inténtalo de nuevo.');
+      }
+    } else {
+      navigate(path);
+    }
   };
 
   const handleLogout = () => {
@@ -121,6 +140,27 @@ const MenuComponent = () => {
     obtenerCitas();
   }, []);
 
+  const handlePasswordSubmit = () => {
+    if (password === correctPassword) {
+      setAuthenticated(true);
+      setShowPasswordPrompt(false);
+      navigate('/homedoctor');
+    } else {
+      alert('Contraseña incorrecta. Inténtalo de nuevo.');
+      setPassword('');
+    }
+  };
+
+  if (!authenticated && showPasswordPrompt) {
+    return (
+      <div>
+        <h2>Ingrese la contraseña para acceder</h2>
+        <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
+        <button onClick={handlePasswordSubmit}>Enviar</button>
+      </div>
+    );
+  }
+
   if (!isLoggedIn && location.pathname !== '/login') {
     return <Login_Component />;
   }
@@ -128,9 +168,8 @@ const MenuComponent = () => {
   return (
     <div className={`menu-container ${menuVisible ? 'menu-visible' : 'menu-hidden'}`}>
       <div className="sidebar" style={{ overflowY: 'auto' }}>
-        <h2 style={{ margin: 0 ,color:'white', textAlign:'center'}}>{greeting}, {usernameLoaded ? username : 'Usuario'}</h2>
+        <h2 style={{ margin: 0 ,color:'white', textAlign:'center', marginTop: 10}}>{greeting}, {usernameLoaded ? username : 'Usuario'}</h2>
         <br></br>
-       
         <p></p>
         <a onClick={() => handleClick("/home")}>
           <img src={paciente} alt="Pacientes" />
@@ -142,7 +181,7 @@ const MenuComponent = () => {
         </a>
         <a onClick={() => handleClick("/homeenfermedad")}>
           <img src={enfermedad} alt="Enfermedades" />
-          <span>Enfermedades</span>
+          <span>Sintomas</span>
         </a>
         <a onClick={() => handleClick("/homecita")}>
           <img src={cita} alt="Citas" />
@@ -158,15 +197,15 @@ const MenuComponent = () => {
         </a>
         <a onClick={() => handleClick("/Verclientes")}>
           <img src={farmacia} alt="ClientesRegistrados" />
-          <span>Ver usuarios registrados</span>
+          <span>Generar receta</span>
         </a>
         <a onClick={() => handleClick("/verqr")}>
           <img src={farmacia} alt="ClientesRegistrados" />
-          <span>Ver Qr</span>
+          <span>Escanear QR Cita</span>
         </a>
         <a onClick={handleLogout}>
           <img src={salir} alt="Salir" />
-          <span>Salir</span>
+          <span>Cerrar sesi&oacute;n</span>
         </a>
       </div>
       <div className="content">
