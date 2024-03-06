@@ -14,7 +14,13 @@ import { useNavigate } from 'react-router-dom';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import CircularProgress from '@mui/material/CircularProgress';
 import miImagen from '../components/assets/simbolo_doc.png';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 
+// CSS
+import './Login.css';
+
+// Función para el campo de contraseña
 const PasswordField = ({ password, handlePasswordChange }) => {
   const [showPassword, setShowPassword] = useState(false);
 
@@ -24,26 +30,27 @@ const PasswordField = ({ password, handlePasswordChange }) => {
 
   return (
     <TextField
-      label="Contraseña"
       type={showPassword ? 'text' : 'password'}
-      name="password"
       value={password}
       onChange={handlePasswordChange}
+      fullWidth
+      margin="normal"
       variant="outlined"
+      label="Password"
       InputProps={{
         endAdornment: (
           <InputAdornment position="end">
             <IconButton onClick={handleClickShowPassword}>
-              {showPassword ? <VisibilityOff /> : <Visibility />}
+              {showPassword ? <Visibility /> : <VisibilityOff />}
             </IconButton>
           </InputAdornment>
         ),
       }}
-      sx={{ borderRadius: '20px', backgroundColor: '#ffffff', color: '#000000' }}
     />
   );
 };
 
+// Componente principal de login
 const Login_Component = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -51,6 +58,18 @@ const Login_Component = () => {
   const [emptyFieldsError, setEmptyFieldsError] = useState(false);
   const [userNotFoundError, setUserNotFoundError] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [mostrarMensaje, setMostrarMensaje] = useState(true);
+  const [nombre, setNombre] = useState('');
+  const [apellido, setApellido] = useState('');
+  const [telefono, setTelefono] = useState('');
+  const [contrasena, setContrasena] = useState('');
+  const [domicilio, setDomicilio] = useState('');
+  const [confirmarContrasena, setConfirmarContrasena] = useState('');
+  const [mensajeValidacion, setMensajeValidacion] = useState('');
+  const [contrasenaValida, setContrasenaValida] = useState(false);
+  const [openAlert, setOpenAlert] = useState(false);
+  const [showLoader, setShowLoader] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleInputChange = (event, setState) => {
     setState(event.target.value);
@@ -64,6 +83,10 @@ const Login_Component = () => {
   };
 
   const navigate = useNavigate();
+
+  const regresar = () => {
+    navigate('/');
+  };
 
   const fnLogin = async (e) => {
     e.preventDefault();
@@ -91,7 +114,6 @@ const Login_Component = () => {
         setOpen(true);
         navigate('/menu');
       } else {
-        // Si la primera API no devuelve un token válido, intentar con la segunda API
         const secondResponse = await axios.post(
           'http://127.0.0.1:8000/api/logincliente',
           { email, contrasena: password }
@@ -122,86 +144,271 @@ const Login_Component = () => {
     setLoading(false);
   };
 
-  const handleNavigation = (path) => {
-    navigate(path);
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (contrasena !== confirmarContrasena) {
+      setMensajeValidacion('Las contraseñas no coinciden');
+      return;
+    }
+
+    if (![nombre, apellido, email, telefono, domicilio, contrasena, confirmarContrasena].every(Boolean)) {
+      setMensajeValidacion('Todos los campos son obligatorios');
+      return;
+    }
+
+    setMensajeValidacion('');
+    setShowLoader(true);
+
+    try {
+      const response = await fetch('http://127.0.0.1:8000/api/cliente/crear', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          nombre,
+          apellido,
+          email,
+          telefono,
+          domicilio,
+          contrasena,
+        }),
+      });
+
+      if (response.ok) {
+        setOpenAlert(true);
+        navigate('/');
+      } else {
+        console.error('Error al guardar el cliente');
+      }
+    } catch (error) {
+      console.error('Error:', error);
+    } finally {
+      setShowLoader(false);
+    }
+
+    setNombre('');
+    setApellido('');
+    setEmail('');
+    setTelefono('');
+    setContrasena('');
+    setDomicilio('');
+    setConfirmarContrasena('');
+  };
+
+  const validarContrasena = (valor) => {
+    let mensaje = '';
+  
+    if (!/[A-Z]/.test(valor)) mensaje += 'Debe contener al menos una mayúscula. ';
+    if (!/[a-z]/.test(valor)) mensaje += 'Debe contener al menos una minúscula. ';
+    if (!/[0-9]/.test(valor)) mensaje += 'Debe contener al menos un número. ';
+  
+    // Verificar longitud mínima
+    if (valor.length < 8) mensaje += 'Debe tener al menos 8 caracteres. ';
+  
+    setContrasenaValida(valor.length >= 8);
+    setMensajeValidacion(mensaje);
+  };
+
+  const handleCloseAlert = () => {
+    setOpenAlert(false);
+  };
+
+  const handleTogglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
+  };
+
+  const isBotonRegistrarDisabled = () => {
+    return !(
+      nombre &&
+      apellido &&
+      email &&
+      telefono &&
+      domicilio &&
+      contrasena &&
+      confirmarContrasena &&
+      contrasenaValida &&
+      contrasena === confirmarContrasena
+    );
+  };
+
+  const handleContrasenaChange = (e) => {
+    const valor = e.target.value;
+    setContrasena(valor);
+    validarContrasena(valor);
+  };
+
+  const handleSignUpClick = () => {
+    const container = document.getElementById('container');
+    container.classList.add('right-panel-active');
+  };
+
+  const handleSignInClick = () => {
+    const container = document.getElementById('container');
+    container.classList.remove('right-panel-active');
   };
 
   return (
-    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh', background: 'linear-gradient(#48A3FF, #ffffff)' }}>
-      <div style={{ display: 'flex', backgroundColor: '#FFFFFF', borderRadius: '20px', overflow: 'hidden' }}>
-        <div style={{ padding: '2px', textAlign: 'center' }}>
-          <Stack spacing={2} sx={{ width: 400, marginTop: '10px', backgroundColor: '#FFFFFF', padding: '20px', borderRadius: '20px', textAlign: 'center' }}>
-            <h1 style={{ fontSize: '40px', color: '#000000' }}>Iniciar Sesión</h1>
-            <TextField
-              label="Usuario"
-              name="email"
-              value={email}
-              onChange={(e) => handleInputChange(e, setEmail)}
-              sx={{ borderRadius: '20px', backgroundColor: '#ffffff', color: '#000000', marginBottom: '10px' }}
-            />
-            <PasswordField password={password} handlePasswordChange={(e) => handleInputChange(e, setPassword)} />
-            <Stack direction="row" sx={{ justifyContent: 'center', marginTop: '10px' }}>
+    <div style={{
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+      flexDirection: 'column',
+      fontFamily: 'Montserrat, sans-serif',
+      height: '100vh',
+      margin: '-20px 0 50px',
+      background: 'linear-gradient(#48A3FF, #ffffff)'
+    }}>
+      <h2 style={{ color: '#fff', fontWeight: 'bold', fontSize: '24px', marginBottom: '20px' }}>Consultorio Médico</h2>
+      <div className="container" id="container">
+        {/* REGISTRARSE (Elementos) */}
+        <div className="form-container sign-up-container">
+          <form onSubmit={handleSubmit}>
+            <h1>Crear cuenta</h1>
+            <input type="text" placeholder="Nombre" onChange={(e) => setNombre(e.target.value)} />
+            <input type="text" placeholder="Apellidos" onChange={(e) => setApellido(e.target.value)} />
+            <input type="number" inputMode="numeric" pattern="[0-9]*" placeholder="Telefono" onChange={(e) => setTelefono(e.target.value.replace(/\D/g, ''))} />
+            <input type="text" placeholder="Domicilio" onChange={(e) => setDomicilio(e.target.value)} />
+            <input type="email" placeholder="Email" onChange={(e) => setEmail(e.target.value)} />
+            <input type="password" placeholder="Password" onChange={handleContrasenaChange} />
+            <input type="password" placeholder="Confirmar Password" onChange={(e) => setConfirmarContrasena(e.target.value)} />
+            {mensajeValidacion && (
+              <p style={{ ...styles.mensajeValidacion, color: mensajeValidacion.includes('coinciden') ? 'green' : 'red' }}>
+                {mensajeValidacion}
+              </p>
+            )}
+            {showLoader ? (
+              <CircularProgress style={{ margin: 'auto', color: 'green' }} />
+            ) : (
               <Button
                 variant="contained"
                 sx={{
-                  fontFamily: 'sans-serif',
-                  fontWeight: 'bold',
-                  backgroundColor: '#3F51B5',
-                  color: '#ffffff',
-                  width: '300px',
+                  backgroundColor: '#4870FF',
+                  color: 'white',
+                  borderRadius: '5px',
+                  marginTop: '10px',
                   '&:hover': {
                     backgroundColor: '#4CAF50',
                   },
                 }}
-                onClick={fnLogin}
-                disabled={!email || !password || loading} // Deshabilita el botón mientras se carga
+                type="submit"
+                disabled={isBotonRegistrarDisabled()}
               >
-                {loading && <CircularProgress size={24} color="inherit" />} {/* Muestra la rueda de carga cuando loading es verdadero */}
-                {!loading && <span>Entrar</span>} {/* Muestra "Entrar" cuando loading es falso */}
-                <LockOutlinedIcon style={{ marginLeft: '5px' }} />
+                <CheckCircleOutlineIcon style={{ marginRight: '5px', display: 'inline-block', verticalAlign: 'middle' }} />
+                Registrar
               </Button>
-            </Stack>
-            <Stack direction="row" sx={{ justifyContent: 'center', marginBottom: '10px', color: '#000000' }}>
-              <span style={{ fontSize: '14px' }}>¿Es tu primera vez? </span>
-              <span
-                style={{ fontSize: '14px', textDecoration: 'underline', cursor: 'pointer', fontWeight: 'bold' }}
-                onClick={() => handleNavigation('/registrar')}
-              >
-                Regístrate aquí
-              </span>
-            </Stack>
-            <Snackbar
-              open={open}
-              autoHideDuration={6000}
-              onClose={handleClose}
+            )}
+            <Button
+              variant="contained"
               sx={{
-                bottom: '0%',
-                right: '50%',
-                transform: 'translate(230%, -660%)',
-                alignItems: 'center',
-                justifyContent: 'center',
+                backgroundColor: '#FFBF48',
+                color: 'white',
+                borderRadius: '5px',
+                marginTop: '10px',
+                '&:hover': {
+                  backgroundColor: '#FF0000',
+                },
               }}
+              onClick={regresar}
             >
-              <Alert severity="success">Ingreso exitoso</Alert>
-            </Snackbar>
-            {emptyFieldsError && (
-              <Alert severity="error" onClose={() => setEmptyFieldsError(false)}>
-                Verifica la información
-              </Alert>
-            )}
-            {userNotFoundError && (
-              <Alert severity="error" onClose={() => setUserNotFoundError(false)}>
-                Usuario o contraseña incorrectos
-              </Alert>
-            )}
-          </Stack>
+              <ArrowBackIcon style={{ marginRight: '5px', display: 'inline-block', verticalAlign: 'middle' }} />
+              INICIO
+            </Button>
+          </form>
         </div>
-        <div style={{ marginLeft: '20px', alignSelf: 'flex-end', marginBottom: '20px' }}>
-          <img src={miImagen} alt="Avatar Doctor" style={{ height: '50vh', marginTop: '50px' }} />
+        {/* Iniciar Sesión (Elementos) */}
+        <div className="form-container sign-in-container">
+          <form action="#">
+            <h1>Iniciar Sesión</h1>
+
+            <input type="email" value={email} onChange={(e) => handleInputChange(e, setEmail)} placeholder="Email" />
+            <input type="password" value={password} onChange={(e) => handleInputChange(e, setPassword)} placeholder="Contraseña" />
+            <a href="#">¿Olvidaste tu contraseña?</a>
+            <button onClick={fnLogin} disabled={!email || !password || loading}>
+              {loading && <CircularProgress size={20} color="inherit" />}
+              {!loading && <span>Iniciar Sesión</span>}
+              <LockOutlinedIcon style={{ marginLeft: '10px' }} />
+            </button>
+            <Button
+              variant="contained"
+              sx={{
+                backgroundColor: '#FFBF48',
+                color: 'white',
+                borderRadius: '5px',
+                marginTop: '10px',
+                '&:hover': {
+                  backgroundColor: '#FF0000',
+                },
+              }}
+              onClick={regresar}
+            >
+              <ArrowBackIcon style={{ marginRight: '5px', display: 'inline-block', verticalAlign: 'middle' }} />
+              INICIO
+            </Button>
+          </form>
         </div>
+
+        <div className="overlay-container">
+          <div className="overlay">
+            <div className="overlay-panel overlay-left">
+              <h1>Bienvenido de nuevo!</h1>
+              <p>Para mantenerse conectado con nosotros, inicie sesión con su información personal</p>
+              <button className="ghost" onClick={handleSignInClick}>Inicia Sesión aquí</button>
+            </div>
+            <div className="overlay-panel overlay-right">
+              <h1>Hola!</h1>
+              <p>¿No tienes cuenta?. Introduce tus datos personales y comienza tu cuenta con nosotros.</p>
+              <button className="ghost" onClick={handleSignUpClick}>Registrate aquí</button>
+            </div>
+          </div>
+        </div>
+        <Snackbar
+          open={open}
+          autoHideDuration={6000}
+          onClose={handleClose}
+          sx={{
+            bottom: '0%',
+            right: '50%',
+            transform: 'translate(230%, -660%)',
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}
+        >
+          <Alert severity="success">Ingreso exitoso</Alert>
+        </Snackbar>
+        {emptyFieldsError && (
+          <Alert severity="error" onClose={() => setEmptyFieldsError(false)}>
+            Verifica la información
+          </Alert>
+        )}
+        {userNotFoundError && (
+          <Alert severity="error" onClose={() => setUserNotFoundError(false)}>
+            Usuario o contraseña incorrectos
+          </Alert>
+        )}
       </div>
     </div>
   );
+};
+
+const styles = {
+  
+  mensaje: {
+    width: '400px',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  mensajeTexto: {
+    color: '#1172D8',
+    fontWeight: 'bold',
+    textAlign: 'center',
+  },
+  
+  mensajeValidacion: {
+    fontSize: '12px',
+    marginBottom: '0px',
+  },
 };
 
 export default Login_Component;
