@@ -12,7 +12,7 @@ const ClienteFarmacia = () => {
 
   const estiloEncabezado = {
     backgroundColor: 'blue',
-    padding: '20px',
+    padding: '10px',
     color: 'white',
     textAlign: 'center',
     fontSize: '24px',

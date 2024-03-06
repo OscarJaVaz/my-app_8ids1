@@ -270,8 +270,8 @@ const Login_Component = () => {
             <input type="number" inputMode="numeric" pattern="[0-9]*" placeholder="Telefono" onChange={(e) => setTelefono(e.target.value.replace(/\D/g, ''))} />
             <input type="text" placeholder="Domicilio" onChange={(e) => setDomicilio(e.target.value)} />
             <input type="email" placeholder="Email" onChange={(e) => setEmail(e.target.value)} />
-            <input type="password" placeholder="Password" onChange={handleContrasenaChange} />
-            <input type="password" placeholder="Confirmar Password" onChange={(e) => setConfirmarContrasena(e.target.value)} />
+            <input type="password" placeholder="Contraseña" onChange={handleContrasenaChange} />
+            <input type="password" placeholder="Confirmar contraseña" onChange={(e) => setConfirmarContrasena(e.target.value)} />
             {mensajeValidacion && (
               <p style={{ ...styles.mensajeValidacion, color: mensajeValidacion.includes('coinciden') ? 'green' : 'red' }}>
                 {mensajeValidacion}
