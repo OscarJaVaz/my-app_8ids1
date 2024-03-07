@@ -24,51 +24,46 @@ const GenerarRecetaComponent = () => {
         // Generar el PDF con los datos de la cita
         const doc = new jsPDF();
         const dateText = selectedDate ? selectedDate.toLocaleDateString() : '';
-
+    
         // Establecer el estilo de fuente y tamaño
         doc.setFont('Arial', 'normal');
         doc.setFontSize(12);
-
-        // Membrete con bordes estilo hospital
-        doc.setDrawColor(0); // Establecer el color de dibujo en negro
-        doc.setFillColor(255, 255, 255); // Establecer el color de relleno en blanco
-        doc.roundedRect(5, 5, 200, 280, 3, 3, 'FD'); // Dibujar un rectángulo con esquinas redondeadas y relleno
-
+    
         // Título "Receta"
-        doc.text('Hospital', 10, 25);
-
-        // Datos del cliente
-        doc.text(`Paciente: ${clienteSeleccionado}`, 10, 40);
-
+        doc.text('Consultorio Médico', 105, 10, null, null, 'center');
+    
+        // Fecha en la esquina superior derecha
+        const fechaX = 180; // Posición horizontal para la fecha
+        const fechaY = 15; // Posición vertical para la fecha
+        doc.text(`Fecha: ${dateText}`, fechaX, fechaY);
+    
         // Receta en recuadro con bordes estilo hospital
-        const recetaY = 60; // Posición vertical inicial para la receta
+        const recetaY = 30; // Posición vertical inicial para la receta
         const recetaLines = doc.splitTextToSize(receta, 180); // Definir recetaLines antes de su uso
-
+    
         doc.setDrawColor(0); // Restaurar el color de dibujo en negro
-        doc.rect(10, recetaY + 25, 190, recetaLines.length * 10 + 10); // Dibujar un rectángulo sin relleno
-        doc.text(recetaLines, 15, recetaY + 35);
-
-        // Fecha
-        const adjustedDate = selectedDate ? new Date(selectedDate.getTime() + selectedDate.getTimezoneOffset() * 60000) : null;
-        const selectedDateFormatted = adjustedDate ? `${adjustedDate.getUTCDate()}/${adjustedDate.getUTCMonth() + 1}/${adjustedDate.getUTCFullYear()}` : '';
-        const fechaX = 100; // Posición horizontal para la fecha
-        const fechaY = recetaY + 35 + recetaLines.length * 10 + 20; // Posición vertical inicial para la fecha
-        doc.text(`Fecha: ${selectedDateFormatted}`, fechaX, fechaY);
-
-
+        doc.rect(10, recetaY, 190, recetaLines.length * 10 + 10); // Dibujar un rectángulo sin relleno
+        doc.text('Diagnóstico del Paciente', 105, recetaY + 7, null, null, 'center'); // Título "Diagnóstico del Paciente"
+        doc.text(recetaLines, 15, recetaY + 15);
+    
         // Línea para la firma del doctor
-        doc.line(10, fechaY + 10, 10 + signatureLineWidth, fechaY + 10, null, 0.1);
-
+        const signatureLineWidth = 90; // Longitud de la línea de firma
+        const signatureLineY = recetaY + recetaLines.length * 10 + 30; // Posición vertical para la línea de la firma
+        const pageWidth = doc.internal.pageSize.width; // Ancho de la página
+        const signatureLineX = (pageWidth - signatureLineWidth) / 2; // Posición horizontal para centrar la línea de firma
+        doc.line(signatureLineX, signatureLineY, signatureLineX + signatureLineWidth, signatureLineY, null, 0.1);
+    
         // Nombre del doctor debajo de la línea
-        const doctorNameY = fechaY + 20; // Posición vertical para el nombre del doctor
-        doc.text(`Nombre y firma del doctor: ${doctorName}`, 10, doctorNameY);
-
+        const doctorNameY = signatureLineY + 5; // Posición vertical para el nombre del doctor
+        doc.text(`Nombre y firma del doctor: ${doctorName}`, 105, doctorNameY, null, null, 'center');
+    
         // Abrir el PDF en una nueva ventana
         window.open(doc.output('bloburl'), '_blank');
-
+    
         // Navegar a /menu
         navigate('/menu');
     };
+    
 
 
 
