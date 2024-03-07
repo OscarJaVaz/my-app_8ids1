@@ -30,7 +30,7 @@ const HomeComponentEnfermedad = () => {
 
   return (
     <div style={styles.container}>
-      <h1 style={styles.title}>Síntomas de los pacientes</h1>
+      <h1 style={styles.title}>Síntomas con mas frecuencia en pacientes</h1>
       <div>
         <DataGrid
           rows={rows}
