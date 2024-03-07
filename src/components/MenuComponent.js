@@ -171,10 +171,7 @@ const MenuComponent = () => {
         <h2 style={{ margin: 0 ,color:'white', textAlign:'center', marginTop: 10}}>{greeting}, {usernameLoaded ? username : 'Usuario'}</h2>
         <br></br>
         <p></p>
-        <a onClick={() => handleClick("/home")}>
-          <img src={paciente} alt="Pacientes" />
-          <span>Pacientes</span>
-        </a>
+        
         <a onClick={() => handleClick("/homedoctor")}>
           <img src={doctor} alt="Doctores" />
           <span>Doctores</span>

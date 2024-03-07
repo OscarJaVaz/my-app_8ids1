@@ -94,7 +94,7 @@ const VerClientesComponent = () => {
 
   return (
     <div style={styles.container}>
-      <h1 style={styles.title}>Clientes Registrados</h1>
+      <h1 style={styles.title}>Pacientes Registrados</h1>
 
       <div>
        
