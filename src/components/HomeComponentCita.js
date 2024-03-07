@@ -9,6 +9,7 @@ import { useNavigate } from 'react-router-dom';
 import Button from '@mui/material/Button';
 import Cita from './assets/citas.jpg';
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
+import TextField from '@mui/material/TextField';
 
 const CustomDataGrid = ({ className, ...other }) => (
   <div className={className}>
@@ -20,6 +21,8 @@ const actions = [{ icon: <FileCopyIcon />, name: 'Nuevo', key: 'new' }];
 
 const HomeComponentCita = () => {
   const navigate = useNavigate();
+  const [filtroNombre, setFiltroNombre] = useState('');
+  const [rows, setRows] = useState([]);
 
   const handleFunction = (e, key) => {
     e.preventDefault();
@@ -51,8 +54,6 @@ const HomeComponentCita = () => {
     { field: 'hora', headerName: 'Hora', width: 130 },
   ];
 
-  const [rows, setRows] = useState([]);
-
   const getData = async () => {
     const response = await axios.get('http://127.0.0.1:8000/api/citas');
     console.log(response.data);
@@ -68,6 +69,10 @@ const HomeComponentCita = () => {
     navigate('/menu');
   };
 
+  const filteredRows = rows.filter(row =>
+    row.paciente.toLowerCase().includes(filtroNombre.toLowerCase())
+  );
+
   useEffect(() => {
     document.body.style.backgroundImage = `url(${Cita})`;
     document.body.style.backgroundSize = 'cover';
@@ -82,6 +87,13 @@ const HomeComponentCita = () => {
   return (
     <div style={styles.container}>
       <h1 style={styles.title}>Citas Registradas</h1>
+
+      <TextField
+        label="Buscar por nombre"
+        value={filtroNombre}
+        onChange={(e) => setFiltroNombre(e.target.value)}
+        style={{ marginBottom: '10px' }}
+      />
 
       <div>
         <SpeedDial
@@ -100,13 +112,13 @@ const HomeComponentCita = () => {
             />
           ))}
         </SpeedDial>
-        {rows.length === 0 && (
+        {filteredRows.length === 0 && (
         <div style={{ textAlign: 'center', padding: '20px' }}>
           <p>No hay registros disponibles.</p>
         </div>
         )}
         <DataGrid
-          rows={rows}
+          rows={filteredRows}
           columns={columns}
           components={{
             Table: CustomDataGrid,
