@@ -302,14 +302,15 @@ code {
 .menu-container {
   display: flex;
   overflow: hidden;
-  /* Para ocultar el desbordamiento del contenido */
+  height: 100vh; /* Establecer la altura del menú para que ocupe toda la altura de la pantalla */
 }
 
 .sidebar {
-  width: 200px;
-  background-color: #333;
+  width: 250px;
+  background-color: #0f4c75; /* Azul oscuro */
   padding: 0px;
   transition: width 0.3s ease;
+  overflow-y: auto; /* Permitir desplazamiento vertical en la barra lateral */
 }
 
 .sidebar .user-info {
@@ -321,17 +322,23 @@ code {
 
 .sidebar .user-info h2 {
   margin: 0;
+  color: #fff; /* Texto blanco */
 }
 
 .sidebar a {
-  display: block;
-  margin-bottom: 10px;
-  text-decoration: none;
-  color: white;
   display: flex;
   align-items: center;
-  cursor: pointer;
-  margin-left: 10px;
+  color: #fff; /* Texto blanco */
+  text-decoration: none;
+  transition: color 0.3s ease;
+  padding: 10px;
+  border-radius: 5px;
+}
+
+.sidebar a:hover {
+  color: #0f4c75; /* Azul oscuro */
+  background-color: #ffcc80; /* Amarillo claro */
+  box-shadow: 0px 0px 10px rgba(15, 76, 117, 0.3); /* Sombra suave */
 }
 
 .sidebar a img {
@@ -340,10 +347,15 @@ code {
   width: 25px;
 }
 
+.sidebar a span {
+  font-size: 16px;
+}
+
+
 .content {
   flex-grow: 1;
   padding: 20px;
-  background-color: #f4f4f4;
+  background-color: #f0f0f0; /* Gris claro */
   overflow-y: auto;
   /* Permitir desplazamiento vertical en el contenido */
 }
@@ -357,6 +369,17 @@ code {
   position: absolute;
   top: 10px;
   left: 10px;
+  color: #fff; /* Texto blanco */
+  background-color: #0f4c75; /* Azul oscuro */
+  border: none;
+  padding: 5px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.toggle-button:hover {
+  background-color: #ffcc80; /* Amarillo claro */
 }
 
 .calendar-container {
