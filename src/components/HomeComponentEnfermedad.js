@@ -1,118 +1,46 @@
 import React, { useEffect, useState } from 'react';
 import { DataGrid } from '@mui/x-data-grid';
 import axios from 'axios';
-import SpeedDial from '@mui/material/SpeedDial';
-import SpeedDialIcon from '@mui/material/SpeedDialIcon';
-import SpeedDialAction from '@mui/material/SpeedDialAction';
-import FileCopyIcon from '@mui/icons-material/FileCopyOutlined';
-import { useNavigate } from 'react-router-dom';
 import Button from '@mui/material/Button';
-import Enfermedad from './assets/virus.jpg';
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 
-const CustomDataGrid = ({ className, ...other }) => (
-  <div className={className}>
-    <DataGrid {...other} />
-  </div>
-);
-
-const actions = [{ icon: <FileCopyIcon />, name: 'Nuevo', key: 'new' }];
-
 const HomeComponentEnfermedad = () => {
-  const navigate = useNavigate();
-
-  const handleFunction = (e, key) => {
-    e.preventDefault();
-    console.log('Presiono Boton' + key);
-    navigate('/enfermedad/nuevo', {
-      state: {
-        id: 0,
-      },
-    });
-  };
-
-  const handleRowClick = (params) => {
-    console.log('Id: ' + params.row.id);
-    console.log('Nombre: ' + params.row.nombre);
-    navigate('/enfermedad/nuevo', {
-      state: {
-        id: params.row.id,
-        nombre: params.row.nombre,
-      },
-    });
-  };
-
-  const columns = [
-    { field: 'id', headerName: 'ID', width: 70 },
-    { field: 'nombre', headerName: 'Nombre', width: 130 },
-    { field: 'gravedad', headerName: 'Gravedad', width: 130 },
-  ];
-
   const [rows, setRows] = useState([]);
 
   const getData = async () => {
-    const response = await axios.get('http://127.0.0.1:8000/api/enfermedades');
-    console.log(response.data);
-    setRows(response.data);
+    try {
+      const response = await axios.get('http://127.0.0.1:8000/api/citas');
+      setRows(response.data);
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
   };
 
   useEffect(() => {
-    console.log('Render');
     getData();
   }, []);
 
-  const menu = () => {
-    navigate('/menu');
-  };
+  const columns = [
+    { field: 'sintomas', headerName: 'Síntomas', width: 300 },
+  ];
 
-  useEffect(() => {
-    document.body.style.backgroundImage = `url(${Enfermedad})`;
-    document.body.style.backgroundSize = 'cover';
-    document.body.style.backgroundPosition = 'center';
-    return () => {
-      document.body.style.backgroundImage = '';
-      document.body.style.backgroundSize = '';
-      document.body.style.backgroundPosition = '';
-    };
-  }, []);
+  const navigate = () => {
+    // Navegación al menú
+  };
 
   return (
     <div style={styles.container}>
-      <h1 style={styles.title}>Enfermedades Registradas</h1>
-
+      <h1 style={styles.title}>Síntomas de los pacientes</h1>
       <div>
-        <SpeedDial
-          ariaLabel="SpeedDial basic example"
-          sx={{ position: 'absolute', bottom: 16, right: 16 }}
-          icon={<SpeedDialIcon />}
-        >
-          {actions.map((action) => (
-            <SpeedDialAction
-              key={action.name}
-              icon={action.icon}
-              tooltipTitle={action.name}
-              onClick={(e) => {
-                handleFunction(e, action.key);
-              }}
-            />
-          ))}
-        </SpeedDial>
         <DataGrid
           rows={rows}
           columns={columns}
-          components={{
-            Table: CustomDataGrid,
-          }}
-          initialState={{
-            pagination: {
-              paginationModel: { page: 0, pageSize: 5 },
-            },
-          }}
-          pageSizeOptions={[5, 10]}
-          onRowClick={handleRowClick}
+          pageSize={5}
+          autoHeight
+          disableSelectionOnClick
         />
         <div style={styles.buttonContainer}>
-          <Button variant="contained" style={styles.button} onClick={menu} startIcon={<ArrowBackIosIcon />}>
+          <Button variant="contained" style={styles.button} onClick={navigate} startIcon={<ArrowBackIosIcon />}>
             Salir
           </Button>
         </div>
@@ -123,16 +51,15 @@ const HomeComponentEnfermedad = () => {
 
 const styles = {
   container: {
-    margin: 'auto', 
+    margin: 'auto',
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'center',
     height: '78vh',
     width: '750px',
-    background: 'rgba(255, 255, 255, 0.8)', 
+    background: 'rgba(255, 255, 255, 0.8)',
     borderRadius: '50px',
-    margin: 'auto', 
   },
   title: {
     marginBottom: '0px',

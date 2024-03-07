@@ -376,6 +376,21 @@ code {
   }
 }
 
+.calendar-graph-container {
+  display: flex;
+  flex-direction: row;
+}
+
+.calendar-container {
+  width: 60%; /* Ajusta el ancho del calendario según tus necesidades */
+  padding-right: 10px; /* Agrega un poco de espacio entre el calendario y la gráfica */
+}
+
+.chart-container {
+  width: 40%; /* Ajusta el ancho de la gráfica según tus necesidades */
+  padding-left: 10px; /* Agrega un poco de espacio entre el calendario y la gráfica */
+}
+
 /*botones*/
 /* 3 */
 
