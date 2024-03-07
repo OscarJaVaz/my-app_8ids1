@@ -97,22 +97,12 @@ const VerClientesComponent = () => {
       <h1 style={styles.title}>Clientes Registrados</h1>
 
       <div>
-        <SpeedDial
-          ariaLabel="SpeedDial basic example"
-          sx={{ position: 'absolute', bottom: 16, right: 16 }}
-          icon={<SpeedDialIcon />}
-        >
-          {actions.map((action) => (
-            <SpeedDialAction
-              key={action.name}
-              icon={action.icon}
-              tooltipTitle={action.name}
-              onClick={(e) => {
-                handleFunction(e, action.key);
-              }}
-            />
-          ))}
-        </SpeedDial>
+       
+        {rows.length === 0 && (
+        <div style={{ textAlign: 'center', padding: '20px' }}>
+          <p>No hay registros disponibles.</p>
+        </div>
+        )}
         <DataGrid
           rows={filteredRows}
           columns={columns}

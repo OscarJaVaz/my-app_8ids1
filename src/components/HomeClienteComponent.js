@@ -80,11 +80,15 @@ const HomeClienteComponent = () => {
         <p></p>
         <a onClick={() => handleClick("/farmaciacliente")}>
           <img src={farmacia} alt="/clienteFarmacia"/>
-          <span>Farmacia</span>
+          <span>Comprar en farmacia</span>
         </a>
         <a onClick={() => handleClick("/registrarCita")}>
           <img src={cita} alt="Citas" />
-          <span>Citas</span>
+          <span>Registrar cita</span>
+        </a>
+        <a onClick={() => handleClick("/")}>
+          <img src={cita} alt="ver_productos" />
+          <span>Ver mis productos comprados</span>
         </a>
         <a onClick={() => handleClick("/")}>
           <img src={salir} alt="Salir" />
