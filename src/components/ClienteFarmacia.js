@@ -211,7 +211,7 @@ const ClienteFarmacia = () => {
       )}
       <div style={estiloProductosContainer}>
         {sortedProducts.length === 0 ? (
-          <p>No se encontraron productos que coincidan con la búsqueda.</p>
+          <p>No se encontraron productos.</p>
         ) : (
           sortedProducts.map((producto) => (
             <div key={producto.id} style={estiloProducto}>

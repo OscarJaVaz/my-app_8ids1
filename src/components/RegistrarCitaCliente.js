@@ -6,7 +6,6 @@ import axios from 'axios';
 import Box from '@mui/material/Box';
 import LinearProgress from '@mui/material/LinearProgress';
 import SaveIcon from '@mui/icons-material/Save';
-import Autocomplete from '@mui/material/Autocomplete';
 import TextField from '@mui/material/TextField';
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import Cita from './assets/cita2.png';
@@ -31,54 +30,40 @@ function RegistrarCitaCliente() {
 
   const [loading, setLoading] = useState(false);
   const [doctores, setDoctores] = useState([]);
-  const [clientes, setEnfermedades] = useState([]);
+  const [clientes, setClientes] = useState([]);
   const [openModal, setOpenModal] = useState(false);
   const [qrData, setQRData] = useState('');
   const [confirmacionVisible, setConfirmacionVisible] = useState(false);
-  const [fechaValida, setFechaValida] = useState(true); // Estado para validar fecha
-  const [descargaHabilitada, setDescargaHabilitada] = useState(false); // Estado para habilitar la descarga
+  const [fechaValida, setFechaValida] = useState(true);
+  const [descargaHabilitada, setDescargaHabilitada] = useState(false);
 
-  const fnObtenerDatos = async () => {
-    if (location.state && location.state.id) {
-      await axios.get('http://127.0.0.1:8000/api/cita', {
-        params: {
-          id: location.state.id
-        }
-      }).then((response) => {
-        console.log(response.data);
-        setCita(response.data);
-        setLoading(false);
-      });
-    } else {
-      console.error("No se encontró el ID en location.state");
+  const fetchDoctores = async () => {
+    try {
+      const response = await axios.get('http://127.0.0.1:8000/api/doctores');
+      setDoctores(response.data);
+    } catch (error) {
+      console.error('Error fetching doctores:', error);
+    }
+  };
+  
+  const fetchClientes = async () => {
+    try {
+      const response = await axios.get('http://127.0.0.1:8000/api/clientes');
+      setClientes(response.data);
+    } catch (error) {
+      console.error('Error fetching clientes:', error);
     }
   };
 
-  const fnObtenerDoctores = async () => {
-    await axios.get('http://127.0.0.1:8000/api/doctores')
-      .then((response) => {
-        setDoctores(response.data);
-      });
-  };
-  
-  const fnObtenerClientes = async () => {
-    await axios.get('http://127.0.0.1:8000/api/clientes')
-      .then((response) => {
-        setEnfermedades(response.data);
-      });
-  };
-
-  const handleGuardar = (event, value) => {
-    const { name, value: fieldValue } = event.target;
-    const newValue = value || fieldValue;
+  const handleGuardar = (event) => {
+    const { name, value } = event.target;
 
     setCita((prevState) => ({
       ...prevState,
-      [name]: newValue,
+      [name]: value,
     }));
 
-    // Validar si la fecha seleccionada no es anterior a la fecha actual
-    const selectedDate = new Date(newValue);
+    const selectedDate = new Date(value);
     const currentDate = new Date();
     if (selectedDate < currentDate) {
       setFechaValida(false);
@@ -123,14 +108,12 @@ function RegistrarCitaCliente() {
       link.href = imgData;
       link.click();
     });
-    setDescargaHabilitada(true); // Habilitar la descarga
+    setDescargaHabilitada(true);
   };
 
   useEffect(() => {
-    console.log('Render');
-    fnObtenerDatos();
-    fnObtenerDoctores();
-    fnObtenerClientes();
+    fetchDoctores();
+    fetchClientes();
   }, []);
 
   const camposCompletos = () => {
@@ -148,15 +131,14 @@ function RegistrarCitaCliente() {
     const year = today.getFullYear();
     let month = today.getMonth() + 1;
     let day = today.getDate();
-  
-    // Agregar un cero delante del mes y el día si son menores que 10
+
     if (month < 10) {
       month = `0${month}`;
     }
     if (day < 10) {
       day = `0${day}`;
     }
-  
+
     return `${year}-${month}-${day}`;
   };
   
@@ -179,44 +161,40 @@ function RegistrarCitaCliente() {
       <ul style={{ listStyleType: 'none', textAlign: 'center', padding: 0 }}>
         <p></p>
         <li>
-          <Autocomplete
-            options={clientes}
-            getOptionLabel={(option) => option.nombre}
-            renderInput={(params) => (
-              <TextField
-                {...params}
-                required
-                id="combo-box-demo"
-                label="Paciente"
-                name="paciente"
-                value={cita.paciente}
-                onChange={(event, value) => handleGuardar(event, value?.nombre)}
-              />
-            )}
-            value={clientes.find((d) => d.nombre === cita.paciente) || null}
-            isOptionEqualToValue={(option, value) => option.id === value.id}
+          <TextField
+            required
+            id="paciente"
+            label="Ingrese su Nombre completo"
+            name="paciente"
+            value={cita.paciente}
+            onChange={handleGuardar}
+            InputProps={{
+              autoComplete: 'off' // Desactivar autocompletado
+            }}
           />
         </li>
         <p></p>
         <li>
-          <Autocomplete
-            options={doctores}
-            getOptionLabel={(option) => option.nombre}
-            renderInput={(params) => (
-              <TextField
-                {...params}
-                required
-                id="combo-box-demo"
-                label="Doctor"
-                name="doctor"
-                value={cita.doctor}
-                onChange={(event, value) => handleGuardar(event, value?.nombre)}
-                
-              />
-            )}
-            value={doctores.find((d) => d.nombre === cita.doctor) || null}
-            isOptionEqualToValue={(option, value) => option.id === value.id}
-          />
+          <TextField
+            required
+            id="doctor"
+            label="Doctor"
+            name="doctor"
+            value={cita.doctor}
+            onClick={fetchDoctores} // Fetch doctores al hacer clic en el campo
+            select
+            SelectProps={{
+              native: true,
+            }}
+            onChange={handleGuardar}
+          >
+            <option></option>
+            {doctores.map((doctor) => (
+              <option key={doctor.id} value={doctor.nombre}>
+                {doctor.nombre}
+              </option>
+            ))}
+          </TextField>
         </li>
         <p></p>
         <li>
@@ -237,7 +215,7 @@ function RegistrarCitaCliente() {
             type="date"
             value={cita.fecha}
             onChange={handleGuardar}
-            inputProps={{ min: getCurrentDate() }} // Establecer la fecha mínima
+            inputProps={{ min: getCurrentDate() }}
           />
         </li>
         <p></p>
@@ -258,7 +236,7 @@ function RegistrarCitaCliente() {
           style={{ backgroundColor: 'green', marginRight: '10px' }}
           onClick={generarQR}
           startIcon={<SaveIcon />}
-          disabled={!camposCompletos() || !fechaValida} // Deshabilitar si los campos no están completos o la fecha no es válida
+          disabled={!camposCompletos() || !fechaValida}
         >
           Generar QR
         </Button>
@@ -292,7 +270,7 @@ function RegistrarCitaCliente() {
                 <QRCode value={qrData} size={256} />
               </div>
               <div style={{ marginTop: '20px' }}>
-                <Button variant="contained" color="primary" onClick={GuardarDatos} style={{ marginRight: '10px',padding: '5px' }} disabled={!descargaHabilitada}>Registrar cita</Button>
+                <Button variant="contained" color="primary" onClick={GuardarDatos} style={{ marginRight: '10px', padding: '5px' }} disabled={!descargaHabilitada}>Registrar cita</Button>
                 <Button variant="contained" color="primary" onClick={handleCloseModal} style={{ marginRight: '10px', padding: '5px' }}>Cerrar</Button>
                 <Button variant="contained" color="primary" onClick={handleDownloadQR} style={{ padding: '5px' }}>Descargar QR</Button>
               </div>

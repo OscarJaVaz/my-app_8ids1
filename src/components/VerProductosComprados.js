@@ -40,7 +40,7 @@ const VerProductosComprados = () => {
 
     return (
         <div>
-            <h2>Perfil de Usuario</h2>
+            <h2>Mis productos comprados</h2>
             {user && (
                 <div>
                     <h3>Nombre del cliente: {user}</h3>
