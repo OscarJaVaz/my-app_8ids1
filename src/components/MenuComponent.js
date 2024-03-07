@@ -110,7 +110,7 @@ const MenuComponent = () => {
       const enfermedadesLabels = enfermedades.map(enfermedad => enfermedad.nombre ? enfermedad.nombre : 'Nombre Desconocido');
       const enfermedadesCounts = enfermedades.map(enfermedad => enfermedad.citas ? enfermedad.citas.length : 0);
       
-      setEnfermedadesData({
+        setEnfermedadesData({
         labels: enfermedadesLabels,
         datasets: [{
           label: 'Enfermedades',
@@ -206,55 +206,58 @@ const MenuComponent = () => {
         </a>
       </div>
       <div className="content">
-        <IconButton onClick={toggleMenu} className="toggle-button">
-          {menuVisible ? <CloseIcon /> : <MenuIcon />}
-        </IconButton>
-        <div className="calendar-container">
-          <FullCalendar
-            plugins={[dayGridPlugin]}
-            initialView="dayGridMonth"
-            locale={esLocale}
-            events={citas.map(cita => ({
-              title: `${cita.paciente} - ${cita.hora}`,
-              date: cita.fecha 
-            }))}
-          />
-        </div>
-        <div className="chart-container">
-          {citas.length > 0 && (
-            <>
-              <div style={{ textAlign: 'center', marginBottom: '10px' }}>
-                <IconButton onClick={() => setShowGraph(!showGraph)} aria-label="Ver gráfica">
-                  <KeyboardArrowDownIcon style={{ transform: showGraph ? 'rotate(180deg)' : 'rotate(0deg)' }} />
-                </IconButton>
-                <span>Ver gráfica</span>
-              </div>
-              {showGraph && (
-                <VictoryChart
-                  domainPadding={20}
-                  theme={VictoryTheme.material}
-                  width={400}
-                  height={200} // Adjusted height to make it smaller
-                >
-                  <VictoryAxis
-                    tickValues={enfermedadesData.labels}
-                    style={{
-                      tickLabels: { angle: -45, textAnchor: 'end' },
-                    }}
-                  />
-                  <VictoryAxis dependentAxis />
-                  <VictoryBar
-                    data={enfermedadesData.datasets[0].data.map((count, index) => ({
-                      x: enfermedadesData.labels[index],
-                      y: count,
-                    }))}
-                  />
-                </VictoryChart>
-              )}
-            </>
+  <IconButton onClick={toggleMenu} className="toggle-button">
+    {menuVisible ? <CloseIcon /> : <MenuIcon />}
+  </IconButton>
+  <div className="calendar-graph-container">
+    <div className="calendar-container">
+      <FullCalendar
+        plugins={[dayGridPlugin]}
+        initialView="dayGridMonth"
+        locale={esLocale}
+        events={citas.map(cita => ({
+          title: `${cita.paciente} - ${cita.hora}`,
+          date: cita.fecha 
+        }))}
+      />
+    </div>
+    <div className="chart-container">
+      {citas.length > 0 && (
+        <>
+          <div style={{ textAlign: 'center', marginBottom: '10px' }}>
+            <IconButton onClick={() => setShowGraph(!showGraph)} aria-label="Ver gráfica">
+              <KeyboardArrowDownIcon style={{ transform: showGraph ? 'rotate(180deg)' : 'rotate(0deg)' }} />
+            </IconButton>
+            <span>Ver gráfica</span>
+          </div>
+          {showGraph && (
+            <VictoryChart
+              domainPadding={20}
+              theme={VictoryTheme.material}
+              width={400}
+              height={200} // Adjusted height to make it smaller
+            >
+              <VictoryAxis
+                tickValues={enfermedadesData.labels}
+                style={{
+                  tickLabels: { angle: -45, textAnchor: 'end' },
+                }}
+              />
+              <VictoryAxis dependentAxis />
+              <VictoryBar
+                data={enfermedadesData.datasets[0].data.map((count, index) => ({
+                  x: enfermedadesData.labels[index],
+                  y: count,
+                }))}
+              />
+            </VictoryChart>
           )}
-        </div>
-      </div>
+        </>
+      )}
+    </div>
+  </div>
+</div>
+
     </div>
   );
 }
