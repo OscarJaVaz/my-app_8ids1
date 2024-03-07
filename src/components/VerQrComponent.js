@@ -1,6 +1,14 @@
 import React, { useState, useRef } from 'react';
 import Webcam from 'react-webcam';
 import jsQR from 'jsqr';
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TableContainer from '@mui/material/TableContainer';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
+import Paper from '@mui/material/Paper';
+import escanearqrImage from './assets/escanearqr.png'; // Importa la imagen
 
 const VerQrComponent = () => {
   const [qrData, setQrData] = useState('');
@@ -81,87 +89,91 @@ const VerQrComponent = () => {
     try {
       const citaData = JSON.parse(qrData);
       return (
-        <table style={{ margin: 'auto', textAlign: 'left' }}>
-          <tbody>
-            <tr>
-              <td style={{ padding: '5px' }}>ID:</td>
-              <td style={{ padding: '5px' }}>{citaData.id}</td>
-            </tr>
-            <tr>
-              <td style={{ padding: '5px' }}>Paciente:</td>
-              <td style={{ padding: '5px' }}>{citaData.paciente}</td>
-            </tr>
-            <tr>
-              <td style={{ padding: '5px' }}>Doctor:</td>
-              <td style={{ padding: '5px' }}>{citaData.doctor}</td>
-            </tr>
-            <tr>
-              <td style={{ padding: '5px' }}>Sintomas:</td>
-              <td style={{ padding: '5px' }}>{citaData.sintomas}</td>
-            </tr>
-            <tr>
-              <td style={{ padding: '5px' }}>Fecha:</td>
-              <td style={{ padding: '5px' }}>{citaData.fecha}</td>
-            </tr>
-            <tr>
-              <td style={{ padding: '5px' }}>Hora:</td>
-              <td style={{ padding: '5px' }}>{citaData.hora}</td>
-            </tr>
-          </tbody>
-        </table>
+        <Paper variant="outlined" style={{ borderRadius: '15px', margin: '20px auto', padding: '10px', boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.5)', width: 'fit-content' }}>
+          <TableContainer>
+            <Table>
+              <TableBody>
+                <TableRow>
+                  <TableCell>ID:</TableCell>
+                  <TableCell>{citaData.id}</TableCell>
+                </TableRow>
+                <TableRow>
+                  <TableCell>Paciente:</TableCell>
+                  <TableCell>{citaData.paciente}</TableCell>
+                </TableRow>
+                <TableRow>
+                  <TableCell>Doctor:</TableCell>
+                  <TableCell>{citaData.doctor}</TableCell>
+                </TableRow>
+                <TableRow>
+                  <TableCell>Síntomas:</TableCell>
+                  <TableCell>{citaData.sintomas}</TableCell>
+                </TableRow>
+                <TableRow>
+                  <TableCell>Fecha:</TableCell>
+                  <TableCell>{citaData.fecha}</TableCell>
+                </TableRow>
+                <TableRow>
+                  <TableCell>Hora:</TableCell>
+                  <TableCell>{citaData.hora}</TableCell>
+                </TableRow>
+              </TableBody>
+            </Table>
+          </TableContainer>
+        </Paper>
       );
     } catch (error) {
       console.error('No se pudo decodificar el código QR:', error);
       return <div>No es un código QR válido</div>;
     }
   };
+  
 
   return (
-    <div style={{ textAlign: 'center' }}>
-      <h2>Escanea el código QR de la cita que se te proporcionó anteriormente</h2>
-
-      <br />
-
-      {cameraActivated ? (
-        <div style={{ display: 'flex', justifyContent: 'center' }}>
-          <Webcam
-            ref={webcamRef}
-            audio={false}
-            screenshotFormat="image/jpeg"
-            style={{ maxWidth: '400px' }}
-            videoConstraints={{
-              width: 1280,
-              height: 720,
-              facingMode: 'user',
-            }}
-            onUserMediaError={handleError}
-          />
-          <br />
-          
-          <button className="custom-btn btn-3" onClick={handleScanQRCode}>Escanear código QR</button>
-          <br />
-          <button className="custom-btn btn-3" onClick={handleDeactivateCamera}>Apagar cámara</button>
-        </div>
-      ) : (
-        <div>
-          <label htmlFor="file-upload" className="custom-btn btn-3">
-            <span>Escoger archivo</span>
-          </label>
-          <input
-            id="file-upload"
-            type="file"
-            onChange={handleFileChange}
-            accept="image/*"
-            style={{ display: 'none' }}
-          />
-          <button className="custom-btn btn-3" onClick={handleActivateCamera}><span>Encender cámara</span></button>
-        </div>
-      )}
-      <br />
+    <div className="qr-component">
+      <h2>Escanea el código QR del paciente para verificar sus datos de la cita</h2>
+      <img src={escanearqrImage} alt="Escanear QR" style={{ width: '80%', maxWidth: '200px', display: 'block', margin: '0 auto 20px' }} />
+      <div className="qr-actions">
+        {cameraActivated ? (
+          <div className="camera-section">
+            <Webcam
+              ref={webcamRef}
+              audio={false}
+              screenshotFormat="image/jpeg"
+              className="webcam"
+              videoConstraints={{
+                width: 1280,
+                height: 720,
+                facingMode: 'user',
+              }}
+              onUserMediaError={handleError}
+            />
+            <div className="button-group">
+              <button className="scan-btn" onClick={handleScanQRCode} disabled={scanning}>
+                {scanning ? 'Escaneando...' : 'Escanear código QR'}
+              </button>
+              <button className="deactivate-btn" onClick={handleDeactivateCamera}>Apagar cámara</button>
+            </div>
+          </div>
+        ) : (
+          <div className="file-section">
+            <label htmlFor="file-upload" className="file-upload-btn">
+              Escoger archivo
+            </label>
+            <input
+              id="file-upload"
+              type="file"
+              onChange={handleFileChange}
+              accept="image/*"
+              style={{ display: 'none' }}
+            />
+            <button className="activate-btn" onClick={handleActivateCamera}>Encender cámara</button>
+          </div>
+        )}
+      </div>
       {qrData && (
-        <div>
+        <div className="appointment-details">
           <h3>Datos de la cita:</h3>
-          
           {renderTableData()}
         </div>
       )}

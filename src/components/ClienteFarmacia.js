@@ -11,7 +11,7 @@ const ClienteFarmacia = () => {
   const navigate = useNavigate();
 
   const estiloEncabezado = {
-    backgroundColor: 'blue',
+    backgroundColor: '#3f51b5',
     padding: '10px',
     color: 'white',
     textAlign: 'center',
@@ -39,8 +39,8 @@ const ClienteFarmacia = () => {
   };
 
   const estiloProductosContainer = {
-    backgroundColor: '#CBCBCB',
-    padding: '60px',
+    backgroundColor: '#f5f5f5',
+    padding: '75px',
     display: 'flex',
     flexWrap: 'wrap',
     justifyContent: 'space-between',
@@ -49,6 +49,9 @@ const ClienteFarmacia = () => {
   const estiloProducto = {
     width: '300px',
     marginBottom: '30px',
+    boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.1)',
+    borderRadius: '8px',
+    overflow: 'hidden',
   };
 
   const estiloImagen = {
@@ -94,6 +97,13 @@ const ClienteFarmacia = () => {
     fetchProductos();
   }, []);
 
+  useEffect(() => {
+    const storedCart = localStorage.getItem('cart');
+    if (storedCart) {
+      setCarrito(JSON.parse(storedCart));
+    }
+  }, []); // Solo se ejecuta una vez al cargar el componente
+
   const addToCart = () => {
     const updatedCarrito = [...carrito, { ...selectedProduct, quantity }];
     setCarrito(updatedCarrito);
@@ -131,13 +141,17 @@ const ClienteFarmacia = () => {
     return 0;
   });
 
+  useEffect(() => {
+    localStorage.setItem('cart', JSON.stringify(carrito));
+  }, [carrito]); // Se ejecuta cada vez que el carrito cambia
+
   return (
     <>
       <header style={estiloEncabezado}>
         <Link to="/cliente" style={{ textDecoration: 'none', color: 'white' }}>
           <ArrowBackIcon />
         </Link>
-        <nav style={{ flex: 1 }}>BIENVENIDO</nav>
+        <nav style={{ flex: 2, textAlign: 'center' }}>Encuentra tus productos aqui</nav>
         <Button
           style={estiloSearchIcon}
           onClick={() => setShowSearchModal(true)}
@@ -175,7 +189,7 @@ const ClienteFarmacia = () => {
             </select>
             <Button
               variant="contained"
-              style={{ color: 'white', backgroundColor: 'blue' }}
+              style={{ color: 'white', backgroundColor: '#3f51b5' }}
               onClick={() => setShowSearchModal(false)}
             >
               Aplicar Filtros
@@ -215,7 +229,7 @@ const ClienteFarmacia = () => {
         ) : (
           sortedProducts.map((producto) => (
             <div key={producto.id} style={estiloProducto}>
-              <h2 style={{ color: 'red' }}>{producto.nom_producto}</h2>
+              <h2 style={{ color: '#3f51b5' }}>{producto.nom_producto}</h2>
               <img
                 src={producto.imagen}
                 alt={producto.nom_producto}
@@ -223,10 +237,10 @@ const ClienteFarmacia = () => {
                 style={estiloImagen}
               />
               <p>{producto.descripcion}</p>
-              <p style={{ color: 'blue' }}>${producto.price}</p>
+              <p style={{ color: '#3f51b5', margin: '0', padding: '20px', backgroundColor: '#ffffff', borderTop: '1px solid #e0e0e0' }}>${producto.price}</p>
               <Button
                 variant="contained"
-                style={{ color: 'white', backgroundColor: 'blue' }}
+                style={{ color: 'white', backgroundColor: '#3f51b5', margin: '0', width: '100%' }}
                 startIcon={<ShoppingCartIcon />}
                 onClick={() => setSelectedProduct(producto)}
               >
@@ -251,7 +265,7 @@ const ClienteFarmacia = () => {
             style={estiloImagen}
           />
           <p>{selectedProduct?.descripcion}</p>
-          <p style={{ color: 'blue', marginBottom: '10px' }}>${selectedProduct?.price}</p>
+          <p style={{ color: '#3f51b5', marginBottom: '10px' }}>${selectedProduct?.price}</p>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '10px', border: '1px solid #ccc', borderRadius: '5px', padding: '5px' }}>
             <Button variant="outlined" onClick={() => setQuantity(quantity > 1 ? quantity - 1 : 1)}>-</Button>
             <input type="number" min="1" value={quantity} onChange={(e) => setQuantity(parseInt(e.target.value))} style={{ margin: '0 10px', width: '60px', textAlign: 'center', border: 'none', outline: 'none', fontSize: '16px' }} />
@@ -259,7 +273,7 @@ const ClienteFarmacia = () => {
           </div>
           <Button
             variant="contained"
-            style={{ color: 'white', backgroundColor: 'blue' }}
+            style={{ color: 'white', backgroundColor: '#3f51b5', width: '100%' }}
             onClick={addToCart}
           >
             Añadir al carrito

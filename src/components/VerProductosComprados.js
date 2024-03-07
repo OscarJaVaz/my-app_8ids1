@@ -8,27 +8,23 @@ const VerProductosComprados = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                // Obtener el token de autenticación del cliente almacenado en el almacenamiento local
                 const token = localStorage.getItem('token');
                 
-                // Verificar si se ha obtenido el token correctamente
                 if (!token) {
                     throw new Error('Token de autenticación no encontrado en el almacenamiento local');
                 }
     
-                // Configurar el encabezado de autorización con el token
                 const config = {
                     headers: {
                         Authorization: `Bearer ${token}`
                     }
                 };
     
-                // Realizar la solicitud para obtener los productos comprados del cliente
-                const response = await axios.get('http://127.0.0.1:8000/api/verproductoComprado', config);
-    
-                // Establecer el nombre de usuario y los productos comprados en el estado
-                setUser(response.data.nombre_cliente);
-                setPurchasedProducts(response.data.compras);
+                const response = await axios.get('http://127.0.0.1:8000/api/compras', config);
+                console.log('Response:', response.data); // Log response data
+                
+                setUser(response.data[0].nombre_cliente);
+                setPurchasedProducts(response.data);
             } catch (error) {
                 console.error('Error al obtener las compras:', error);
             }
@@ -36,7 +32,9 @@ const VerProductosComprados = () => {
     
         fetchData();
     }, []);
-    
+
+    console.log('User:', user); // Log user state
+    console.log('Purchased Products:', purchasedProducts); // Log purchasedProducts state
 
     return (
         <div>

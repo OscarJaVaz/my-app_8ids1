@@ -561,3 +561,87 @@ button {
 .btn-eliminar:hover {
   opacity: 0.8;
 }
+
+
+/*QR COMPONENT STYLES*/
+
+.qr-component {
+  text-align: center;
+  padding: 20px;
+}
+
+.qr-actions {
+  margin-top: 20px;
+}
+
+.camera-section {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.webcam {
+  max-width: 400px;
+  margin-right: 20px;
+}
+
+.button-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.scan-btn, .deactivate-btn, .file-upload-btn, .activate-btn {
+  margin-bottom: 10px;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  background-color: #007bff;
+  color: #fff;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.scan-btn:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+.appointment-details {
+  margin-top: 20px;
+}
+
+/* Estilos para la tabla de citas */
+.appointment-table {
+  margin: auto;
+  text-align: center; /* Centra el contenido de la tabla */
+  border-collapse: collapse;
+  width: 80%; /* Ancho de la tabla */
+  margin-top: 20px; /* Espacio superior */
+  border: 2px solid black; /* Contorno negro */
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5); /* Sombra definida */
+}
+
+.appointment-table th {
+  background-color: #007bff; /* Color de fondo del encabezado */
+  color: #fff; /* Color del texto del encabezado */
+  font-weight: bold; /* Fuente en negrita */
+  padding: 10px; /* Espaciado interno */
+}
+
+.appointment-table td {
+  padding: 10px; /* Espaciado interno */
+  border-bottom: 1px solid #ddd; /* Borde inferior */
+}
+
+.appointment-table td:first-child {
+  font-weight: bold; /* Fuente en negrita para la primera columna */
+}
+
+.appointment-table tbody tr:last-child td {
+  border-bottom: none; /* Elimina el borde inferior de la última fila */
+}
+
+.file-section {
+  margin-top: 20px;
+}
+
