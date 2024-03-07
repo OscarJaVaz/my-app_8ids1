@@ -25,7 +25,7 @@ const HomeComponentEnfermedad = () => {
   ];
 
   const navigate = () => {
-    // Navegación al menú
+    
   };
 
   return (
