@@ -26,7 +26,7 @@ import VerQrComponent from './components/VerQrComponent';
 import ClienteFarmacia from './components/ClienteFarmacia';
 import VistaCompra from './components/VistaCompra';
 import GenerarRecetaComponent from './components/GenerarRecetaComponent';
-
+import VerProductosComprados from './components/VerProductosComprados';
 //
 function App() {   
   const [token, setToken] = useState(null);
@@ -64,6 +64,7 @@ function App() {
     <Route path="/cliente" element={<HomeClienteComponent/>}/>
     <Route path="/vistaCompra" element={<VistaCompra/>}/>
     <Route path="/generarReceta" element={<GenerarRecetaComponent/>}/>
+    <Route path="/verProductosComprado" element={<VerProductosComprados/>}/>
     
     </Routes>
   );
