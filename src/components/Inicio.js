@@ -61,8 +61,6 @@ const Inicio = () => {
             <p></p>
           </CardContent>
         </Card>
-
-
         <Card style={{ width: '280px',height:'250px',backgroundColor:'#5EA9FD', position: 'absolute', top: '81%', left: '42%', transform: 'translate(-50%, -50%)', zIndex: 1 }}>
           <CardContent>
             <h2>Ayuda en linea</h2>
