@@ -1,35 +1,41 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import secureLocalStorage from 'react-secure-storage'; // Importa secureLocalStorage
 
 const VerProductosComprados = () => {
     const [user, setUser] = useState(null);
     const [purchasedProducts, setPurchasedProducts] = useState([]);
 
     useEffect(() => {
+        const storedUsername = secureLocalStorage.getItem('username'); // Obtén el nombre de usuario desde secureLocalStorage
+        if (storedUsername) {
+            setUser(storedUsername);
+        }
+
         const fetchData = async () => {
             try {
                 const token = localStorage.getItem('token');
-                
+
                 if (!token) {
                     throw new Error('Token de autenticación no encontrado en el almacenamiento local');
                 }
-    
+
                 const config = {
                     headers: {
                         Authorization: `Bearer ${token}`
                     }
                 };
-    
-                const response = await axios.get('http://127.0.0.1:8000/api/compras', config);
+
+                const response = await axios.get('http://127.0.0.1:8000/api/productoComprado', config);
                 console.log('Response:', response.data); // Log response data
-                
-                setUser(response.data[0].nombre_cliente);
+
+                setUser(response.data[0]?.nombre_cliente);
                 setPurchasedProducts(response.data);
             } catch (error) {
                 console.error('Error al obtener las compras:', error);
             }
         };
-    
+
         fetchData();
     }, []);
 
