@@ -13,7 +13,6 @@ import EnfermedadComponent from './components/EnfermedadComponent';
 import MenuComponent from './components/MenuComponent';
 import HomeComponentCita from './components/HomeComponentCita';
 import CitaComponent from './components/CitaComponent';
-import AvisoComponent from './components/AvisoComponent';
 import Inicio from './components/Inicio';
 import Registrar from './components/Registrar';
 import Farmacia from './components/Farmacia';
@@ -27,6 +26,7 @@ import ClienteFarmacia from './components/ClienteFarmacia';
 import VistaCompra from './components/VistaCompra';
 import GenerarRecetaComponent from './components/GenerarRecetaComponent';
 import VerProductosComprados from './components/VerProductosComprados';
+import ValidarFechasCita from './components/ValidarFechasCita';
 //
 function App() {   
   const [token, setToken] = useState(null);
@@ -51,7 +51,6 @@ function App() {
     <Route path="/homecita" element={<HomeComponentCita />} />
     <Route path="/registrar" element={<Registrar />} />
     <Route path="/login" element={<Login_Component />} />
-    <Route path="/aviso" element={<AvisoComponent />} />
     <Route path="/menu" element={<MenuComponent />} />
     <Route path="/menu" element={<MenuComponent />} />
     <Route path="/farmacia" element={<Farmacia />} />
@@ -65,7 +64,7 @@ function App() {
     <Route path="/vistaCompra" element={<VistaCompra/>}/>
     <Route path="/generarReceta" element={<GenerarRecetaComponent/>}/>
     <Route path="/verProductosComprado" element={<VerProductosComprados/>}/>
-    
+    <Route path="/citasDisponibles" element={<ValidarFechasCita/>}/>
     </Routes>
   );
 }

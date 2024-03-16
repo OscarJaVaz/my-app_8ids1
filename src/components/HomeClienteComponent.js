@@ -90,6 +90,10 @@ const HomeClienteComponent = () => {
           <img src={cita} alt="ver_productos" />
           <span>Ver mis productos comprados</span>
         </a>
+        <a onClick={() => handleClick("/citasDisponibles")}>
+          <img src={cita} alt="citas" />
+          <span>citas</span>
+        </a>
         <a onClick={() => handleClick("/")}>
           <img src={salir} alt="Salir" />
           <span>Salir</span>

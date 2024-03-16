@@ -14,8 +14,12 @@ import Backdrop from '@mui/material/Backdrop';
 import Fade from '@mui/material/Fade';
 import html2canvas from 'html2canvas';
 import Alert from '@mui/material/Alert';
+import ValidarFechasCita from './ValidarFechasCita'; // Importa el componente ValidarFechasCita
+
 
 function RegistrarCitaCliente() {
+
+  
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -36,7 +40,10 @@ function RegistrarCitaCliente() {
   const [confirmacionVisible, setConfirmacionVisible] = useState(false);
   const [fechaValida, setFechaValida] = useState(true);
   const [descargaHabilitada, setDescargaHabilitada] = useState(false);
-
+  const [calendarVisible, setCalendarVisible] = useState(false); // Estado para controlar la visibilidad del calendario
+  const toggleCalendarVisibility = () => {
+    setCalendarVisible(!calendarVisible); // Cambia la visibilidad del calendario cuando se hace clic en un botón, por ejemplo
+  };
   const fetchDoctores = async () => {
     try {
       const response = await axios.get('http://127.0.0.1:8000/api/doctores');
@@ -45,7 +52,7 @@ function RegistrarCitaCliente() {
       console.error('Error fetching doctores:', error);
     }
   };
-  
+
   const fetchClientes = async () => {
     try {
       const response = await axios.get('http://127.0.0.1:8000/api/clientes');
@@ -141,8 +148,9 @@ function RegistrarCitaCliente() {
 
     return `${year}-${month}-${day}`;
   };
-  
+
   return (
+
     <div
       style={{
         margin: 'auto',
@@ -250,6 +258,7 @@ function RegistrarCitaCliente() {
           Regresar
         </Button>
         <br /><br />
+        
         {loading ? <Box sx={{ width: '100%' }}>
           <LinearProgress />
         </Box> : ''}
@@ -295,7 +304,13 @@ function RegistrarCitaCliente() {
           </Fade>
         </Modal>
       </ul>
+      <div>
+          <h1>Diás disponibles</h1>
+          <button onClick={toggleCalendarVisibility}>Mostrar/ocultar calendario</button>
+          {calendarVisible && <ValidarFechasCita />} {/* Muestra ValidarFechasCita solo si calendarVisible es true */}
+        </div>
     </div>
+    
   );
 }
 

@@ -1,0 +1,24 @@
+.container {
+    max-width: 800px; /* Ajusta el ancho del contenedor según sea necesario */
+    margin: 0 auto;
+  }
+  
+  .cal-container {
+    display: flex;
+  }
+  
+  .blue-box {
+    width: 100px; /* Ajusta el ancho del cuadro azul según sea necesario */
+    height: 50px; /* Ajusta la altura del cuadro azul según sea necesario */
+    background-color: #007bff; /* Color azul */
+    color: white; /* Texto blanco */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: 20px; /* Espacio entre el calendario y el cuadro azul */
+  }
+  
+  .blue-box-content {
+    font-size: 12px; /* Tamaño de fuente del texto dentro del cuadro azul */
+  }
+  
