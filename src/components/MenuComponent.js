@@ -101,11 +101,11 @@ const MenuComponent = () => {
     // Determinar el saludo según la hora del día
     const currentHour = new Date().getHours();
     if (currentHour >= 5 && currentHour < 12) {
-      setGreeting('Buenos días');
+      setGreeting('Buenos días Doctor');
     } else if (currentHour >= 12 && currentHour < 18) {
-      setGreeting('Buenas tardes');
+      setGreeting('Buenas tardes Doctor');
     } else {
-      setGreeting('Buenas noches');
+      setGreeting('Buenas noches Doctor');
     }
 
     return () => {
