@@ -94,8 +94,15 @@ const VerClientesComponent = () => {
 
   return (
     <div style={styles.container}>
-      <h1 style={styles.title}>Pacientes Registrados</h1>
-
+      <h1 style={styles.title}>Pacientes</h1>
+      <TextField
+        label="Buscar cliente"
+        variant="outlined"
+        margin="dense"
+        value={searchText}
+        onChange={(e) => setSearchText(e.target.value)}
+        style={{ marginBottom: '20px' }}
+      />
       <div>
        
         {rows.length === 0 && (

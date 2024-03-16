@@ -8,17 +8,16 @@ import { useNavigate } from 'react-router-dom';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import jsPDF from 'jspdf';
+import secureLocalStorage from 'react-secure-storage';
 import { CenterFocusStrong } from '@mui/icons-material';
 
 const GenerarRecetaComponent = () => {
     const navigate = useNavigate();
     const location = useLocation();
     const [receta, setReceta] = useState('');
-    const [doctorName, setDoctorName] = useState('');
     const [selectedDate, setSelectedDate] = useState(null);
     const [buttonDisabled, setButtonDisabled] = useState(true);
-    const [signatureLineWidth, setSignatureLineWidth] = useState(100); // Ancho inicial de la línea de firma
-
+    const storedUsername = secureLocalStorage.getItem('username');
     const clienteSeleccionado = location.state ? location.state.nombre : '';
     const handleGenerarReceta = () => {
         // Generar el PDF con los datos de la cita
@@ -55,7 +54,7 @@ const GenerarRecetaComponent = () => {
     
         // Nombre del doctor debajo de la línea
         const doctorNameY = signatureLineY + 5; // Posición vertical para el nombre del doctor
-        doc.text(`Nombre y firma del doctor: ${doctorName}`, 105, doctorNameY, null, null, 'center');
+        doc.text(`Nombre y firma del doctor: ${storedUsername}`, 105, doctorNameY, null, null, 'center');
     
         // Abrir el PDF en una nueva ventana
         window.open(doc.output('bloburl'), '_blank');
@@ -69,21 +68,13 @@ const GenerarRecetaComponent = () => {
 
     const handleInputChange = (event) => {
         setReceta(event.target.value);
-        setButtonDisabled(!(event.target.value && doctorName && selectedDate));
+        setButtonDisabled(!(event.target.value && selectedDate));
     };
 
-    const handleDoctorNameChange = (event) => {
-        setDoctorName(event.target.value);
-        setButtonDisabled(!(event.target.value && receta && selectedDate));
-
-        // Calcular la longitud del nombre del doctor y ajustar el tamaño de la línea de firma
-        const nameWidth = event.target.value.length * 5; // Ajuste de tamaño arbitrario
-        setSignatureLineWidth(nameWidth < 100 ? 100 : nameWidth); // Establecer un ancho mínimo de 100
-    };
 
     const handleDateChange = (date) => {
         setSelectedDate(date);
-        setButtonDisabled(!(date && receta && doctorName));
+        setButtonDisabled(!(date && receta));
     };
 
     const handleBack = () => {
@@ -96,16 +87,6 @@ const GenerarRecetaComponent = () => {
             <div style={styles.clienteContainer}>
                 <label>Nombre del Paciente:</label>
                 <div>{clienteSeleccionado}</div>
-            </div>
-            <div style={styles.doctorContainer}>
-                <TextField
-                    label="Nombre del doctor"
-                    value={doctorName}
-                    onChange={handleDoctorNameChange}
-                    variant="outlined"
-                    margin="dense"
-                />
-                <div style={{ ...styles.signatureLine, width: `${signatureLineWidth}px` }}></div>
             </div>
             <div style={styles.recetaContainer}>
                 <label style={styles.recetaLabel}>Diagnostico del paciente:</label>
@@ -201,16 +182,6 @@ const styles = {
         resize: 'vertical', // Permite redimensionar verticalmente solo
         fontSize: '16px',
         lineHeight: '1.5',
-    },
-    doctorContainer: {
-        marginBottom: '20px',
-        position: 'relative',
-    },
-    signatureLine: {
-        position: 'absolute',
-        top: '-5px', // Ajuste de posición para que esté más cerca del nombre
-        left: '0',
-        borderBottom: '1px solid black',
     },
     datePickerContainer: {
         marginBottom: '20px',
