@@ -64,7 +64,6 @@ function App() {
     <Route path="/vistaCompra" element={<VistaCompra/>}/>
     <Route path="/generarReceta" element={<GenerarRecetaComponent/>}/>
     <Route path="/verProductosComprado" element={<VerProductosComprados/>}/>
-    <Route path="/citasDisponibles" element={<ValidarFechasCita/>}/>
     </Routes>
   );
 }
