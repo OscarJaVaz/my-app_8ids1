@@ -95,14 +95,14 @@ const Inicio = () => {
 <article class="card">
   <img
     class="card__background"
-    src="https://www.dvd-dental.com/blogodontomecum/wp-content/uploads/2022/05/iStock-1241455947.jpg"
+    src="https://btlcenter.com/es/wp-content/uploads/2017/09/7-consejos-para-atraer-mas-pacientes-clinica-dental.jpg"
     alt="Atencion personalizada"
     width="1920"
     height="2193"
   />
   <div class="card__content | flow">
     <div class="card__content--container | flow">
-      <h2 class="card__title">Atención Personalizada</h2>
+      <h2 class="card__title">Enfocados a ti</h2>
       
     </div>
     
@@ -112,14 +112,14 @@ const Inicio = () => {
 <article class="card">
   <img
     class="card__background"
-    src="https://www.dvd-dental.com/blogodontomecum/wp-content/uploads/2022/05/iStock-1241455947.jpg"
+    src="https://www.dvd-dental.com/blogodontomecum/wp-content/uploads/2022/05/iStock-1164023823-1024x684.jpg"
     alt="Atencion personalizada"
     width="1920"
     height="2193"
   />
   <div class="card__content | flow">
     <div class="card__content--container | flow">
-      <h2 class="card__title">Atención Personalizada</h2>
+      <h2 class="card__title">Tu salud, nuestro enfoque</h2>
       
     </div>
     
@@ -129,14 +129,14 @@ const Inicio = () => {
 <article class="card">
   <img
     class="card__background"
-    src="https://www.dvd-dental.com/blogodontomecum/wp-content/uploads/2022/05/iStock-1241455947.jpg"
+    src="https://empresasecooperativas.com.br/wp-content/uploads/2019/04/clinica-m%C3%A9dica-1024x535.jpg"
     alt="Atencion personalizada"
     width="1920"
     height="2193"
   />
   <div class="card__content | flow">
     <div class="card__content--container | flow">
-      <h2 class="card__title">Atención Personalizada</h2>
+      <h2 class="card__title">Experiencia en cuidado de la salud</h2>
       
     </div>
     
