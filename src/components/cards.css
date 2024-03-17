@@ -32,7 +32,7 @@ p {
   font-family: var(--font-text);
   font-size: 0.875rem; /* Ajustado */
   line-height: 1.5;
-  color: var(--white);
+  
 }
 
 .flow > * + * {
