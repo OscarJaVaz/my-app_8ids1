@@ -50,7 +50,7 @@ input:focus, textarea:focus, keygen:focus, select:focus {
 
 .custom-section1 h1 {
 	font-size: 40px;
-	color: #1fbcec;
+	color: #1172D8;
 	font-weight: normal;
 }
 
@@ -100,7 +100,7 @@ input:focus, textarea:focus, keygen:focus, select:focus {
 	padding: 15px 40px;
     color: #fff;
     border: 0;
-    background: #1fbcec;
+    background: #1172D8;
     font-size: 16px;
     text-transform: uppercase;
     margin: 7px 0;
@@ -112,7 +112,7 @@ input:focus, textarea:focus, keygen:focus, select:focus {
     margin-top: 30px;
     border-bottom: 1px solid #ddd;
     padding-bottom: 19px;
-    color: #1fbcec;
+    color: #1172D8;
 }
 
 /* @media querries */
