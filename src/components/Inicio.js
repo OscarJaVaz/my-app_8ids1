@@ -12,10 +12,15 @@ import Modal from '@mui/material/Modal';
 import Slider from 'react-slick'; // Importa el componente Slider de react-slick
 import 'slick-carousel/slick/slick.css'; // Importa los estilos de react-slick
 import 'slick-carousel/slick/slick-theme.css'; // Importa los estilos del tema de react-slick
-
+import './ChatButton';
 import './cards.css';
 import './footer.css';
 import { ContactPage } from '@mui/icons-material';
+import ChatButton from './ChatButton';
+
+
+
+
 
 const NavigationButton = ({ label, onClick, icon, fontSize }) => (
   <Button
@@ -56,9 +61,11 @@ const Inicio = () => {
 
   return (
     <>
+    
       <header style={{ backgroundColor: '#1172D8', padding: '25px', color: 'white', textAlign: 'right', fontSize: '24px', width: '100%', boxSizing: 'border-box', margin: 0, position: 'fixed', top: 0, zIndex: 1000 }}>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '100%', boxSizing: 'border-box', margin: 0, position: 'fixed', top: 10, left: 0, right: 0 }}>
           <img src={logo1} alt="Logo" style={{ width: '110px', marginRight: '20px' }} />
+          
         </div>
         <nav style={{ display: 'flex', justifyContent: 'flex-end' }}>
           <ul style={{ listStyleType: 'none', margin: 0, padding: 0 }}>
@@ -67,7 +74,7 @@ const Inicio = () => {
           </ul>
         </nav>
       </header>
-
+      
       <Modal
         open={showModal}
         onClose={handleCloseModal}
@@ -263,6 +270,7 @@ const Inicio = () => {
       </div>
     </footer>
   </div>
+  <ChatButton />
     </>
   );
 };
