@@ -316,6 +316,8 @@ const MenuComponent = () => {
                 }, [])}
               />
             </VictoryChart>
+
+            
           </div>
 
         </div>

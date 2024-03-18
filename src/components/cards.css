@@ -24,7 +24,7 @@
 h2 {
   font-size: 1.5rem; /* Ajustado */
   font-family: var(--font-title);
-  color: var(--white);
+  
   line-height: 1.1;
 }
 
@@ -84,6 +84,7 @@ p {
 }
 
 .card__title {
+  color: var(--white);
   position: relative;
   width: fit-content;
   width: -moz-fit-content; /* Prefijo necesario para Firefox  */

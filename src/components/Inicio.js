@@ -14,6 +14,7 @@ import 'slick-carousel/slick/slick.css'; // Importa los estilos de react-slick
 import 'slick-carousel/slick/slick-theme.css'; // Importa los estilos del tema de react-slick
 
 import './cards.css';
+import { ContactPage } from '@mui/icons-material';
 
 const NavigationButton = ({ label, onClick, icon, fontSize }) => (
   <Button
@@ -61,6 +62,7 @@ const Inicio = () => {
         <nav style={{ display: 'flex', justifyContent: 'flex-end' }}>
           <ul style={{ listStyleType: 'none', margin: 0, padding: 0 }}>
             <NavigationButton label='Iniciar sesión' onClick={() => handleNavigation('/login')} icon={<PersonIcon />} fontSize="15px" />
+            <NavigationButton label='Contacto' onClick={() => handleNavigation('/contacto')} icon={<ContactPage />} fontSize="15px" />
           </ul>
         </nav>
       </header>
