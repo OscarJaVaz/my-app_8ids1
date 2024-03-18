@@ -38,16 +38,33 @@ const ChatButton = () => {
     {
       id: 'inicio_sesion',
       message: 'Para iniciar sesión, debes dirigirte a nuestra página web e ingresar tus credenciales.',
-      end: true,
+      trigger: 'necesitas_algo_mas',
     },
     {
       id: 'agendar_cita',
       message: 'Puedes agendar una cita llamando a nuestro número de teléfono o visitando nuestras instalaciones.',
-      end: true,
+      trigger: 'necesitas_algo_mas',
     },
     {
       id: 'horarios',
       message: 'Nuestros horarios de atención son de lunes a viernes de 8:00 AM a 6:00 PM.',
+      trigger: 'necesitas_algo_mas',
+    },
+    {
+      id: 'necesitas_algo_mas',
+      message: '¿Necesitas algo más?',
+      trigger: 'necesitas_mas_options',
+    },
+    {
+      id: 'necesitas_mas_options',
+      options: [
+        { value: 'si', label: 'Sí', trigger: 'opciones' },
+        { value: 'no', label: 'No', trigger: 'end_chat' },
+      ],
+    },
+    {
+      id: 'end_chat',
+      message: '¡Gracias por usar nuestro servicio de chat!',
       end: true,
     },
   ];
