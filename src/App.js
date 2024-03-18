@@ -26,6 +26,7 @@ import ClienteFarmacia from './components/ClienteFarmacia';
 import VistaCompra from './components/VistaCompra';
 import GenerarRecetaComponent from './components/GenerarRecetaComponent';
 import VerProductosComprados from './components/VerProductosComprados';
+import Miperfil from './components/Miperfil';
 import ValidarFechasCita from './components/ValidarFechasCita';
 //
 function App() {   
@@ -64,6 +65,7 @@ function App() {
     <Route path="/vistaCompra" element={<VistaCompra/>}/>
     <Route path="/generarReceta" element={<GenerarRecetaComponent/>}/>
     <Route path="/verProductosComprado" element={<VerProductosComprados/>}/>
+    <Route path="/miperfil" element={<Miperfil/>}/>
     </Routes>
   );
 }

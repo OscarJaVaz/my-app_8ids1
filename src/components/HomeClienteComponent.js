@@ -1,3 +1,4 @@
+// Importaciones necesarias
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import IconButton from '@mui/material/IconButton';
@@ -10,22 +11,25 @@ import farmacia from './assets/farmacia.png';
 import axios from 'axios';
 import secureLocalStorage from 'react-secure-storage';
 
+// Definición del componente HomeClienteComponent
 const HomeClienteComponent = () => {
+  // Hook para la navegación
   const navigate = useNavigate();
+  
+  // Estados del componente
   const [menuVisible, setMenuVisible] = useState(true);
   const [citas, setCitas] = useState([]);
   const [username, setUsername] = useState('');
   const [usernameLoaded, setUsernameLoaded] = useState(false);
   const [greeting, setGreeting] = useState('');
 
+  // Función para alternar la visibilidad del menú
   const toggleMenu = () => {
     setMenuVisible(!menuVisible);
   };
 
+  // Efecto para cargar los datos del usuario y las citas
   useEffect(() => {
-    setUsername(secureLocalStorage.getItem('username')); 
-    setUsernameLoaded(true); 
-
     async function fetchData() {
       try {
         const response = await axios.get('http://127.0.0.1:8000/api/citas');
@@ -36,7 +40,7 @@ const HomeClienteComponent = () => {
     }
 
     fetchData();
-
+    
     const storedUsername = secureLocalStorage.getItem('username');
     
     if (storedUsername) {
@@ -52,7 +56,6 @@ const HomeClienteComponent = () => {
     window.history.pushState(null, '', window.location.pathname);
     window.addEventListener('popstate', handleBackButton);
 
-    // Determinar el saludo según la hora del día
     const currentHour = new Date().getHours();
     if (currentHour >= 5 && currentHour < 12) {
       setGreeting('Buenos días');
@@ -67,10 +70,12 @@ const HomeClienteComponent = () => {
     };
   }, []);
 
-  const handleClick = (path) => {
-    navigate(path);
+  // Función para manejar el clic en el botón de perfil
+  const handleClick = () => {
+    navigate("/miperfil", { state: { username } });
   };
-
+ 
+  // Renderizado del componente
   return (
     <div className={`menu-container ${menuVisible ? 'menu-visible' : 'menu-hidden'}`}>
       <div className="sidebar" style={{ overflowY: 'auto' }}>
@@ -78,19 +83,24 @@ const HomeClienteComponent = () => {
         <br></br>
         
         <p></p>
-        <a onClick={() => handleClick("/farmaciacliente")}>
+        <a onClick={() => handleClick()}>
+          <img src={farmacia} alt="/clienteFarmacia"/>
+          <span>Mi Perfil</span>
+        </a>
+        <p></p>
+        <a onClick={() => navigate("/farmaciacliente")}>
           <img src={farmacia} alt="/clienteFarmacia"/>
           <span>Comprar en farmacia</span>
         </a>
-        <a onClick={() => handleClick("/registrarCita")}>
+        <a onClick={() => navigate("/registrarCita")}>
           <img src={cita} alt="Citas" />
           <span>Registrar cita</span>
         </a>
-        <a onClick={() => handleClick("/verProductosComprado")}>
+        <a onClick={() => navigate("/verProductosComprado")}>
           <img src={cita} alt="ver_productos" />
           <span>Ver mis productos comprados</span>
         </a>
-        <a onClick={() => handleClick("/")}>
+        <a onClick={() => navigate("/")}>
           <img src={salir} alt="Salir" />
           <span>Salir</span>
         </a>

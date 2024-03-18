@@ -223,7 +223,7 @@ function RegistrarCitaCliente() {
             type="date"
             value={cita.fecha}
             onChange={handleGuardar}
-            inputProps={{ min: getCurrentDate() }}
+            inputProps={{ min: getCurrentDate() }} 
           />
         </li>
         <p></p>
