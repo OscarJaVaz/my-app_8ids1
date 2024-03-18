@@ -28,6 +28,7 @@ import GenerarRecetaComponent from './components/GenerarRecetaComponent';
 import VerProductosComprados from './components/VerProductosComprados';
 import Miperfil from './components/Miperfil';
 import ValidarFechasCita from './components/ValidarFechasCita';
+import Contacto from './components/Contacto';
 //
 function App() {   
   const [token, setToken] = useState(null);

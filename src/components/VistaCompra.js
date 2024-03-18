@@ -163,7 +163,7 @@ const VistaCompra = () => {
         {showAddressForm && (
           <div className="alert alert-info" role="alert">
             <h4 className="alert-heading" style={{ color: '#305edb', marginBottom: '20px', fontWeight: 'bold', fontSize: '24px' }}>Ingresa tus datos domiciliarios</h4>
-            <form onSubmit={handleAddressFormSubmit}>
+            <form className='formulario-compra' onSubmit={handleAddressFormSubmit}>
               <div className="form-row">
                 <div className="form-group col-md-6">
                   <label htmlFor="cp">Código Postal</label>
@@ -227,8 +227,8 @@ const VistaCompra = () => {
               cvc={paymentDetails.cvc}
               focused={paymentDetails.focus}
             />
-            <div className="card">
-              <div className="card-body">
+            <div className="card-compra">
+              <div className="card-compra-body">
                 <form>
                   <div className="form-group">
                     <label htmlFor="num_tarjeta">Número de la tarjeta</label>

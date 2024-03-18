@@ -2,7 +2,7 @@
 
 :root {
   /* Colors */
-  --brand-color: hsl(46, 100%, 50%);
+  --brand-color: #1172D8;
   --black: hsl(0, 0%, 0%);
   --white: hsl(0, 0%, 100%);
   /* Fonts */
@@ -24,7 +24,7 @@
 h2 {
   font-size: 1.5rem; /* Ajustado */
   font-family: var(--font-title);
-  color: var(--white);
+  
   line-height: 1.1;
 }
 
@@ -32,7 +32,7 @@ p {
   font-family: var(--font-text);
   font-size: 0.875rem; /* Ajustado */
   line-height: 1.5;
-  color: var(--white);
+  
 }
 
 .flow > * + * {
@@ -84,6 +84,7 @@ p {
 }
 
 .card__title {
+  color: var(--white);
   position: relative;
   width: fit-content;
   width: -moz-fit-content; /* Prefijo necesario para Firefox  */

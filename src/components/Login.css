@@ -66,8 +66,19 @@ form {
 	flex-direction: column;
 	padding: 0 50px;
 	height: 100%;
-	text-align: center;
+	
 }
+
+.formulario-compra {
+	background-color: #FFFFFF;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex-direction: column;
+	padding: 0 50px;
+	height: 100%;
+  }
+  
 
 input {
 	background-color: #eee;
