@@ -120,25 +120,53 @@ const MenuComponent = () => {
   const handleClick = (path) => {
     if (path === '/homedoctor') {
       // Mostrar alerta para ingresar contraseña
-      const enteredPassword = prompt('Ingrese la contraseña para acceder:');
-      if (enteredPassword === correctPassword) {
-        setAuthenticated(true);
-        navigate('/homedoctor');
-      } else {
-        alert('Contraseña incorrecta. Inténtalo de nuevo.');
-      }
+      Swal.fire({
+        title: "Ingrese la contraseña para acceder:",
+        input: "password",
+        showCancelButton: true,
+        confirmButtonText: "Enviar",
+        cancelButtonText: "Cancelar",
+        inputValidator: (value) => {
+          if (!value) {
+            return "¡Debes ingresar una contraseña!";
+          }
+        }
+      }).then((result) => {
+        if (result.isConfirmed) {
+          if (result.value === correctPassword) {
+            setAuthenticated(true);
+            navigate('/homedoctor');
+          } else {
+            Swal.fire({
+              icon: "error",
+              title: "Contraseña incorrecta",
+              text: "Por favor, inténtalo de nuevo."
+            });
+          }
+        }
+      });
     } else {
       navigate(path);
     }
   };
+  
 
   const handleLogout = () => {
-    const confirmLogout = window.confirm("¿Estás seguro de que quieres salir?");
-    if (confirmLogout) {
-      secureLocalStorage.clear();
-      setIsLoggedIn(false);
-      navigate("/");
-    }
+    Swal.fire({
+      title: "¿Seguro que quieres cerrar sesión?",
+      icon: "question",
+      iconHtml: "?",
+      confirmButtonText: "Sí",
+      cancelButtonText: "No",
+      showCancelButton: true,
+      showCloseButton: true
+    }).then((result) => {
+      if (result.isConfirmed) {
+        secureLocalStorage.clear();
+        setIsLoggedIn(false);
+        navigate("/");
+      }
+    });
   };
 
   const obtenerEnfermedades = async () => {
