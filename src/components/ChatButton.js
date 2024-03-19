@@ -18,6 +18,7 @@ const theme = {
 
 const ChatButton = () => {
   const [showChat, setShowChat] = useState(false);
+  const [userInput, setUserInput] = useState('');
 
   const handleChatToggle = () => {
     setShowChat(!showChat);
@@ -76,25 +77,13 @@ const ChatButton = () => {
                 {
                   id: 'response',
                   message: ({ previousValue }) => handleUserInput(previousValue),
-                  trigger: 'necesitas_mas_options',
-                },
-                {
-                  id: 'necesitas_mas_options',
-                  options: [
-                    { value: 'si', label: 'Sí', trigger: 'mucho_gusto' },
-                    { value: 'no', label: 'No', trigger: 'end_chat' },
-                  ],
-                },
-                {
-                  id: 'end_chat',
-                  message: '¡Gracias por usar nuestro servicio de chat!',
-                  end: true,
+                  trigger: 'user_input',
                 },
               ]}
               botDelay={1000}
               contentStyle={{ width: '100%', maxWidth: 'none' }} // Make sure the content takes full width
               userDelay={1000}
-              optionStyle={{ display: 'inline-block', margin: '0 10px' }} // Display options inline
+              optionStyle={{ display: 'none' }} // Hide options
             />
           </ThemeProvider>
         </div>
