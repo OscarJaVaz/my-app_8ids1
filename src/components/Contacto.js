@@ -1,8 +1,51 @@
 import React from 'react';
 import './contacto.css';
+import Button from '@mui/material/Button';
+import PersonIcon from '@mui/icons-material/Person';
+import { ContactPage } from '@mui/icons-material';
+import logo1 from '../components/assets/logo1.png';
+import { useNavigate } from 'react-router-dom';
 
-export default function Contacto() {
+const NavigationButton = ({ label, onClick, icon, fontSize }) => (
+  <Button
+    variant="outline"
+    style={{
+      marginRight: '60px',
+      fontWeight: 'bold',
+      fontSize: fontSize || '30px'
+    }}
+    onClick={onClick}
+    startIcon={React.cloneElement(icon, { style: { fontSize: fontSize || '30px' } })}
+  >
+    {label}
+  </Button>
+);
+
+const Contacto = () => {
+  const navigate = useNavigate();
+
+  const handleNavigation = (path) => {
+  navigate(path);
+  };
+
+ 
   return (
+    <>
+    <header style={{ backgroundColor: '#1172D8', padding: '25px', color: 'white', textAlign: 'right', fontSize: '24px', width: '100%', boxSizing: 'border-box', margin: 0, position: 'fixed', top: 0, zIndex: 1000 }}>
+  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-start', width: '100%', boxSizing: 'border-box', margin: 0, position: 'fixed', top: 10, left: 10 }}>
+    <img src={logo1} alt="Logo" style={{ width: '110px', marginRight: '20px' }} />
+  </div>
+  <nav style={{ display: 'flex', justifyContent: 'flex-end' }}>
+    <ul style={{ listStyleType: 'none', margin: 0, padding: 0 }}>
+      <NavigationButton label='Iniciar sesión' onClick={() => handleNavigation('/login')} icon={<PersonIcon />} fontSize="15px" />
+      <NavigationButton label='Contacto' onClick={() => handleNavigation('/contacto')} icon={<ContactPage />} fontSize="15px" />
+    </ul>
+  </nav>
+</header>
+<br></br>
+<br></br>
+<br></br>
+<br></br>
     <div className="custom-container">
       <div className="custom-innerwrap">
         <section className="custom-section1 clearfix">
@@ -74,5 +117,8 @@ export default function Contacto() {
         </section>
       </div>
     </div>
+    </>
   );
 }
+
+export default Contacto;

@@ -18,7 +18,7 @@ import axios from 'axios';
 import secureLocalStorage from 'react-secure-storage';
 import Login_Component from './Login_Component';
 import { VictoryBar, VictoryChart, VictoryAxis, VictoryTheme } from 'victory';
-
+import Swal from 'sweetalert2'
 
 // Función para normalizar los síntomas
 const normalizarSintoma = (sintoma) => {
@@ -209,10 +209,20 @@ const MenuComponent = () => {
 
   const showCitaDetails = (info) => {
     const cita = info.event.extendedProps.cita; // Obtener los detalles de la cita del evento del calendario
-    setSelectedCita(cita);
-    // Aquí puedes mostrar los detalles de la cita en una alerta
-    alert(`Detalles de la cita:\nPaciente: ${cita.paciente}\nFecha: ${cita.fecha}\nHora: ${cita.hora}\nSíntomas: ${cita.sintomas}`);
+    Swal.fire({
+      title: "Detalles de la cita",
+      html: `
+        <div>
+          <p><strong>Paciente:</strong> ${cita.paciente}</p>
+          <p><strong>Fecha:</strong> ${cita.fecha}</p>
+          <p><strong>Hora:</strong> ${cita.hora}</p>
+          <p><strong>Síntomas:</strong> ${cita.sintomas}</p>
+        </div>
+      `,
+      
+    });
   };
+  
 
 
   return (
