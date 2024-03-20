@@ -33,6 +33,20 @@ const ChatButton = () => {
       response = 'Puedes agendar una cita, tienes que registrarte y crear una cuenta o visitando nuestras instalaciones. ¿Necesitas algo más?';
     } else if (lowerCaseValue.includes('horarios')) {
       response = 'Nuestros horarios de atención son de lunes a viernes de 8:00 AM a 6:00 PM. ¿Necesitas algo más?';
+    } else if (lowerCaseValue.includes('ubicación')) {
+      response = 'Nos encontramos ubicados en De Los Colegios 1, Reyes Acozac, 55755 Los Reyes Acozac, Méx. ';
+    } else if (lowerCaseValue.includes('servicios ofrecidos')) {
+      response = 'Ofrecemos una variedad de servicios médicos, incluyendo [lista de servicios]. ';
+    } else if (lowerCaseValue.includes('especialidades')) {
+      response = 'Contamos con especialistas en diversas áreas, como [lista de especialidades]. ';
+    } else if (lowerCaseValue.includes('formas de pago')) {
+      response = 'Aceptamos pagos en efectivo, tarjeta de crédito y débito. ';
+    } else if (lowerCaseValue.includes('cancelar cita')) {
+      response = 'Para cancelar una cita, por favor comunícate con nosotros con al menos 24 horas de anticipación. ¿Hay algo más en lo que pueda ayudarte?';
+    } else if (lowerCaseValue.includes('seguros médicos')) {
+      response = 'Aceptamos una variedad de seguros médicos, incluyendo [lista de seguros]. ';
+    } else if (lowerCaseValue.includes('contacto')) {
+      response = 'Puedes contactarnos al siguiente número de teléfono: +52 5619019251 o a través de nuestro correo electrónico: [correo electrónico].';
     } else {
       response = 'Lo siento, no entendí tu pregunta. ¿Puedes intentar preguntar de otra manera?';
     }
