@@ -108,17 +108,22 @@ const Inicio = () => {
   return (
     <>
 
-<header style={{ backgroundColor: '#1172D8', padding: '25px', color: 'white', textAlign: 'right', fontSize: '24px', width: '100%', boxSizing: 'border-box', margin: 0, position: 'fixed', top: 0, zIndex: 1000 }}>
-  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-start', width: '100%', boxSizing: 'border-box', margin: 0, position: 'fixed', top: 10, left: 10 }}>
-    <img src={logo1} alt="Logo" style={{ width: '110px', marginRight: '20px' }} />
+<header style={{ backgroundColor: '#1172D8', padding: '20px', color: 'white', textAlign: 'center', fontSize: '24px', width: '100%', boxSizing: 'border-box', margin: 0, position: 'fixed', top: 0, zIndex: 1000 }}>
+  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', maxWidth: '1200px', margin: '0 auto' }}>
+    <div style={{ display: 'flex', alignItems: 'center' }}>
+      <img src={logo1} alt="Logo" style={{ width: '80px', marginRight: '20px', borderRadius: '50%' }} />
+      <h1 className='animate-charcter' style={{ margin: 0, fontFamily: 'Arial, sans-serif', fontWeight: 'bold' }}>Consultech</h1>
+    </div>
+    <nav>
+      <ul style={{ listStyleType: 'none', margin: 0, padding: 0, display: 'flex', alignItems: 'center' }}>
+        <NavigationButton label='Iniciar sesión' onClick={() => handleNavigation('/login')} icon={<PersonIcon />} fontSize="15px" />
+        <NavigationButton label='Contacto' onClick={() => handleNavigation('/contacto')} icon={<ContactPage />} fontSize="15px" />
+      </ul>
+    </nav>
   </div>
-  <nav style={{ display: 'flex', justifyContent: 'flex-end' }}>
-    <ul style={{ listStyleType: 'none', margin: 0, padding: 0 }}>
-      <NavigationButton label='Iniciar sesión' onClick={() => handleNavigation('/login')} icon={<PersonIcon />} fontSize="15px" />
-      <NavigationButton label='Contacto' onClick={() => handleNavigation('/contacto')} icon={<ContactPage />} fontSize="15px" />
-    </ul>
-  </nav>
 </header>
+
+
 
       <Modal
         open={showModal}
