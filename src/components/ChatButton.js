@@ -40,13 +40,13 @@ const ChatButton = () => {
     } else if (lowerCaseValue.includes('especialidades')) {
       response = 'Contamos con especialistas en diversas áreas, como [lista de especialidades]. ';
     } else if (lowerCaseValue.includes('formas de pago')) {
-      response = 'Aceptamos pagos en efectivo, tarjeta de crédito y débito. ';
+      response = 'Aceptamos pagos en tarjeta de crédito y débito. ';
     } else if (lowerCaseValue.includes('cancelar cita')) {
       response = 'Para cancelar una cita, por favor comunícate con nosotros con al menos 24 horas de anticipación. ¿Hay algo más en lo que pueda ayudarte?';
     } else if (lowerCaseValue.includes('seguros médicos')) {
       response = 'Aceptamos una variedad de seguros médicos, incluyendo [lista de seguros]. ';
     } else if (lowerCaseValue.includes('contacto')) {
-      response = 'Puedes contactarnos al siguiente número de teléfono: +52 5619019251 o a través de nuestro correo electrónico: [correo electrónico].';
+      response = 'Puedes contactarnos al siguiente número de teléfono: +52 5619019251 o a través de nuestro correo electrónico: consultech@gmail.com.';
     } else {
       response = 'Lo siento, no entendí tu pregunta. ¿Puedes intentar preguntar de otra manera?';
     }
