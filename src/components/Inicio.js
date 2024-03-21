@@ -15,6 +15,7 @@ import 'slick-carousel/slick/slick-theme.css'; // Importa los estilos del tema d
 import './ChatButton';
 import './cards.css';
 import './footer.css';
+import './gridcards.css';
 import { ContactPage } from '@mui/icons-material';
 import ChatButton from './ChatButton';
 import { CardGroup, CardBody, CardTitle, CardText, CardImg, CardSubtitle } from 'reactstrap';
@@ -268,8 +269,135 @@ const Inicio = () => {
       </div>
   </CardBody>
 </Card>
+<br></br>
 
-
+  <h1 style={{textAlign: 'center', color: '#1172d8'}}>Testimoniales</h1>
+  <br></br>
+<section className="nombre-de-clase-personalizado-section">
+    <article className="nombre-de-clase-personalizado-article">
+      <figure className="nombre-de-clase-personalizado-figure">
+        <h2>Raul</h2>
+        <p>Excelente consultorio, muy accesible.</p>
+      </figure>
+      <img
+        className="nombre-de-clase-personalizado-img"
+        alt=""
+        src="https://masmorbomenosriesgo.es/wp-content/uploads/2019/07/Testimonio-Eric-740x427.jpg"
+      />
+    </article>
+    <article className="nombre-de-clase-personalizado-article">
+      <figure className="nombre-de-clase-personalizado-figure">
+        <h2>Angelica</h2>
+        <p>Atencion de gran calidad, recomendable.</p>
+      </figure>
+      <img
+        className="nombre-de-clase-personalizado-img"
+        alt=""
+        src="https://blog.hubspot.es/hubfs/pa%CC%81ginas-testimoniales.png"
+      />
+    </article>
+    <article className="nombre-de-clase-personalizado-article">
+      <figure className="nombre-de-clase-personalizado-figure">
+        <h2>Veronica</h2>
+        <p>Quedé encantaDA del consultorio</p>
+      </figure>
+      <img
+        className="nombre-de-clase-personalizado-img"
+        alt=""
+        src="https://www.wowcx.com/wp-content/uploads/2021/12/Poder_testimonios_blog_wow.jpg"
+      />
+    </article>
+    <article className="nombre-de-clase-personalizado-article">
+      <figure className="nombre-de-clase-personalizado-figure">
+        <h2>Federico</h2>
+        <p>Muy facil para agendar una cita</p>
+      </figure>
+      <img
+        className="nombre-de-clase-personalizado-img"
+        alt=""
+        src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQN13zrYQZVASAmgWheDMacZNLPqXcAg0f0LIskDg5C5VavwTP7oL7lWqhvYA7kTvXS2Ws&usqp=CAU"
+      />
+    </article>
+    <article className="nombre-de-clase-personalizado-article">
+      <figure className="nombre-de-clase-personalizado-figure">
+        <h2>Victoria</h2>
+        <p>Hay doctores de gran calidad.</p>
+      </figure>
+      <img
+        className="nombre-de-clase-personalizado-img"
+        alt=""
+        src="https://www.contrareplica.mx/uploads/galerias/normal/93dabd5b458063670d4be2082049d426.jpg"
+      />
+    </article>
+    <article className="nombre-de-clase-personalizado-article">
+      <figure className="nombre-de-clase-personalizado-figure">
+        <h2>Diego</h2>
+        <p>Este consultorio es el mejor de todos</p>
+      </figure>
+      <img
+        className="nombre-de-clase-personalizado-img"
+        alt=""
+        src="https://www.contrareplica.mx/uploads/galerias/normal/d51adde6198cd2e5a32ddda82d2ee9b6.jpg"
+      />
+    </article>
+    <article className="nombre-de-clase-personalizado-article">
+      <figure className="nombre-de-clase-personalizado-figure">
+        <h2>Oscar</h2>
+        <p>Los horarios flexibles e incluso si hay una emergencia despues del horario laboral te atienden sin problemas</p>
+      </figure>
+      <img
+        className="nombre-de-clase-personalizado-img"
+        alt=""
+        src="https://tecnofanatico.com/wp-content/uploads/2019/02/thispersondoesnotexist.com_.jpeg"
+      />
+    </article>
+    <article className="nombre-de-clase-personalizado-article">
+      <figure className="nombre-de-clase-personalizado-figure">
+        <h2>Vivian</h2>
+        <p>El registro al consultorio es muy facil de hacer. </p>
+      </figure>
+      <img
+        className="nombre-de-clase-personalizado-img"
+        alt=""
+        src="https://mochileros.org/nelson/wp-content/uploads/2020/04/esta-persona-no-existe-8.jpg"
+      />
+    </article>
+    <article className="nombre-de-clase-personalizado-article">
+      <figure className="nombre-de-clase-personalizado-figure">
+        <h2>Fernanda</h2>
+        <p>Con el chatbot me resolvió mis dudas. </p>
+      </figure>
+      <img
+        className="nombre-de-clase-personalizado-img"
+        alt=""
+        src="https://www.llermania.com/mac/wp-content/uploads/2022/05/no-existe.jpg"
+      />
+    </article>
+    <article className="nombre-de-clase-personalizado-article">
+      <figure className="nombre-de-clase-personalizado-figure">
+        <h2>Rúben</h2>
+        <p>Puedo agendar mi cita sin necesidad de recurrir al consultorio presencialmente. </p>
+      </figure>
+      <img
+        className="nombre-de-clase-personalizado-img"
+        alt=""
+        src="https://f.rpp-noticias.io/2019/02/15/753300descarga-11jpg.jpg"
+      />
+    </article>
+    <article className="nombre-de-clase-personalizado-article">
+      <figure className="nombre-de-clase-personalizado-figure">
+        <h2>Kevin</h2>
+        <p>Pude comprar mis medicamentos en linea desde este consultorio. </p>
+      </figure>
+      <img
+        className="nombre-de-clase-personalizado-img"
+        alt=""
+        src="https://i.pinimg.com/originals/3f/56/3f/3f563f80bef17bcc5db82ca43ec42969.jpg"
+      />
+    </article>
+    
+    {/* Resto de los artículos */}
+  </section>
 
 
       <div class="pg-footer">
