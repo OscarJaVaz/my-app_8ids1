@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import secureLocalStorage from 'react-secure-storage';
 import jsPDF from 'jspdf';
+import { Button, Card, Container, Grid, Typography } from '@mui/material';
+import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 
 const VerProductosComprados = () => {
     const [user, setUser] = useState(null);
@@ -20,7 +22,6 @@ const VerProductosComprados = () => {
                         nombre_cliente: storedUsername
                     }
                 });
-                console.log('Response:', response.data);
 
                 setUser(storedUsername);
                 setPurchasedProducts(response.data);
@@ -33,46 +34,54 @@ const VerProductosComprados = () => {
     }, []);
 
     const generarReportePDF = () => {
-        // Crea un nuevo documento PDF
         const doc = new jsPDF();
-
-        // Define el título del documento
         doc.text('Reporte de Compras', 10, 10);
 
-        // Agrega los datos de las compras al documento
         purchasedProducts.forEach((compra, index) => {
             const yPos = 20 + index * 10;
             doc.text(`Nombre: ${compra.nombre_producto}, Cantidad: ${compra.cantidad}, Total: ${compra.total}`, 10, yPos);
         });
 
-        // Genera la URL de datos del PDF y abre una nueva ventana para mostrarlo
         window.open(doc.output('dataurlnewwindow'));
     };
 
     return (
-        <div>
-            <h2>Mis productos comprados</h2>
-            {user && (
-                <div>
-                    <h3>Nombre del cliente: {user}</h3>
-                    <h3>Productos comprados:</h3>
-                    {purchasedProducts.length > 0 ? (
-                        <ul>
-                            {purchasedProducts.map((compra, index) => (
-                                <li key={index}>
-                                    <p>Nombre: {compra.nombre_producto}</p>
-                                    <p>Cantidad: {compra.cantidad}</p>
-                                    <p>Total: {compra.total}</p>
-                                </li>
-                            ))}
-                        </ul>
-                    ) : (
-                        <p>Aún no has realizado ninguna compra.</p>
-                    )}
-                    <button onClick={generarReportePDF}>Generar Reporte de Compras</button>
-                </div>
-            )}
-        </div>
+        <Container maxWidth="md" style={{ marginTop: '40px' }}>
+            <Card sx={{ p: 3, borderRadius: '20px', boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.1)' }}>
+                <Typography variant="h4" align="center" gutterBottom style={{ color: '#333' }}>Mis productos comprados</Typography>
+                {user && (
+                    <div>
+                        
+                        <Typography variant="h6" align="center" style={{ marginBottom: '20px' }}>Aquí tienes un resumen de tus compras:</Typography>
+                        {purchasedProducts.length > 0 ? (
+                            <Grid container spacing={2}>
+                                {purchasedProducts.map((compra, index) => (
+                                    <Grid item xs={12} sm={6} md={4} key={index}>
+                                        <Card sx={{ p: 2, borderRadius: '15px', boxShadow: '0px 2px 5px rgba(0, 0, 0, 0.1)' }}>
+                                            <Typography variant="body1" style={{ fontWeight: 'bold' }}>{compra.nombre_producto}</Typography>
+                                            <Typography variant="body2">Cantidad: {compra.cantidad}</Typography>
+                                            <Typography variant="body2">Total: {compra.total}</Typography>
+                                        </Card>
+                                    </Grid>
+                                ))}
+                            </Grid>
+                        ) : (
+                            <Typography variant="body1" align="center">Aún no has realizado ninguna compra.</Typography>
+                        )}
+                        <div style={{ display: 'flex', justifyContent: 'center', marginTop: '30px' }}>
+                            <Button
+                                variant="contained"
+                                color="primary"
+                                startIcon={<ShoppingCartIcon />}
+                                onClick={generarReportePDF}
+                            >
+                                Generar Reporte de Compras
+                            </Button>
+                        </div>
+                    </div>
+                )}
+            </Card>
+        </Container>
     );
 };
 
