@@ -430,9 +430,9 @@ const Inicio = () => {
             </div>
             <div class="footer-content-column">
               <div class="footer-menu">
-                <h2 class="footer-menu-name">Consulte a su medico</h2>
+                <h2 class="footer-menu-name">Horarios laborales</h2>
                 <ul id="menu-company" class="footer-menu-list">
-
+                  <h4>Lunes a Viernes de 8:00am a 6:00pm</h4>
                 </ul>
               </div>
               <div class="footer-menu">
@@ -454,7 +454,8 @@ const Inicio = () => {
               <div class="footer-call-to-action">
                 <h2 class="footer-call-to-action-title"> Charlemos</h2>
                 <p class="footer-call-to-action-description"> Tienes una pregunta?</p>
-                <a class="footer-call-to-action-button button" target="_self"> Usa nuestro chatbot </a>
+                <a class="footer-call-to-action-button button" target="_self"> Usa nuestro chatbot dando clic en el icono ubicado en la parte 
+                esquina inferior derecha de abajo  </a>
               </div>
               <div class="footer-call-to-action">
                 <h2 class="footer-call-to-action-title">Llamanos</h2>

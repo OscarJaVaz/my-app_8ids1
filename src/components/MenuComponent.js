@@ -4,10 +4,11 @@ import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
 import CloseIcon from '@mui/icons-material/Close';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
-import paciente from './assets/paciente.png';
+import pacientes from './assets/pacientes.png';
 import doctor from './assets/doctor.png';
 import enfermedad from './assets/enfermedad.png';
 import cita from './assets/cita1.png';
+import qr from './assets/qr.png';
 import salir from './assets/salir.png';
 import agregar from './assets/agregar.png';
 import farmacia from './assets/farmacia.png';
@@ -268,10 +269,7 @@ const MenuComponent = () => {
           <img src={enfermedad} alt="Enfermedades" />
           <span>Sintomas</span>
         </a>
-        <a onClick={() => handleClick("/homecita")}>
-          <img src={cita} alt="Citas" />
-          <span>Citas</span>
-        </a>
+        
         <a onClick={() => handleClick("/homeproducto")}>
           <img src={agregar} alt="Productos" />
           <span>Productos</span>
@@ -281,11 +279,11 @@ const MenuComponent = () => {
           <span>Farmacia</span>
         </a>
         <a onClick={() => handleClick("/Verclientes")}>
-          <img src={farmacia} alt="ClientesRegistrados" />
-          <span>Generar receta</span>
+          <img src={pacientes} alt="ClientesRegistrados" />
+          <span>Citas/Pacientes</span>
         </a>
         <a onClick={() => handleClick("/verqr")}>
-          <img src={farmacia} alt="ClientesRegistrados" />
+          <img src={qr} alt="ClientesRegistrados" />
           <span>Escanear QR Cita</span>
         </a>
         <a onClick={handleLogout}>

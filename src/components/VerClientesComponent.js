@@ -1,39 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import { DataGrid } from '@mui/x-data-grid';
 import axios from 'axios';
-import SpeedDial from '@mui/material/SpeedDial';
-import SpeedDialIcon from '@mui/material/SpeedDialIcon';
-import SpeedDialAction from '@mui/material/SpeedDialAction';
-import FileCopyIcon from '@mui/icons-material/FileCopyOutlined';
-import { useNavigate } from 'react-router-dom';
-import Button from '@mui/material/Button';
-import Cita from './assets/citas.jpg';
-import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import TextField from '@mui/material/TextField';
-
-const CustomDataGrid = ({ className, ...other }) => (
-  <div className={className}>
-    <DataGrid {...other} />
-  </div>
-);
-
-const actions = [{ icon: <FileCopyIcon />, name: 'Nuevo', key: 'new' }];
+import Button from '@mui/material/Button';
+import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
+import Paper from '@mui/material/Paper';
+import Typography from '@mui/material/Typography';
+import { useNavigate } from 'react-router-dom';
 
 const VerClientesComponent = () => {
   const navigate = useNavigate();
   const [rows, setRows] = useState([]);
   const [filteredRows, setFilteredRows] = useState([]);
   const [searchText, setSearchText] = useState('');
-
-  const handleFunction = (e, key) => {
-    e.preventDefault();
-    console.log('Presiono Boton' + key);
-    navigate('/paciente/nuevo', {
-      state: {
-        id: 0,
-      },
-    });
-  };
 
   const handleRowClick = (params) => {
     const { id, nombre, apellido } = params.row;
@@ -81,82 +60,57 @@ const VerClientesComponent = () => {
     navigate('/menu');
   };
 
-  useEffect(() => {
-    document.body.style.backgroundImage = `url(${Cita})`;
-    document.body.style.backgroundSize = 'cover';
-    document.body.style.backgroundPosition = 'center';
-    return () => {
-      document.body.style.backgroundImage = '';
-      document.body.style.backgroundSize = '';
-      document.body.style.backgroundPosition = '';
-    };
-  }, []);
-
   return (
     <div style={styles.container}>
-      <h1 style={styles.title}>Pacientes</h1>
+      <Typography variant="h4" gutterBottom style={{ marginBottom: '20px' }}>
+        Pacientes
+      </Typography>
       <TextField
         label="Buscar cliente"
         variant="outlined"
         margin="dense"
         value={searchText}
         onChange={(e) => setSearchText(e.target.value)}
-        style={{ marginBottom: '20px' }}
+        style={{ marginBottom: '20px', width: '300px' }}
       />
-      <div>
-       
-        {rows.length === 0 && (
-        <div style={{ textAlign: 'center', padding: '20px' }}>
-          <p>No hay registros disponibles.</p>
-        </div>
-        )}
+      <Paper elevation={3} style={{ width: '100%', minHeight: '400px', borderRadius: '10px', overflow: 'hidden' }}>
         <DataGrid
           rows={filteredRows}
           columns={columns}
-          components={{
-            Table: CustomDataGrid,
-          }}
-          initialState={{
-            pagination: {
-              paginationModel: { page: 0, pageSize: 5 },
-            },
-          }}
-          pageSizeOptions={[5, 10]}
+          pageSize={5}
+          rowsPerPageOptions={[5, 10]}
+          autoHeight
           onRowClick={handleRowClick}
+          rowStyle={(rowData) => ({
+            backgroundColor: rowData.id % 2 === 0 ? '#E3F2FD' : '#FFFFFF',
+          })}
+          headerStyle={{ backgroundColor: '#1976D2', color: '#FFFFFF' }}
         />
-        <div style={styles.buttonContainer}>
-          <Button variant="contained" style={styles.button} onClick={menu} startIcon={<ArrowBackIosIcon />}>
-            Salir
-          </Button>
-        </div>
-      </div>
+      </Paper>
+      <Button variant="contained" style={styles.button} onClick={menu} startIcon={<ArrowBackIosIcon />}>
+        Salir
+      </Button>
     </div>
   );
 };
 
 const styles = {
   container: {
-    margin: 'auto', 
+    margin: 'auto',
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'center',
-    height: '78vh',
-    width: '900px',
-    background: 'rgba(255, 255, 255, 0.9)',
-    borderRadius: '50px',
-  },
-  title: {
-    marginBottom: '0px',
-  },
-  buttonContainer: {
-    position: 'absolute',
-    top: 540,
-    right: 1060,
+    padding: '20px',
+    background: '#f0f0f0', // Cambiando el fondo a un tono más suave
+    borderRadius: '20px',
+    boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.1)', // Agregando sombra para mejorar el aspecto visual
   },
   button: {
-    backgroundColor: 'red',
-    
+    backgroundColor: '#FF5252', // Color de botón más llamativo
+    marginTop: '20px',
+    color: '#FFFFFF', // Texto blanco para mayor contraste
+    fontWeight: 'bold', // Añadiendo negrita al texto del botón
   },
 };
 
