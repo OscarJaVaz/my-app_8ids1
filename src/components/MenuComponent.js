@@ -122,7 +122,7 @@ const MenuComponent = () => {
     if (path === '/homedoctor') {
       // Mostrar alerta para ingresar contraseña
       Swal.fire({
-        title: "Ingrese la contraseña para acceder:",
+        title: "Contacte al administrador para acceder:",
         input: "password",
         showCancelButton: true,
         confirmButtonText: "Enviar",
