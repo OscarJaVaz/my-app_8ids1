@@ -1,20 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import { DataGrid } from '@mui/x-data-grid';
-import axios from 'axios';
 import SpeedDial from '@mui/material/SpeedDial';
 import SpeedDialIcon from '@mui/material/SpeedDialIcon';
 import SpeedDialAction from '@mui/material/SpeedDialAction';
 import FileCopyIcon from '@mui/icons-material/FileCopyOutlined';
 import { useNavigate } from 'react-router-dom';
 import Button from '@mui/material/Button';
-import Consultorio from './assets/consultorio.jpg';
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
-
-const CustomDataGrid = ({ className, ...other }) => (
-  <div className={className}>
-    <DataGrid {...other} />
-  </div>
-);
+import axios from 'axios';
+import Typography from '@mui/material/Typography';
+import Toolbar from '@mui/material/Toolbar';
+import Pagination from '@mui/material/Pagination';
 
 const actions = [{ icon: <FileCopyIcon />, name: 'Nuevo', key: 'new' }];
 
@@ -60,13 +56,16 @@ const HomeComponentDoctor = () => {
   const [rows, setRows] = useState([]);
 
   const getData = async () => {
-    const response = await axios.get('http://127.0.0.1:8000/api/doctores');
-    console.log(response.data);
-    setRows(response.data);
+    try {
+      const response = await axios.get('http://127.0.0.1:8000/api/doctores');
+      setRows(response.data);
+    } catch (error) {
+      console.error('Error al obtener los datos de los doctores:', error);
+      // Manejo de errores
+    }
   };
 
   useEffect(() => {
-    console.log('Render');
     getData();
   }, []);
 
@@ -74,22 +73,30 @@ const HomeComponentDoctor = () => {
     navigate('/menu');
   };
 
-  useEffect(() => {
-    document.body.style.backgroundImage = `url(${Consultorio})`;
-    document.body.style.backgroundSize = 'cover';
-    document.body.style.backgroundPosition = 'center';
-    return () => {
-      document.body.style.backgroundImage = '';
-      document.body.style.backgroundSize = '';
-      document.body.style.backgroundPosition = '';
-    };
-  }, []);
+  const CustomToolbar = () => {
+    return (
+      <Toolbar>
+        {/* Aquí puedes agregar elementos personalizados para la barra de herramientas */}
+      </Toolbar>
+    );
+  };
+
+  const CustomPagination = ({ paginationProps }) => {
+    return (
+      <Pagination
+        {...paginationProps}
+        sx={{ marginTop: '20px' }} // Ajusta el margen superior de la paginación
+      />
+    );
+  };
 
   return (
     <div style={styles.container}>
-      <h1 style={styles.title}>Doctores Registrados</h1>
+      <Typography variant="h4" gutterBottom style={{ marginBottom: '20px', color: 'white' }}>
+        Doctores registrados
+      </Typography>
 
-      <div>
+      <div style={{ width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
         <SpeedDial
           ariaLabel="SpeedDial basic example"
           sx={{ position: 'absolute', bottom: 16, right: 16 }}
@@ -107,23 +114,21 @@ const HomeComponentDoctor = () => {
           ))}
         </SpeedDial>
         {rows.length === 0 && (
-        <div style={{ textAlign: 'center', padding: '20px' }}>
-          <p>No hay registros disponibles.</p>
-        </div>
+          <div style={{ textAlign: 'center', padding: '20px' }}>
+            <p>No hay registros disponibles.</p>
+          </div>
         )}
         <DataGrid
           rows={rows}
           columns={columns}
-          components={{
-            Table: CustomDataGrid,
-          }}
-          initialState={{
-            pagination: {
-              paginationModel: { page: 0, pageSize: 5 },
-            },
-          }}
-          pageSizeOptions={[5, 10]}
+          pageSize={5}
+          rowsPerPageOptions={[5, 10]}
           onRowClick={handleRowClick}
+          components={{
+            Toolbar: CustomToolbar,
+            Pagination: CustomPagination,
+          }}
+          style={{ backgroundColor: 'white', borderRadius: '10px', boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.1)' }}
         />
         <div style={styles.buttonContainer}>
           <Button variant="contained" style={styles.button} onClick={menu} startIcon={<ArrowBackIosIcon />}>
@@ -141,20 +146,19 @@ const styles = {
     flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'center',
-    height: '78vh',
-    width: '750px',
-    background: 'rgba(255, 255, 255, 0.8)', 
-    borderRadius: '50px',
-    margin: 'auto', 
-
+    height: '100vh',
+    background: '#1172D8', // Cambiando el fondo a un tono más suave
+    borderRadius: '20px',
+    padding: '20px',
+    boxSizing: 'border-box', // Asegurar que el padding no incremente el tamaño total
+    overflow: 'hidden', // Para evitar que el contenido se desborde en pantallas pequeñas
   },
   title: {
-    marginBottom: '0px',
+    marginBottom: '20px', // Espacio adicional debajo del título
   },
   buttonContainer: {
-    position: 'absolute',
-    top: 540,
-    right: 1006,
+    marginTop: '20px', // Ajustar el margen superior del botón
+    marginBottom: '20px', // Ajustar el margen inferior del botón
   },
   button: {
     backgroundColor: 'red',

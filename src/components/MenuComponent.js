@@ -257,7 +257,7 @@ const MenuComponent = () => {
   return (
     <div className={`menu-container ${menuVisible ? 'menu-visible' : 'menu-hidden'}`}>
       <div className="sidebar" style={{ overflowY: 'auto' }}>
-        <h2 style={{ margin: 0, color: 'white', textAlign: 'center', marginTop: 10 }}>{greeting}, {usernameLoaded ? username : 'Usuario'}</h2>
+        <h2 style={{ margin: 0, color: 'black', textAlign: 'center', marginTop: 10 }}>{greeting}, {usernameLoaded ? username : 'Usuario'}</h2>
         <br></br>
         <p></p>
 
@@ -296,7 +296,7 @@ const MenuComponent = () => {
           {menuVisible ? <CloseIcon /> : <MenuIcon />}
         </IconButton>
         <div className="calendar-graph-container">
-          <div className="calendar-container">
+          <div className="calendar-container" >
             <FullCalendar
               plugins={[dayGridPlugin]}
               initialView="dayGridMonth"
@@ -307,6 +307,8 @@ const MenuComponent = () => {
                 cita: cita // Pasar los detalles de la cita como propiedad extendida del evento
               }))}
               eventClick={showCitaDetails} // Manejador de eventos para mostrar los detalles de la cita al hacer clic en un evento
+              // Opciones de configuración para el estilo del calendario
+              contentStyle={{ background: 'white', color: 'white' }} // Establecer el color de fondo y texto del contenido del calendario
             />
           </div>
           <div className="chart-container" style={{ overflowY: 'hidden' }}>
@@ -316,9 +318,9 @@ const MenuComponent = () => {
                 fontFamily: 'Arial, sans-serif',
                 fontSize: '1.5rem',
                 fontWeight: 'bold',
-                color: '#333', // Color del texto
+                color: 'white', // Color del texto
                 textTransform: 'uppercase', // Convertir texto a mayúsculas
-                borderBottom: '2px solid #007bff', // Línea inferior azul
+                borderBottom: '2px solid #FFFFFF', // Línea inferior azul
                 paddingBottom: '2px', // Espacio entre el texto y la línea
               }}>Síntomas más recurrentes</span>
 
@@ -326,7 +328,7 @@ const MenuComponent = () => {
 
             <VictoryChart
               domainPadding={20}
-              theme={VictoryTheme.material}
+              theme={VictoryTheme.grayscale}
               width={400}
               height={300} 
             >
