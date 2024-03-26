@@ -104,18 +104,20 @@ const HomeComponentProducto = () => {
             <p>No hay registros disponibles.</p>
           </div>
         )}
-        <DataGrid
-          rows={rows}
-          columns={columns}
-          components={{
-            Table: CustomDataGrid,
-          }}
-          pageSize={5}
-          onRowClick={handleRowClick}
-          rowHeight={100} // Ajusta la altura de la fila
-          // Estilo de la tabla
-          rowClassName={(params) => `${params.rowIndex % 2 === 0 ? 'even-row' : 'odd-row'}`}
-        />
+        <div style={styles.tableContainer}>
+          <DataGrid
+            rows={rows}
+            columns={columns}
+            components={{
+              Table: CustomDataGrid,
+            }}
+            pageSize={5}
+            onRowClick={handleRowClick}
+            rowHeight={100} // Ajusta la altura de la fila
+            // Estilo de la tabla
+            rowClassName={(params) => `${params.rowIndex % 2 === 0 ? 'even-row' : 'odd-row'}`}
+          />
+        </div>
         <div style={styles.buttonContainer}>
           <Button variant="contained" style={styles.button} onClick={menu} startIcon={<ArrowBackIosIcon />}>
             Salir
@@ -128,23 +130,29 @@ const HomeComponentProducto = () => {
 
 const styles = {
   container: {
-    margin: 'auto',
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'center',
-    height: '78vh',
-    width: '900px',
+    height: '100vh',
+    background: '#1172D8', // Cambiando el fondo a un tono más suave
     borderRadius: '20px',
-    margin: 'auto',
+    padding: '20px',
+    boxSizing: 'border-box', // Asegurar que el padding no incremente el tamaño total
+    overflow: 'hidden', // Para evitar que el contenido se desborde en pantallas pequeñas
   },
   title: {
-    marginBottom: '0px',
+    marginBottom: '20px', // Espacio adicional debajo del título
+    color: '#ffffff', // Color blanco para el título
+  },
+  tableContainer: {
+    width: '100%', // Ajusta el ancho de la tabla al 100%
+    
+    background: '#ffffff', // Fondo blanco para la tabla
   },
   buttonContainer: {
-    position: 'absolute',
-    top: '65%',
-    right: '47%',
+    marginTop: '20px', // Ajustar el margen superior del botón
+    marginBottom: '20px', // Ajustar el margen inferior del botón
   },
   button: {
     backgroundColor: 'red',
