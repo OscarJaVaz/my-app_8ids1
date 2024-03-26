@@ -62,9 +62,9 @@ const VerClientesComponent = () => {
 
   return (
     <div style={styles.container}>
-      <Typography variant="h4" gutterBottom style={{ marginBottom: '20px' }}>
-        Pacientes
-      </Typography>
+      <Typography variant="h4" gutterBottom style={{ marginBottom: '20px', color: 'white' }}>
+  Pacientes
+</Typography>
       <TextField
         label="Buscar cliente"
         variant="outlined"
@@ -102,7 +102,7 @@ const styles = {
     justifyContent: 'center',
     alignItems: 'center',
     padding: '20px',
-    background: '#f0f0f0', // Cambiando el fondo a un tono más suave
+    background: '#1172D8', // Cambiando el fondo a un tono más suave
     borderRadius: '20px',
     boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.1)', // Agregando sombra para mejorar el aspecto visual
   },

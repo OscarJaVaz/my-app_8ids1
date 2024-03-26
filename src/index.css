@@ -308,7 +308,7 @@ code {
 
 .sidebar {
   width: 250px;
-  background-color: #0f4c75; /* Azul oscuro */
+  background-color: #eeeeee; /* Azul oscuro */
   padding: 0px;
   transition: width 0.3s ease;
   overflow-y: auto; /* Permitir desplazamiento vertical en la barra lateral */
@@ -329,7 +329,7 @@ code {
 .sidebar a {
   display: flex;
   align-items: center;
-  color: #fff; /* Texto blanco */
+  color: #000000; /* Texto blanco */
   text-decoration: none;
   transition: color 0.3s ease;
   padding: 10px;
@@ -337,9 +337,9 @@ code {
 }
 
 .sidebar a:hover {
-  color: #0f4c75; /* Azul oscuro */
-  background-color: #ffcc80; /* Amarillo claro */
-  box-shadow: 0px 0px 10px rgba(15, 76, 117, 0.3); /* Sombra suave */
+  color: #ffffff; /* Azul oscuro */
+  background-color: #1172D8; /* Amarillo claro */
+  box-shadow: 0px 0px 10px rgba(181, 199, 211, 0.3); /* Sombra suave */
 }
 
 .sidebar a img {
@@ -356,7 +356,7 @@ code {
 .content {
   flex-grow: 1;
   padding: 20px;
-  background-color: #f0f0f0; /* Gris claro */
+  background-color: #1172D8; /* Gris claro */
   overflow-y: auto;
   /* Permitir desplazamiento vertical en el contenido */
 }
@@ -410,6 +410,7 @@ code {
 .calendar-container {
   width: 60%; /* Ajusta el ancho del calendario según tus necesidades */
   padding-right: 10px; /* Agrega un poco de espacio entre el calendario y la gráfica */
+  color: white;
 }
 
 .chart-container {
