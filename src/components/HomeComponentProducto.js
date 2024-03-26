@@ -7,7 +7,6 @@ import SpeedDialAction from '@mui/material/SpeedDialAction';
 import FileCopyIcon from '@mui/icons-material/FileCopyOutlined';
 import { useNavigate } from 'react-router-dom';
 import Button from '@mui/material/Button';
-import Enfermedad from './assets/virus.jpg';
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 
 const CustomDataGrid = ({ className, ...other }) => (
@@ -60,7 +59,6 @@ const HomeComponentProducto = () => {
       ),
     },
   ];
-  
 
   const [rows, setRows] = useState([]);
 
@@ -78,18 +76,6 @@ const HomeComponentProducto = () => {
   const menu = () => {
     navigate('/menu');
   };
-
-  useEffect(() => {
-    document.body.style.backgroundImage = `url(${Enfermedad})`;
-    document.body.style.backgroundSize = 'cover';
-    document.body.style.backgroundPosition = 'center';
-    return () => {
-      document.body.style.backgroundImage = '';
-      document.body.style.backgroundSize = '';
-      document.body.style.backgroundPosition = '';
-    };
-  }, []);
-  
 
   return (
     <div style={styles.container}>
@@ -112,11 +98,11 @@ const HomeComponentProducto = () => {
             />
           ))}
         </SpeedDial>
-        
+
         {rows.length === 0 && (
-        <div style={{ textAlign: 'center', padding: '20px' }}>
-          <p>No hay registros disponibles.</p>
-        </div>
+          <div style={{ textAlign: 'center', padding: '20px' }}>
+            <p>No hay registros disponibles.</p>
+          </div>
         )}
         <DataGrid
           rows={rows}
@@ -127,7 +113,8 @@ const HomeComponentProducto = () => {
           pageSize={5}
           onRowClick={handleRowClick}
           rowHeight={100} // Ajusta la altura de la fila
-          
+          // Estilo de la tabla
+          rowClassName={(params) => `${params.rowIndex % 2 === 0 ? 'even-row' : 'odd-row'}`}
         />
         <div style={styles.buttonContainer}>
           <Button variant="contained" style={styles.button} onClick={menu} startIcon={<ArrowBackIosIcon />}>
@@ -148,8 +135,7 @@ const styles = {
     alignItems: 'center',
     height: '78vh',
     width: '900px',
-    background: 'rgba(255, 255, 255, 0.8)',
-    borderRadius: '50px',
+    borderRadius: '20px',
     margin: 'auto',
   },
   title: {
@@ -157,11 +143,21 @@ const styles = {
   },
   buttonContainer: {
     position: 'absolute',
-    top: '65%',  
-    right: '47%',  
+    top: '65%',
+    right: '47%',
   },
   button: {
     backgroundColor: 'red',
+  },
+};
+
+// Estilo para filas alternas
+const rowStyle = {
+  '&.even-row': {
+    backgroundColor: '#f2f2f2', // Color de fondo para filas pares
+  },
+  '&.odd-row': {
+    backgroundColor: '#ffffff', // Color de fondo para filas impares
   },
 };
 
