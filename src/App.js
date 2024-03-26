@@ -40,7 +40,7 @@ function App() {
   }, []);
   
   return (
-
+ 
 <Routes>
     <Route path="/home" element={token == null ? <Inicio /> :<HomeComponent />}/>
     <Route path="/paciente/nuevo" element={token == null ? <Inicio /> :<PacienteComponent />}/>
