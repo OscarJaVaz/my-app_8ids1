@@ -29,6 +29,7 @@ import VerProductosComprados from './components/VerProductosComprados';
 import Miperfil from './components/Miperfil';
 import ValidarFechasCita from './components/ValidarFechasCita';
 import Contacto from './components/Contacto';
+import Perfildoc from './components/Perfildoc';
 //
 function App() {   
   const [token, setToken] = useState(null);
@@ -68,6 +69,7 @@ function App() {
     <Route path="/verProductosComprado" element={<VerProductosComprados/>}/>
     <Route path="/miperfil" element={<Miperfil/>}/>
     <Route path="/contacto" element={<Contacto/>}/>
+    <Route path="/perfil" element={<Perfildoc/>}/>
     </Routes>
   );
 }
