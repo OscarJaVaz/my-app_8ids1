@@ -148,6 +148,7 @@ const VerQrComponent = () => {
               }}
               onUserMediaError={handleError}
             />
+            
             <div className="button-group">
               <button className="scan-btn" onClick={handleScanQRCode} disabled={scanning}>
                 {scanning ? 'Escaneando...' : 'Escanear código QR'}
@@ -156,7 +157,9 @@ const VerQrComponent = () => {
             </div>
           </div>
         ) : (
+          
           <div className="file-section">
+            
             <label htmlFor="file-upload" className="file-upload-btn">
               Escoger archivo
             </label>

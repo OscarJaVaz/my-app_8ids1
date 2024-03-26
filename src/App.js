@@ -44,8 +44,8 @@ function App() {
 <Routes>
     <Route path="/home" element={token == null ? <Inicio /> :<HomeComponent />}/>
     <Route path="/paciente/nuevo" element={token == null ? <Inicio /> :<PacienteComponent />}/>
-    <Route path="/homedoctor" element={token == null ? <Inicio /> :<HomeComponentDoctor />}/>
-    <Route path="/doctor/nuevo" element={token == null ? <Inicio /> :<DoctorComponent />}/>
+    <Route path="/homedoctor" element={<HomeComponentDoctor />}/>
+    <Route path="/doctor/nuevo" element={<DoctorComponent />}/>
     <Route path="/homeenfermedad" element={token == null ? <Inicio /> :<HomeComponentEnfermedad />}/>
     <Route path="/enfermedad/nuevo" element={token == null ? <Inicio /> :<EnfermedadComponent />}/>
     <Route path="/cita/nuevo" element={token == null ? <Inicio /> :<CitaComponent />}/>

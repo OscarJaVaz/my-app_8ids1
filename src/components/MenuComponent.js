@@ -6,6 +6,8 @@ import CloseIcon from '@mui/icons-material/Close';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import pacientes from './assets/pacientes.png';
 import doctor from './assets/doctor.png';
+import perfill from './assets/perfill.png';
+import prod from './assets/prod.png';
 import enfermedad from './assets/enfermedad.png';
 import cita from './assets/cita1.png';
 import qr from './assets/qr.png';
@@ -261,20 +263,15 @@ const MenuComponent = () => {
         <br></br>
         <p></p>
         <a onClick={() => handleClick("/perfil")}>
-          <img src={doctor} alt="Doctores" />
+          <img src={perfill} alt="Doctores" />
           <span>Mi perfil</span>
         </a>
         <a onClick={() => handleClick("/homedoctor")}>
           <img src={doctor} alt="Doctores" />
           <span>Doctores</span>
         </a>
-        <a onClick={() => handleClick("/homeenfermedad")}>
-          <img src={enfermedad} alt="Enfermedades" />
-          <span>Sintomas</span>
-        </a>
-        
         <a onClick={() => handleClick("/homeproducto")}>
-          <img src={agregar} alt="Productos" />
+          <img src={prod} alt="Productos" />
           <span>Productos</span>
         </a>
         <a onClick={() => handleClick("/farmacia")}>

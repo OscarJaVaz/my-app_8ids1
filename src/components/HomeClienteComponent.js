@@ -10,7 +10,8 @@ import salir from './assets/salir.png';
 import farmacia from './assets/farmacia.png';
 import axios from 'axios';
 import secureLocalStorage from 'react-secure-storage';
-
+import perfill from './assets/perfill.png';
+import compras from './assets/compras.png';
 // Definición del componente HomeClienteComponent
 const HomeClienteComponent = () => {
   // Hook para la navegación
@@ -84,7 +85,7 @@ const HomeClienteComponent = () => {
         
         <p></p>
         <a onClick={() => handleClick()}>
-          <img src={farmacia} alt="/clienteFarmacia"/>
+          <img src={perfill} alt="/clienteFarmacia"/>
           <span>Mi Perfil</span>
         </a>
         <p></p>
@@ -97,7 +98,7 @@ const HomeClienteComponent = () => {
           <span>Registrar cita</span>
         </a>
         <a onClick={() => navigate("/verProductosComprado")}>
-          <img src={cita} alt="ver_productos" />
+          <img src={compras} alt="ver_productos" />
           <span>Ver mis productos comprados</span>
         </a>
         <a onClick={() => navigate("/")}>
