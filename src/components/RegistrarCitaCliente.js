@@ -73,6 +73,8 @@ function RegistrarCitaCliente() {
       [name]: value,
     }));
 
+  
+
     const selectedDate = new Date(value);
     const currentDate = new Date();
     if (selectedDate < currentDate) {
@@ -163,6 +165,17 @@ function RegistrarCitaCliente() {
     return `${year}-${month}-${day}`;
   };
 
+  const generateHalfHourOptions = () => {
+    const options = [];
+    for (let hour = 0; hour < 24; hour++) {
+      for (let minute = 0; minute < 60; minute += 30) {
+        const formattedHour = `${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}`;
+        options.push(formattedHour);
+      }
+    }
+    return options;
+  };
+
   return (
     <div>
     <div style={styles.line}></div>
@@ -238,17 +251,26 @@ function RegistrarCitaCliente() {
         </div>
         
         <div style={{ marginBottom: '20px', width: '100%' }}>
-          <TextField
-            required
-            id="outlined-required"
-            
-            name="hora"
-            type="time"
-            value={cita.hora}
-            onChange={handleGuardar}
-            fullWidth
-          />
-        </div>
+      <TextField
+        required
+        id="outlined-required"
+        label="Hora"
+        name="hora"
+        type="time"
+        value={cita.hora}
+        onChange={handleGuardar}
+        inputProps={{
+          step: 1800, // 1800 segundos = 30 minutos
+          list: 'half-hour-options' // Utiliza la lista de opciones personalizada
+        }}
+        fullWidth
+      />
+      <datalist id="half-hour-options">
+        {generateHalfHourOptions().map((option, index) => (
+          <option key={index} value={option} />
+        ))}
+      </datalist>
+    </div>
         
         <Button
           variant="contained"
