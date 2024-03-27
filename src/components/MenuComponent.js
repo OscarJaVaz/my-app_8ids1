@@ -259,7 +259,8 @@ const MenuComponent = () => {
   return (
     <div className={`menu-container ${menuVisible ? 'menu-visible' : 'menu-hidden'}`}>
       <div className="sidebar" style={{ overflowY: 'auto' }}>
-        <h2 style={{ margin: 0, color: 'black', textAlign: 'center', marginTop: 10 }}>{greeting}, {usernameLoaded ? username : 'Usuario'}</h2>
+      <h2 style={{ margin: 0, color: 'white', textAlign: 'center', marginTop: 10, textShadow: '1px 1px 3px rgba(0, 0, 0, 0.3)' }}>{greeting}, {usernameLoaded ? username : 'Usuario'}</h2>
+
         <br></br>
         <p></p>
         <a onClick={() => handleClick("/perfil")}>
@@ -308,7 +309,7 @@ const MenuComponent = () => {
               }))}
               eventClick={showCitaDetails} // Manejador de eventos para mostrar los detalles de la cita al hacer clic en un evento
               // Opciones de configuración para el estilo del calendario
-              contentStyle={{ background: 'white', color: 'white' }} // Establecer el color de fondo y texto del contenido del calendario
+              contentStyle={{ background: 'black', color: 'black' }} // Establecer el color de fondo y texto del contenido del calendario
             />
           </div>
           <div className="chart-container" style={{ overflowY: 'hidden' }}>
@@ -318,7 +319,8 @@ const MenuComponent = () => {
                 fontFamily: 'Arial, sans-serif',
                 fontSize: '1.5rem',
                 fontWeight: 'bold',
-                color: 'white', // Color del texto
+                color: '#3b4094'/* Azul oscuro */
+                , // Color del texto
                 textTransform: 'uppercase', // Convertir texto a mayúsculas
                 borderBottom: '2px solid #FFFFFF', // Línea inferior azul
                 paddingBottom: '2px', // Espacio entre el texto y la línea

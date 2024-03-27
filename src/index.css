@@ -308,7 +308,7 @@ code {
 
 .sidebar {
   width: 250px;
-  background-color: #eeeeee; /* Azul oscuro */
+  background-color: #3b4094; /* Azul oscuro */
   padding: 0px;
   transition: width 0.3s ease;
   overflow-y: auto; /* Permitir desplazamiento vertical en la barra lateral */
@@ -337,8 +337,8 @@ code {
 }
 
 .sidebar a:hover {
-  color: #ffffff; /* Azul oscuro */
-  background-color: #1172D8; /* Amarillo claro */
+  color: #3b4094; /* Azul oscuro */
+  background-color: #f2f3f3; /* Amarillo claro */
   box-shadow: 0px 0px 10px rgba(181, 199, 211, 0.3); /* Sombra suave */
 }
 
@@ -356,7 +356,8 @@ code {
 .content {
   flex-grow: 1;
   padding: 20px;
-  background-color: #1172D8; /* Gris claro */
+  background-color: #f6f6f6;
+ /* Gris claro */
   overflow-y: auto;
   /* Permitir desplazamiento vertical en el contenido */
 }
@@ -410,12 +411,14 @@ code {
 .calendar-container {
   width: 60%; /* Ajusta el ancho del calendario según tus necesidades */
   padding-right: 10px; /* Agrega un poco de espacio entre el calendario y la gráfica */
-  color: white;
+  color: #3b4094; /* Azul oscuro */
+
 }
 
 .chart-container {
   width: 40%; /* Ajusta el ancho de la gráfica según tus necesidades */
   padding-left: 10px; /* Agrega un poco de espacio entre el calendario y la gráfica */
+  
 }
 
 /*botones*/
@@ -676,4 +679,39 @@ button {
   to {
     background-position: 200% center;
   }
+}
+
+/*TABLAS DISEÑO*/
+.even-row {
+  background-color: #f2f2f2; /* Color de fondo para filas pares */
+}
+
+.odd-row {
+  background-color: #ffffff; /* Color de fondo para filas impares */
+}
+
+.MuiDataGrid-root .MuiDataGrid-cell {
+  padding: 10px; /* Ajuste de relleno de celda */
+}
+
+.MuiDataGrid-root .MuiDataGrid-columnsContainer .MuiDataGrid-columnSeparator {
+  display: none; /* Oculta los separadores de columna */
+}
+
+.MuiDataGrid-root .MuiDataGrid-columnHeaderWrapper {
+  background-color: #e0e0e0; /* Color de fondo del encabezado de columna */
+}
+
+.MuiDataGrid-root .MuiDataGrid-columnHeader,
+.MuiDataGrid-root .MuiDataGrid-columnHeaderSortable:hover {
+  color: #3b4094; /* Color de texto del encabezado de columna */
+  font-weight: bold; /* Establece el texto en negrita */
+}
+
+.MuiDataGrid-root .MuiDataGrid-columnHeader:hover {
+  background-color: #bcbcbe; /* Color de fondo del encabezado de columna al pasar el cursor sobre él */
+}
+
+.MuiDataGrid-root .MuiDataGrid-cell:hover {
+  background-color: #bcbcbe; /* Color de fondo de la celda al pasar el cursor sobre ella */
 }

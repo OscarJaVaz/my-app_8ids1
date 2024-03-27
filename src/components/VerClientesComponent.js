@@ -61,19 +61,22 @@ const VerClientesComponent = () => {
   };
 
   return (
+    <div>
+    <div style={styles.line}></div>
     <div style={styles.container}>
-      <Typography variant="h4" gutterBottom style={{ marginBottom: '20px', color: 'white' }}>
+      <Typography variant="h4" gutterBottom style={{ marginBottom: '20px', color: 'black' }}>
   Pacientes
 </Typography>
+<p style={{ color: '#878686', marginTop: '5px', fontSize: '20px' }}>Selecciona algun paciente para generar su receta medica.</p>
       <TextField
-        label="Buscar cliente"
+        label="Buscar paciente"
         variant="outlined"
         margin="dense"
         value={searchText}
         onChange={(e) => setSearchText(e.target.value)}
         style={{ marginBottom: '20px', width: '300px' }}
       />
-      <Paper elevation={3} style={{ width: '100%', minHeight: '400px', borderRadius: '10px', overflow: 'hidden' }}>
+      <Paper elevation={3} style={{ width: '100%', borderRadius: '10px', overflow: 'hidden' }}>
         <DataGrid
           rows={filteredRows}
           columns={columns}
@@ -91,6 +94,7 @@ const VerClientesComponent = () => {
         Salir
       </Button>
     </div>
+    </div>
   );
 };
 
@@ -100,17 +104,24 @@ const styles = {
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'center',
-    alignItems: 'center',
+    
     padding: '20px',
-    background: '#1172D8', // Cambiando el fondo a un tono más suave
+    background: '#f2f3f3', // Cambiando el fondo a un tono más suave
     borderRadius: '20px',
     boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.1)', // Agregando sombra para mejorar el aspecto visual
+  },
+  line: {
+    width: '100%',
+    height: '53px',
+    backgroundColor: '#3b4094', 
+    
   },
   button: {
     backgroundColor: '#FF5252', // Color de botón más llamativo
     marginTop: '20px',
     color: '#FFFFFF', // Texto blanco para mayor contraste
     fontWeight: 'bold', // Añadiendo negrita al texto del botón
+    alignItems: 'center',
   },
 };
 

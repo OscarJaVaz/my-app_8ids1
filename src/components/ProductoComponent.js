@@ -127,17 +127,7 @@ function ProductoComponent() {
     }
   };
 
-  useEffect(() => {
-    document.body.style.backgroundImage = `url(${Enfermedad2})`;
-    document.body.style.backgroundSize = 'cover';
-    document.body.style.backgroundPosition = 'center';
-    return () => {
-      document.body.style.backgroundImage = '';
-      document.body.style.backgroundSize = '';
-      document.body.style.backgroundPosition = '';
-    };
-  }, []);
-
+  
   const regresar = async () => {
     navigate('/homeproducto');
   };
@@ -152,117 +142,141 @@ function ProductoComponent() {
   };
 
   return (
-    <div
-      style={{
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'center',
-        alignItems: 'center',
-        height: '160vh',
-        width: '600px',
-        background: '#DEDFEF',
-        borderRadius: '50px',
-        margin: 'auto',
-      }}
-    >
-      <h1 style={{ marginBottom: '10px' }}>Agregar productos</h1>
-      <img src={Enfermedad} style={{ height: '25%', width: '25%' }} />
-      {error && (
-  <div style={{ color: 'red', marginTop: '10px', whiteSpace: 'pre-wrap', overflowWrap: 'break-word' }}>
-    <p>{error}</p>
-  </div>
-)}
-
-      <ul style={{ listStyleType: 'none', textAlign: 'center', padding: 0 }}>
-        <p></p>
-        <li>
-          <TextField
-            required
-            id="outlined-required"
-            label="Nombre del Producto"
-            name="nom_producto"
-            value={productos.nom_producto}
-            onChange={handleGuardar}
-          />
-        </li>
-        <p></p>
-        <li>
-          <TextField
-            required
-            id="outlined-required"
-            label="Descripcion"
-            name="descripcion"
-            value={productos.descripcion}
-            onChange={handleGuardar}
-          />
-        </li>
-        <p></p>
-        <li>
-          <TextField
-            required
-            id="outlined-required"
-            label="Price"
-            name="price"
-            value={productos.price}
-            onChange={handleGuardar}
-          />
-        </li>
-        <p></p>
-        <li>
-          <input
-            type="file"
-            accept="image/*"
-            onChange={handleImageChange}
-          />
-          {imagen || productos.imagen ? (
-            <div>
-              <p>Imagen del producto:</p>
-              <img
-                src={imagen || productos.imagen}
-                alt="Imagen del producto"
-                style={{
-                  maxWidth: '60%',  // Ancho máximo
-                  maxHeight: '80vh' // Altura máxima (en este caso, 20% de la altura de la ventana)
-                }}
-              />
-            </div>
-          ) : null}
-        </li>
-        <p></p>
-        <Button
-          variant="contained"
-          style={{ backgroundColor: 'green', marginRight: '10px' }}
-          onClick={GuardarDatos}
-          startIcon={<SaveIcon />}
-          disabled={!camposCompletos()}
-        >
-          Guardar
-        </Button>
-        <Button
-          variant="contained"
-          style={{ backgroundColor: 'red' }}
-          onClick={eliminarDatos}
-          startIcon={<DeleteIcon />}
-          disabled={!camposCompletos()}
-        >
-          Eliminar
-        </Button>
-        <br /><br />
-        <Button
-          variant="contained"
-          style={{ backgroundColor: '#F66E10' }}
-          onClick={regresar}
-          startIcon={<ArrowBackIosIcon />}
-        >
-          Regresar
-        </Button>
-        <br /><br />
-        {loading ? <Box sx={{ width: '100%' }}>
-          <LinearProgress />
-        </Box> : ''}
-      </ul>
+    <div>
+       <div style={styles.line}></div> 
+    <div style={styles.container}>
+      
+      <h1 style={{ marginBottom: '20px', textSizeAdjust: '50px'}}>Agregar productos</h1>
+  {error && (
+    <div style={{ color: 'red', marginBottom: '20px', textAlign: 'center' }}>
+      <p>{error}</p>
     </div>
+  )}
+  <div style={{ marginBottom: '20px', width: '100%' }}>
+  <TextField
+    required
+    id="outlined-required"
+    label="Nombre del Producto"
+    name="nom_producto"
+    value={productos.nom_producto}
+    onChange={handleGuardar}
+    fullWidth // Otra opción es usar la prop fullWidth de TextField para que ocupe todo el ancho disponible
+  />
+</div>
+
+  <div style={{ marginBottom: '20px', width: '100%' }}>
+    <TextField
+      required
+      id="outlined-required"
+      label="Descripcion"
+      name="descripcion"
+      value={productos.descripcion}
+      onChange={handleGuardar}
+      fullWidth 
+    />
+  </div>
+  <div style={{ marginBottom: '20px', width: '100%'}}>
+    <TextField
+      required
+      id="outlined-required"
+      label="Precio"
+      name="price"
+      value={productos.price}
+      onChange={handleGuardar}
+      fullWidth 
+    />
+  </div>
+  <div style={{ marginBottom: '20px', textAlign: 'center'}}>
+  <input type="file" accept="image/*" onChange={handleImageChange} />
+  {imagen || productos.imagen ? (
+    <div>
+      <p>Imagen del producto:</p>
+      <img
+        src={imagen || productos.imagen}
+        alt="Imagen del producto"
+        style={{
+          maxWidth: '100px', // Ancho máximo de la imagen
+          maxHeight: '100px', // Altura máxima de la imagen
+          borderRadius: '10px',
+        }}
+      />
+    </div>
+  ) : null}
+</div>
+
+  <div style={{ textAlign: 'center' }}>
+    <Button
+      variant="contained"
+      style={{ backgroundColor: '#3b4094', marginRight: '10px' }}
+      onClick={GuardarDatos}
+      startIcon={<SaveIcon />}
+      disabled={!camposCompletos()}
+    >
+      Guardar
+    </Button>
+    <Button
+      variant="contained"
+      style={{ backgroundColor: 'red' }}
+      onClick={eliminarDatos}
+      startIcon={<DeleteIcon />}
+      disabled={!camposCompletos()}
+    >
+      Eliminar
+    </Button>
+  </div>
+  <div style={{ textAlign: 'center', marginTop: '20px' }}>
+    <Button
+      variant="contained"
+      style={{ backgroundColor: '#F66E10' }}
+      onClick={regresar}
+      startIcon={<ArrowBackIosIcon />}
+    >
+      Regresar
+    </Button>
+  </div>
+  <div style={{ marginTop: '20px', width: '100%', textAlign: 'center' }}>
+    {loading && (
+      <Box sx={{ width: '100%' }}>
+        <LinearProgress />
+      </Box>
+    )}
+  </div>
+</div>
+</div>
+
   );
-}
+};
+
+const styles = {
+  container: {
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
+    
+    height: '100vh',
+    background: '#f2f3f3', // Cambiando el fondo a un tono más suave
+    borderRadius: '20px',
+    padding: '20px',
+    boxSizing: 'border-box', // Asegurar que el padding no incremente el tamaño total
+    overflow: 'hidden', // Para evitar que el contenido se desborde en pantallas pequeñas
+  },
+  title: {
+    marginBottom: '10px', // Espacio adicional debajo del título
+    color: 'black', // Color blanco para el título
+  },
+  line: {
+    width: '100%',
+    height: '53px',
+    backgroundColor: '#3b4094', 
+    marginBottom: '1px', // Margen inferior para separar la línea del título
+  },
+  buttonContainer: {
+    marginTop: '20px', // Ajustar el margen superior del botón
+    marginBottom: '20px', // Ajustar el margen inferior del botón
+  },
+  button: {
+    backgroundColor: 'red',
+  },
+};
 
 export default ProductoComponent;

@@ -78,53 +78,49 @@ const HomeComponentProducto = () => {
   };
 
   return (
+    <div>
+    <div style={styles.line}></div>
     <div style={styles.container}>
-      <h1 style={styles.title}>Productos Registrados</h1>
-
-      <div>
-        <SpeedDial
-          ariaLabel="SpeedDial basic example"
-          sx={{ position: 'absolute', bottom: 16, right: 16 }}
-          icon={<SpeedDialIcon />}
-        >
-          {actions.map((action) => (
-            <SpeedDialAction
-              key={action.name}
-              icon={action.icon}
-              tooltipTitle={action.name}
-              onClick={(e) => {
-                handleFunction(e, action.key);
-              }}
-            />
-          ))}
-        </SpeedDial>
-
-        {rows.length === 0 && (
-          <div style={{ textAlign: 'center', padding: '20px' }}>
-            <p>No hay registros disponibles.</p>
-          </div>
-        )}
-        <div style={styles.tableContainer}>
-          <DataGrid
-            rows={rows}
-            columns={columns}
-            components={{
-              Table: CustomDataGrid,
+      <h1 style={styles.title}>Productos</h1>
+      <p style={{ color: '#878686', marginTop: '5px', fontSize: '20px' }}>Gestionar los productos registrados.</p>
+      <hr style={{ width: '100%', borderTop: '1px solid #ccc' }} />
+      <div style={{ width: '100%', overflowX: 'auto' }}>
+      <DataGrid
+  rows={rows}
+  columns={columns}
+  components={{
+    Table: CustomDataGrid,
+  }}
+  pageSize={5}
+  onRowClick={handleRowClick}
+  rowHeight={120} // Ajusta la altura de la fila
+  // Estilo de la tabla
+  rowClassName={(params) => `${params.rowIndex % 2 === 0 ? 'even-row' : 'odd-row'}`}
+/>
+      </div>
+      <SpeedDial
+        ariaLabel="SpeedDial basic example"
+        sx={{ position: 'fixed', bottom: 16, right: 16}}
+        icon={<SpeedDialIcon />}
+      >
+        {actions.map((action) => (
+          <SpeedDialAction
+            key={action.name}
+            icon={action.icon}
+            tooltipTitle={action.name}
+            onClick={(e) => {
+              handleFunction(e, action.key);
             }}
-            pageSize={5}
-            onRowClick={handleRowClick}
-            rowHeight={100} // Ajusta la altura de la fila
-            // Estilo de la tabla
-            rowClassName={(params) => `${params.rowIndex % 2 === 0 ? 'even-row' : 'odd-row'}`}
           />
-        </div>
-        <div style={styles.buttonContainer}>
-          <Button variant="contained" style={styles.button} onClick={menu} startIcon={<ArrowBackIosIcon />}>
-            Salir
-          </Button>
-        </div>
+        ))}
+      </SpeedDial>
+      <div style={styles.buttonContainer}>
+        <Button variant="contained" style={styles.button} onClick={menu} startIcon={<ArrowBackIosIcon />}>
+          Salir
+        </Button>
       </div>
     </div>
+  </div>
   );
 };
 
@@ -133,22 +129,24 @@ const styles = {
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'center',
-    alignItems: 'center',
+    
     height: '100vh',
-    background: '#1172D8', // Cambiando el fondo a un tono más suave
+    background: '#f2f3f3', // Cambiando el fondo a un tono más suave
     borderRadius: '20px',
     padding: '20px',
     boxSizing: 'border-box', // Asegurar que el padding no incremente el tamaño total
     overflow: 'hidden', // Para evitar que el contenido se desborde en pantallas pequeñas
   },
   title: {
-    marginBottom: '20px', // Espacio adicional debajo del título
-    color: '#ffffff', // Color blanco para el título
+    marginBottom: '10px', // Espacio adicional debajo del título
+    color: 'black', // Color blanco para el título
+    fontSize: '40px'
   },
-  tableContainer: {
-    width: '100%', // Ajusta el ancho de la tabla al 100%
+  line: {
+    width: '100%',
+    height: '53px',
+    backgroundColor: '#3b4094', 
     
-    background: '#ffffff', // Fondo blanco para la tabla
   },
   buttonContainer: {
     marginTop: '20px', // Ajustar el margen superior del botón
@@ -162,7 +160,7 @@ const styles = {
 // Estilo para filas alternas
 const rowStyle = {
   '&.even-row': {
-    backgroundColor: '#f2f2f2', // Color de fondo para filas pares
+    backgroundColor: '#f2f3f3', // Color de fondo para filas pares
   },
   '&.odd-row': {
     backgroundColor: '#ffffff', // Color de fondo para filas impares
