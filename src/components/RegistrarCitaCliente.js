@@ -14,8 +14,11 @@ import Backdrop from '@mui/material/Backdrop';
 import Fade from '@mui/material/Fade';
 import html2canvas from 'html2canvas';
 import Alert from '@mui/material/Alert';
+import withReactContent from 'sweetalert2-react-content';
 import ValidarFechasCita from './ValidarFechasCita'; // Importa el componente ValidarFechasCita
+import Swal from 'sweetalert2';
 
+const MySwal = withReactContent(Swal);
 
 function RegistrarCitaCliente() {
 
@@ -42,7 +45,7 @@ function RegistrarCitaCliente() {
   const [descargaHabilitada, setDescargaHabilitada] = useState(false);
   const [calendarVisible, setCalendarVisible] = useState(false); // Estado para controlar la visibilidad del calendario
   const toggleCalendarVisibility = () => {
-    setCalendarVisible(!calendarVisible); // Cambia la visibilidad del calendario cuando se hace clic en un botón, por ejemplo
+    setCalendarVisible(!calendarVisible); // Cambia el estado de calendarVisible al valor opuesto
   };
   const fetchDoctores = async () => {
     try {
@@ -123,6 +126,17 @@ function RegistrarCitaCliente() {
     fetchClientes();
   }, []);
 
+  useEffect(() => {
+    if (calendarVisible) {
+      MySwal.fire({
+        
+        html: <ValidarFechasCita />,
+        showCloseButton: true,
+        showConfirmButton: false,
+        focusConfirm: false,
+      });
+    }
+  }, [calendarVisible]);
   const camposCompletos = () => {
     return (
       cita.paciente.trim() !== '' &&
@@ -150,39 +164,32 @@ function RegistrarCitaCliente() {
   };
 
   return (
-
-    <div
-      style={{
-        margin: 'auto',
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'center',
-        alignItems: 'center',
-        height: '130vh',
-        width: '440px',
-        background: '#DEDFEF',
-        borderRadius: '50px',
-      }}
-    >
+    <div>
+    <div style={styles.line}></div>
+    <div style={styles.container}>
+    <br></br>
+    <br></br>
+    <br></br>
       <h1 style={{ marginBottom: '10px' }}>Citas</h1>
-      <img src={Cita} style={{ height: '18%', width: '25%' }} alt="Imagen de cita" />
-      <ul style={{ listStyleType: 'none', textAlign: 'center', padding: 0 }}>
-        <p></p>
-        <li>
+      <p style={{ color: '#878686', marginTop: '3px', fontSize: '20px' }}>Gestione su cita.</p>
+      <ul style={{ listStyleType: 'none', textAlign: 'center'}}>
+        
+        <div style={{ marginBottom: '20px', width: '100%' }}>
           <TextField
             required
             id="paciente"
-            label="Ingrese su Nombre completo"
+            label="Ingrese su nombre completo"
             name="paciente"
             value={cita.paciente}
             onChange={handleGuardar}
             InputProps={{
               autoComplete: 'off' // Desactivar autocompletado
             }}
+            fullWidth
           />
-        </li>
-        <p></p>
-        <li>
+        </div>
+        
+        <div style={{ marginBottom: '20px', width: '100%' }}>
           <TextField
             required
             id="doctor"
@@ -195,6 +202,7 @@ function RegistrarCitaCliente() {
               native: true,
             }}
             onChange={handleGuardar}
+            fullWidth
           >
             <option></option>
             {doctores.map((doctor) => (
@@ -203,42 +211,45 @@ function RegistrarCitaCliente() {
               </option>
             ))}
           </TextField>
-        </li>
-        <p></p>
-        <li>
+        </div>
+        
+        <div style={{ marginBottom: '20px', width: '100%' }}>
           <TextField
-            label="Sintomas"
+            label="Sintomas que presenta"
             name="sintomas"
             value={cita.sintomas}
             onChange={handleGuardar}
+            fullWidth
           />
-        </li>
-        <p></p>
-        <li>
+        </div>
+        
+        <div style={{ marginBottom: '20px', width: '100%' }}>
           <TextField
             required
             id="outlined-required"
-            label="Fecha"
+            
             name="fecha"
             type="date"
             value={cita.fecha}
             onChange={handleGuardar}
             inputProps={{ min: getCurrentDate() }} 
+            fullWidth
           />
-        </li>
-        <p></p>
-        <li>
+        </div>
+        
+        <div style={{ marginBottom: '20px', width: '100%' }}>
           <TextField
             required
             id="outlined-required"
-            label="Hora"
+            
             name="hora"
             type="time"
             value={cita.hora}
             onChange={handleGuardar}
+            fullWidth
           />
-        </li>
-        <p></p>
+        </div>
+        
         <Button
           variant="contained"
           style={{ backgroundColor: 'green', marginRight: '10px' }}
@@ -303,15 +314,47 @@ function RegistrarCitaCliente() {
             </div>
           </Fade>
         </Modal>
+        <div style={{ marginBottom: '60px', width: '100%', textAlign: 'center' }}>
+    <button onClick={toggleCalendarVisibility}>Consultar dias disponibles</button>
+  
+</div>
       </ul>
-      <div>
-          <h1>Diás disponibles</h1>
-          <button onClick={toggleCalendarVisibility}>Mostrar/ocultar calendario</button>
-          {calendarVisible && <ValidarFechasCita />} {/* Muestra ValidarFechasCita solo si calendarVisible es true */}
-        </div>
+      
+
     </div>
-    
+    </div>
   );
-}
+};
+
+const styles = {
+  container: {
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
+    
+    height: '100vh',
+     // Cambiando el fondo a un tono más suave
+    
+    padding: '20px',
+    boxSizing: 'border-box', // Asegurar que el padding no incremente el tamaño total
+    overflow: 'hidden', // Para evitar que el contenido se desborde en pantallas pequeñas
+  },
+  title: {
+    marginBottom: '20px', // Espacio adicional debajo del título
+  },
+  line: {
+    width: '100%',
+    height: '53px',
+    backgroundColor: '#1172D8', 
+    
+  },
+  buttonContainer: {
+    marginTop: '20px', // Ajustar el margen superior del botón
+    marginBottom: '20px', // Ajustar el margen inferior del botón
+  },
+  button: {
+    backgroundColor: 'red',
+  },
+};
 
 export default RegistrarCitaCliente;

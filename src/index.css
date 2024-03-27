@@ -308,7 +308,7 @@ code {
 
 .sidebar {
   width: 250px;
-  background-color: #3b4094; /* Azul oscuro */
+  background-color: #1172D8; /* Azul oscuro */
   padding: 0px;
   transition: width 0.3s ease;
   overflow-y: auto; /* Permitir desplazamiento vertical en la barra lateral */
@@ -329,15 +329,16 @@ code {
 .sidebar a {
   display: flex;
   align-items: center;
-  color: #000000; /* Texto blanco */
+  color: #ffffff; /* Texto blanco */
   text-decoration: none;
+  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
   transition: color 0.3s ease;
   padding: 10px;
   border-radius: 5px;
 }
 
 .sidebar a:hover {
-  color: #3b4094; /* Azul oscuro */
+  color: #1172D8; /* Azul oscuro */
   background-color: #f2f3f3; /* Amarillo claro */
   box-shadow: 0px 0px 10px rgba(181, 199, 211, 0.3); /* Sombra suave */
 }
@@ -411,7 +412,7 @@ code {
 .calendar-container {
   width: 60%; /* Ajusta el ancho del calendario según tus necesidades */
   padding-right: 10px; /* Agrega un poco de espacio entre el calendario y la gráfica */
-  color: #3b4094; /* Azul oscuro */
+  color: #1172D8; /* Azul oscuro */
 
 }
 
@@ -704,7 +705,7 @@ button {
 
 .MuiDataGrid-root .MuiDataGrid-columnHeader,
 .MuiDataGrid-root .MuiDataGrid-columnHeaderSortable:hover {
-  color: #3b4094; /* Color de texto del encabezado de columna */
+  color: #1172D8; /* Color de texto del encabezado de columna */
   font-weight: bold; /* Establece el texto en negrita */
 }
 

@@ -207,7 +207,7 @@ function ProductoComponent() {
   <div style={{ textAlign: 'center' }}>
     <Button
       variant="contained"
-      style={{ backgroundColor: '#3b4094', marginRight: '10px' }}
+      style={{ backgroundColor: '#1172D8', marginRight: '10px' }}
       onClick={GuardarDatos}
       startIcon={<SaveIcon />}
       disabled={!camposCompletos()}
@@ -267,7 +267,7 @@ const styles = {
   line: {
     width: '100%',
     height: '53px',
-    backgroundColor: '#3b4094', 
+    backgroundColor: '#1172D8', 
     marginBottom: '1px', // Margen inferior para separar la línea del título
   },
   buttonContainer: {

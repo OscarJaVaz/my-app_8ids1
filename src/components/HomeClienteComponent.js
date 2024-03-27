@@ -80,7 +80,7 @@ const HomeClienteComponent = () => {
   return (
     <div className={`menu-container ${menuVisible ? 'menu-visible' : 'menu-hidden'}`}>
       <div className="sidebar" style={{ overflowY: 'auto' }}>
-        <h2 style={{ margin: 0 ,color:'black', textAlign:'center'}}> {greeting}, {usernameLoaded ? username : 'Usuario'} </h2>
+      <h2 style={{ margin: 0, color: 'white', textAlign: 'center', marginTop: 10, textShadow: '1px 1px 3px rgba(0, 0, 0, 0.3)' }}>{greeting}, {usernameLoaded ? username : 'Usuario'}</h2>
         <br></br>
         
         <p></p>

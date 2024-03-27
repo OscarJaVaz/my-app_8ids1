@@ -103,16 +103,7 @@ function DoctorComponent() {
     navigate("/homedoctor");
   };
 
-  useEffect(() => {
-    document.body.style.backgroundImage = `url(${Doctor2})`;
-    document.body.style.backgroundSize = 'cover';
-    document.body.style.backgroundPosition = 'center';
-    return () => {
-      document.body.style.backgroundImage = '';
-      document.body.style.backgroundSize = '';
-      document.body.style.backgroundPosition = '';
-    };
-  }, []);
+  
 
   useEffect(() => {
     console.log('Render');
@@ -137,25 +128,15 @@ function DoctorComponent() {
 
 
   return (
-    <div
-      style={{
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'center',
-        alignItems: 'center',
-        height: '120vh',
-        width: '450px',
-        background: '#DEDFEF',
-        borderRadius: '50px',
-        margin: 'auto',
-        marginTop: '20px',
-      }}
-    >
-      <h1 style={{ marginBottom: '10px' }}>Doctores</h1>
-      <img src={Doctor} style={{ height: '18%', width: '25%' }} />
-      <ul style={{ listStyleType: 'none', textAlign: 'center', padding: 0 }}>
-        <p></p>
-        <li>
+    <div>
+      <div style={styles.line}></div>
+    <div style={styles.container}>
+      
+      <h1 style={{ marginBottom: '10px' }}>Gestionar doctores</h1>
+      
+      <ul style={{ listStyleType: 'none',  padding: 0 }}>
+        
+        <div style={{ marginBottom: '20px', width: '100%' }}>
           <TextField
             required
             id="outlined-required"
@@ -163,10 +144,11 @@ function DoctorComponent() {
             name="nombre"
             value={doctor.nombre}
             onChange={handleGuardar}
+            fullWidth
           />
-        </li>
-        <p></p>
-        <li>
+        </div>
+        
+        <div style={{ marginBottom: '20px', width: '100%' }}>
           <TextField
             required
             id="outlined-required"
@@ -176,11 +158,12 @@ function DoctorComponent() {
             onChange={handleGuardar}
             error={!!nssError}
             helperText={nssError}
+            fullWidth
           />
-        </li>
+        </div>
 
-        <p></p>
-        <li>
+        
+        <div style={{ marginBottom: '20px', width: '100%' }}>
           <TextField
             required
             id="outlined-required"
@@ -188,10 +171,11 @@ function DoctorComponent() {
             name="contacto"
             value={doctor.contacto}
             onChange={handleGuardar}
+            fullWidth
           />
-        </li>
-        <p></p>
-        <li>
+        </div>
+        
+        <div style={{ marginBottom: '20px', width: '100%' }}>
           <TextField
             required
             id="outlined-required"
@@ -199,9 +183,10 @@ function DoctorComponent() {
             name="domicilio"
             value={doctor.domicilio}
             onChange={handleGuardar}
+            fullWidth
           />
-        </li>
-        <p></p>
+        </div>
+        <div style={{ textAlign: 'center' }}>
         <Button
           variant="contained"
           style={{ backgroundColor: 'green', marginRight: '10px' }}
@@ -219,7 +204,7 @@ function DoctorComponent() {
           disabled={!camposCompletos()} >
           Eliminar
         </Button>
-
+        
         <br /><br />
         <Button
           variant="contained"
@@ -229,14 +214,45 @@ function DoctorComponent() {
         >
           Regresar
         </Button>
-
+        </div>
         <br /><br />
         {loading ? <Box sx={{ width: '100%' }}>
           <LinearProgress />
         </Box> : ''}
       </ul>
     </div>
-
+    </div>
   );
-}
+};
+
+const styles = {
+  container: {
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
+    
+    height: '100vh',
+     // Cambiando el fondo a un tono más suave
+    
+    padding: '20px',
+    boxSizing: 'border-box', // Asegurar que el padding no incremente el tamaño total
+    overflow: 'hidden', // Para evitar que el contenido se desborde en pantallas pequeñas
+  },
+  title: {
+    marginBottom: '20px', // Espacio adicional debajo del título
+  },
+  line: {
+    width: '100%',
+    height: '53px',
+    backgroundColor: '#1172D8', 
+    
+  },
+  buttonContainer: {
+    marginTop: '20px', // Ajustar el margen superior del botón
+    marginBottom: '20px', // Ajustar el margen inferior del botón
+  },
+  button: {
+    backgroundColor: 'red',
+  },
+};
 export default DoctorComponent;

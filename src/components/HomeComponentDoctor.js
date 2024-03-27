@@ -91,12 +91,14 @@ const HomeComponentDoctor = () => {
   };
 
   return (
+    <div>
+     <div style={styles.line}></div>
     <div style={styles.container}>
-      <Typography variant="h4" gutterBottom style={{ marginBottom: '20px', color: 'white' }}>
-        Doctores registrados
+      <Typography variant="h4" gutterBottom style={{ marginBottom: '20px', color: 'black' }}>
+        Doctores
       </Typography>
-
-      <div style={{ width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+      <p style={{ color: '#878686', marginTop: '5px', fontSize: '20px' }}>Gestionar los doctores registrados.</p>
+      <div style={{ width: '100%', display: 'flex', flexDirection: 'column'}}>
         <SpeedDial
           ariaLabel="SpeedDial basic example"
           sx={{ position: 'absolute', bottom: 16, right: 16 }}
@@ -137,6 +139,7 @@ const HomeComponentDoctor = () => {
         </div>
       </div>
     </div>
+    </div>
   );
 };
 
@@ -145,16 +148,22 @@ const styles = {
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'center',
-    alignItems: 'center',
+    
     height: '100vh',
-    background: '#1172D8', // Cambiando el fondo a un tono más suave
-    borderRadius: '20px',
+     // Cambiando el fondo a un tono más suave
+    
     padding: '20px',
     boxSizing: 'border-box', // Asegurar que el padding no incremente el tamaño total
     overflow: 'hidden', // Para evitar que el contenido se desborde en pantallas pequeñas
   },
   title: {
     marginBottom: '20px', // Espacio adicional debajo del título
+  },
+  line: {
+    width: '100%',
+    height: '53px',
+    backgroundColor: '#1172D8', 
+    
   },
   buttonContainer: {
     marginTop: '20px', // Ajustar el margen superior del botón

@@ -99,8 +99,8 @@ const Perfildoc = () => {
             {userData ? (
                 <div>
                     <Divider sx={{ mb: 2 }} />
-                    <Typography variant="subtitle1" gutterBottom>Nombre del paciente: {userData.name}</Typography>
-                    <Typography variant="subtitle1" gutterBottom>Email: {userData.email}</Typography>
+                    <Typography variant="subtitle1" gutterBottom>Nombre del doctor: {userData.name}</Typography>
+                    <Typography variant="subtitle1" gutterBottom>Correo electronico: {userData.email}</Typography>
                 </div>
             ) : (
                 <Typography variant="body1" gutterBottom>No se encontraron datos del usuario.</Typography>
@@ -114,7 +114,7 @@ const Perfildoc = () => {
                             <Paper elevation={3} sx={{ bgcolor: 'info.main', p: 3 }}>
                                 {isChangingPassword ? (
                                     <div>
-                                        <Typography variant="h6" gutterBottom align="center">Cambiar Contraseña</Typography>
+                                        <Typography variant="subtitle1" gutterBottom align="center">Cambiar Contraseña</Typography>
                                         <TextField
                                             variant="outlined"
                                             fullWidth

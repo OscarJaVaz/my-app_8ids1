@@ -145,7 +145,7 @@ const styles = {
   line: {
     width: '100%',
     height: '53px',
-    backgroundColor: '#3b4094', 
+    backgroundColor: '#1172D8', 
     
   },
   buttonContainer: {

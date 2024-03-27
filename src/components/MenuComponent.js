@@ -319,7 +319,7 @@ const MenuComponent = () => {
                 fontFamily: 'Arial, sans-serif',
                 fontSize: '1.5rem',
                 fontWeight: 'bold',
-                color: '#3b4094'/* Azul oscuro */
+                color: '#1172D8'/* Azul oscuro */
                 , // Color del texto
                 textTransform: 'uppercase', // Convertir texto a mayúsculas
                 borderBottom: '2px solid #FFFFFF', // Línea inferior azul
