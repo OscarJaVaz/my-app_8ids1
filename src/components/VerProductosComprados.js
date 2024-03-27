@@ -8,7 +8,7 @@ import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 const VerProductosComprados = () => {
     const [user, setUser] = useState(null);
     const [purchasedProducts, setPurchasedProducts] = useState([]);
-
+    
     useEffect(() => {
         const fetchData = async () => {
             try {

@@ -1,44 +1,58 @@
-// Importaciones necesarias
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import FullCalendar from '@fullcalendar/react';
+import dayGridPlugin from '@fullcalendar/daygrid';
 import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
 import CloseIcon from '@mui/icons-material/Close';
-import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import axios from 'axios';
+import secureLocalStorage from 'react-secure-storage';
+
+import perfill from './assets/perfill.png';
 import cita from './assets/cita1.png';
 import salir from './assets/salir.png';
 import farmacia from './assets/farmacia.png';
-import axios from 'axios';
-import secureLocalStorage from 'react-secure-storage';
-import perfill from './assets/perfill.png';
 import compras from './assets/compras.png';
-// Definición del componente HomeClienteComponent
+
 const HomeClienteComponent = () => {
-  // Hook para la navegación
   const navigate = useNavigate();
-  
-  // Estados del componente
   const [menuVisible, setMenuVisible] = useState(true);
   const [citas, setCitas] = useState([]);
   const [username, setUsername] = useState('');
   const [usernameLoaded, setUsernameLoaded] = useState(false);
   const [greeting, setGreeting] = useState('');
 
-  // Función para alternar la visibilidad del menú
   const toggleMenu = () => {
     setMenuVisible(!menuVisible);
   };
 
-  // Efecto para cargar los datos del usuario y las citas
   useEffect(() => {
-    async function fetchData() {
+    const fetchData = async () => {
       try {
-        const response = await axios.get('http://127.0.0.1:8000/api/citas');
-        setCitas(response.data);
+        const storedUsername = secureLocalStorage.getItem('username');
+        if (!storedUsername) {
+          throw new Error('Nombre de usuario no encontrado en secureLocalStorage');
+        }
+
+        const response = await axios.get('http://127.0.0.1:8000/api/calendariocliente', {
+          params: {
+            nombre_cliente: storedUsername
+          }
+        });
+
+        // Transformar las citas al formato esperado por FullCalendar
+        const citasFormatted = response.data.map(cita => ({
+          title: 'Cita', // Título genérico para todas las citas
+          start: new Date(`${cita.fecha}T${cita.hora}`), // Combinar fecha y hora en un formato de fecha válido
+          citaData: cita // Guardar los datos de la cita para mostrar en la alerta
+        }));
+
+        // Establecer las citas formateadas en el estado
+        setCitas(citasFormatted);
       } catch (error) {
-        console.error('Error fetching citas:', error);
+        console.error('Error al obtener citas:', error);
       }
-    }
+    };
 
     fetchData();
     
@@ -71,16 +85,29 @@ const HomeClienteComponent = () => {
     };
   }, []);
 
-  // Función para manejar el clic en el botón de perfil
   const handleClick = () => {
     navigate("/miperfil", { state: { username } });
   };
+
+  const handleEventClick = (info) => {
+    const citaData = info.event.extendedProps.citaData;
+    // Construir el mensaje de la alerta con los detalles de la cita
+    const alertMessage = `
+      Detalles de la cita:
+      - Paciente: ${citaData.paciente}
+      - Doctor: ${citaData.doctor}
+      - Síntomas: ${citaData.sintomas}
+      - Fecha: ${info.event.start.toLocaleDateString()}
+      - Hora: ${info.event.start.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+    `;
+    // Mostrar la alerta con los detalles de la cita
+    alert(alertMessage);
+  };
  
-  // Renderizado del componente
   return (
     <div className={`menu-container ${menuVisible ? 'menu-visible' : 'menu-hidden'}`}>
       <div className="sidebar" style={{ overflowY: 'auto' }}>
-      <h2 style={{ margin: 0, color: 'white', textAlign: 'center', marginTop: 10, textShadow: '1px 1px 3px rgba(0, 0, 0, 0.3)' }}>{greeting}, {usernameLoaded ? username : 'Usuario'}</h2>
+        <h2 style={{ margin: 0, color: 'white', textAlign: 'center', marginTop: 10, textShadow: '1px 1px 3px rgba(0, 0, 0, 0.3)' }}>{greeting}, {usernameLoaded ? username : 'Usuario'}</h2>
         <br></br>
         
         <p></p>
@@ -110,6 +137,14 @@ const HomeClienteComponent = () => {
         <IconButton onClick={toggleMenu} className="toggle-button">
           {menuVisible ? <CloseIcon /> : <MenuIcon />}
         </IconButton>
+        <div style={{ marginTop: '20px' }}>
+          <FullCalendar
+            plugins={[dayGridPlugin]}
+            initialView="dayGridMonth"
+            events={citas}
+            eventClick={handleEventClick} // Manejar clic en eventos del calendario
+          />
+        </div>
       </div>
     </div>
   );
