@@ -74,18 +74,41 @@ const MenuComponent = () => {
   const [sintomas, setSintomas] = useState([]);
   const [selectedCita, setSelectedCita] = useState(null);
   const correctPassword = 'admin1'; // Cambia esto por tu contraseña
+  const [citasEstado, setCitasEstado] = useState({});
+  const [citasAceptadas, setCitasAceptadas] = useState([]);
+  const [citasRechazadas, setCitasRechazadas] = useState([]);
 
   useEffect(() => {
     setUsername(secureLocalStorage.getItem('username'));
     setUsernameLoaded(true);
-
+  
     // Verificar si el usuario está logueado
     const storedUsername = secureLocalStorage.getItem('username');
     if (storedUsername) {
       setUsername(storedUsername);
       setIsLoggedIn(true);
+      
+      // Recuperar el estado de citas, citas aceptadas y rechazadas del almacenamiento local
+      const storedCitasEstado = localStorage.getItem(`citasEstado_${storedUsername}`);
+      if (storedCitasEstado) {
+        setCitasEstado(JSON.parse(storedCitasEstado));
+      }
+  
+      const storedCitasAceptadas = localStorage.getItem(`citasAceptadas_${storedUsername}`);
+      if (storedCitasAceptadas) {
+        setCitasAceptadas(JSON.parse(storedCitasAceptadas));
+      }
+  
+      const storedCitasRechazadas = localStorage.getItem(`citasRechazadas_${storedUsername}`);
+      if (storedCitasRechazadas) {
+        setCitasRechazadas(JSON.parse(storedCitasRechazadas));
+      }
     }
 
+  
+    
+    
+    
 
     // Evitar que el usuario retroceda usando el botón del navegador si no está logueado
     const handleBackButton = (event) => {
@@ -115,6 +138,14 @@ const MenuComponent = () => {
       window.removeEventListener('popstate', handleBackButton);
     };
   }, [isLoggedIn, location.pathname, showPasswordPrompt]);
+
+   
+  // Segundo useEffect para almacenar citas aceptadas y rechazadas en el almacenamiento local
+useEffect(() => {
+  localStorage.setItem(`citasAceptadas_${username}`, JSON.stringify(citasAceptadas));
+  localStorage.setItem(`citasRechazadas_${username}`, JSON.stringify(citasRechazadas));
+}, [citasAceptadas, citasRechazadas]);
+  
 
   const toggleMenu = () => {
     setMenuVisible(!menuVisible);
@@ -239,22 +270,88 @@ const MenuComponent = () => {
   }
 
   const showCitaDetails = (info) => {
-    const cita = info.event.extendedProps.cita; // Obtener los detalles de la cita del evento del calendario
+    const cita = info.event.extendedProps.cita;
     Swal.fire({
-      title: "Detalles de la cita",
+      title: 'Detalles de la cita',
       html: `
-        <div>
-          <p><strong>Paciente:</strong> ${cita.paciente}</p>
-          <p><strong>Fecha:</strong> ${cita.fecha}</p>
-          <p><strong>Hora:</strong> ${cita.hora}</p>
-          <p><strong>Síntomas:</strong> ${cita.sintomas}</p>
-        </div>
+        <p>Paciente: ${cita.paciente}</p>
+        <p>Hora: ${cita.hora}</p>
+        <p>Fecha: ${cita.fecha}</p>
       `,
-      
+      showCancelButton: true,
+      confirmButtonText: 'Aceptar',
+      cancelButtonText: 'Rechazar',
+      reverseButtons: true,
+    }).then((result) => {
+      if (result.isConfirmed) {
+        // Aceptar la cita
+        const updatedCitasEstado = { ...citasEstado, [cita.id]: 'aceptada' };
+        setCitasEstado(updatedCitasEstado);
+        setCitasAceptadas([...citasAceptadas, cita]);
+        localStorage.setItem(`citasEstado_${username}`, JSON.stringify(updatedCitasEstado));
+        Swal.fire('Cita aceptada', '', 'success');
+      } else if (result.dismiss === Swal.DismissReason.cancel) {
+        // Rechazar la cita
+        const updatedCitasEstado = { ...citasEstado, [cita.id]: 'rechazada' };
+        setCitasEstado(updatedCitasEstado);
+        setCitasRechazadas([...citasRechazadas, cita]);
+        localStorage.setItem(`citasEstado_${username}`, JSON.stringify(updatedCitasEstado));
+        Swal.fire('Cita rechazada', '', 'error');
+      }
     });
   };
   
 
+const eventColor = (info) => {
+  const cita = info.event.extendedProps.cita;
+  if (citasEstado[cita.id] === 'aceptada') {
+    return 'green';
+  } else if (citasEstado[cita.id] === 'rechazada') {
+    return 'red';
+  } else {
+    return null;
+  }
+};
+
+
+  const eventDidMount = (info) => {
+    const cita = info.event.extendedProps.cita;
+    const date = info.event.start;
+    const dayElement = info.el.querySelector('.fc-daygrid-day');
+    if (dayElement) {
+      if (citasEstado[cita.id] === 'aceptada') {
+        dayElement.style.backgroundColor = 'green';
+      } else if (citasEstado[cita.id] === 'rechazada') {
+        dayElement.style.backgroundColor = 'red';
+      }
+    }
+  };
+  
+    // Función para filtrar citas aceptadas
+    const getCitasAceptadas = () => {
+      return citas.filter(cita => citasEstado[cita.id] === 'aceptada');
+    };
+  
+    // Función para filtrar citas rechazadas
+    const getCitasRechazadas = () => {
+      return citas.filter(cita => citasEstado[cita.id] === 'rechazada');
+    };
+  
+    
+  
+    const limpiarTablas = () => {
+      // Limpia los estados
+      setCitasEstado({});
+      setCitasAceptadas([]);
+      setCitasRechazadas([]);
+    
+      // Limpia el almacenamiento local para las citas aceptadas y rechazadas
+      localStorage.removeItem(`citasEstado_${username}`);
+      localStorage.removeItem(`citasAceptadas_${username}`);
+      localStorage.removeItem(`citasRechazadas_${username}`);
+    };
+
+    
 
   return (
     <div className={`menu-container ${menuVisible ? 'menu-visible' : 'menu-hidden'}`}>
@@ -297,21 +394,22 @@ const MenuComponent = () => {
           {menuVisible ? <CloseIcon /> : <MenuIcon />}
         </IconButton>
         <div className="calendar-graph-container">
-          <div className="calendar-container" >
-            <FullCalendar
-              plugins={[dayGridPlugin]}
-              initialView="dayGridMonth"
-              locale={esLocale}
-              events={citas.map(cita => ({
-                title: `${cita.paciente} - ${cita.hora}`,
-                date: cita.fecha,
-                cita: cita // Pasar los detalles de la cita como propiedad extendida del evento
-              }))}
-              eventClick={showCitaDetails} // Manejador de eventos para mostrar los detalles de la cita al hacer clic en un evento
-              // Opciones de configuración para el estilo del calendario
-              contentStyle={{ background: 'black', color: 'black' }} // Establecer el color de fondo y texto del contenido del calendario
-            />
-          </div>
+        <div className="calendar-container">
+      <FullCalendar
+        plugins={[dayGridPlugin]}
+        initialView="dayGridMonth"
+        locale={esLocale}
+        events={citas.map((cita) => ({
+          title: `${cita.paciente} - ${cita.hora}`,
+          date: cita.fecha,
+          cita: cita,
+        }))}
+        eventClick={showCitaDetails}
+        eventDisplay="block"
+        eventColor={eventColor}
+        eventDidMount={eventDidMount}
+      />
+    </div>
           <div className="chart-container" style={{ overflowY: 'hidden' }}>
             <div style={{ textAlign: 'center', marginBottom: '1px' }}>
               
@@ -359,8 +457,50 @@ const MenuComponent = () => {
 
             
           </div>
-
+          
         </div>
+        <div className="table-container">
+  <h2 style={{ color: '#1172D8' }}>Citas Aceptadas</h2>
+  <table style={{ borderCollapse: 'collapse', width: '100%' }}>
+    <thead>
+      <tr>
+        <th style={{ border: '1px solid #ddd', padding: '8px', backgroundColor: '#f2f2f2' }}>Paciente</th>
+        <th style={{ border: '1px solid #ddd', padding: '8px', backgroundColor: '#f2f2f2' }}>Hora</th>
+        <th style={{ border: '1px solid #ddd', padding: '8px', backgroundColor: '#f2f2f2' }}>Fecha</th>
+      </tr>
+    </thead>
+    <tbody>
+      {citasAceptadas.map((cita, index) => (
+        <tr key={index} style={{ backgroundColor: '#cce5ff' }}>
+          <td style={{ border: '1px solid #ddd', padding: '8px' }}>{cita.paciente}</td>
+          <td style={{ border: '1px solid #ddd', padding: '8px' }}>{cita.hora}</td>
+          <td style={{ border: '1px solid #ddd', padding: '8px' }}>{cita.fecha}</td>
+        </tr>
+      ))}
+    </tbody>
+  </table>
+  <h2 style={{ color: '#FF6347' }}>Citas Rechazadas</h2>
+  <table style={{ borderCollapse: 'collapse', width: '100%' }}>
+    <thead>
+      <tr>
+        <th style={{ border: '1px solid #ddd', padding: '8px', backgroundColor: '#f2f2f2' }}>Paciente</th>
+        <th style={{ border: '1px solid #ddd', padding: '8px', backgroundColor: '#f2f2f2' }}>Hora</th>
+        <th style={{ border: '1px solid #ddd', padding: '8px', backgroundColor: '#f2f2f2' }}>Fecha</th>
+      </tr>
+    </thead>
+    <tbody>
+      {citasRechazadas.map((cita, index) => (
+        <tr key={index} style={{ backgroundColor: '#ffd6cc' }}>
+          <td style={{ border: '1px solid #ddd', padding: '8px' }}>{cita.paciente}</td>
+          <td style={{ border: '1px solid #ddd', padding: '8px' }}>{cita.hora}</td>
+          <td style={{ border: '1px solid #ddd', padding: '8px' }}>{cita.fecha}</td>
+        </tr>
+      ))}
+    </tbody>
+  </table>
+  <button onClick={limpiarTablas}>Limpiar Tablas</button>
+</div>
+
       </div>
     </div>
   );

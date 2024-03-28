@@ -173,7 +173,7 @@ const Miperfil = () => {
             </main>
 
             <Grid item xs={12} sx={{ display: 'flex', justifyContent: 'center' }}>
-                <Link to="/menu" style={{ textDecoration: 'none' }}>
+                <Link to="/cliente" style={{ textDecoration: 'none' }}>
                     <Button
                         variant="outlined"
                         sx={{
