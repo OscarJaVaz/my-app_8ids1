@@ -7,7 +7,7 @@ import MenuIcon from '@mui/icons-material/Menu';
 import CloseIcon from '@mui/icons-material/Close';
 import axios from 'axios';
 import secureLocalStorage from 'react-secure-storage';
-
+import Swal from 'sweetalert2';
 import perfill from './assets/perfill.png';
 import cita from './assets/cita1.png';
 import salir from './assets/salir.png';
@@ -93,15 +93,22 @@ const HomeClienteComponent = () => {
     const citaData = info.event.extendedProps.citaData;
     // Construir el mensaje de la alerta con los detalles de la cita
     const alertMessage = `
-      Detalles de la cita:
-      - Paciente: ${citaData.paciente}
-      - Doctor: ${citaData.doctor}
-      - Síntomas: ${citaData.sintomas}
-      - Fecha: ${info.event.start.toLocaleDateString()}
-      - Hora: ${info.event.start.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+      <div style="text-align: left;">
+        
+        <p><strong style="color: #000080;">Paciente:</strong> ${citaData.paciente}</p>
+        <p><strong style="color: #000080;">Doctor:</strong> ${citaData.doctor}</p>
+        <p><strong style="color: #000080;">Síntomas:</strong> ${citaData.sintomas}</p>
+        <p><strong style="color: #000080;">Fecha:</strong> ${info.event.start.toLocaleDateString()}</p>
+        <p><strong style="color: #000080;">Hora:</strong> ${info.event.start.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</p>
+      </div>
     `;
-    // Mostrar la alerta con los detalles de la cita
-    alert(alertMessage);
+    // Mostrar la alerta de SweetAlert con los detalles de la cita
+    Swal.fire({
+      title: 'Detalles de la cita',
+      html: alertMessage,
+      icon: 'info',
+      confirmButtonText: 'Cerrar',
+    });
   };
  
   return (
