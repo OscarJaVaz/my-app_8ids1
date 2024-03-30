@@ -27,63 +27,63 @@ const HomeClienteComponent = () => {
   };
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const storedUsername = secureLocalStorage.getItem('username');
-        if (!storedUsername) {
-          throw new Error('Nombre de usuario no encontrado en secureLocalStorage');
-        }
-
-        const response = await axios.get('http://127.0.0.1:8000/api/calendariocliente', {
-          params: {
-            nombre_cliente: storedUsername
-          }
-        });
-
-        // Transformar las citas al formato esperado por FullCalendar
-        const citasFormatted = response.data.map(cita => ({
-          title: 'Cita', // Título genérico para todas las citas
-          start: new Date(`${cita.fecha}T${cita.hora}`), // Combinar fecha y hora en un formato de fecha válido
-          citaData: cita // Guardar los datos de la cita para mostrar en la alerta
-        }));
-
-        // Establecer las citas formateadas en el estado
-        setCitas(citasFormatted);
-      } catch (error) {
-        console.error('Error al obtener citas:', error);
-      }
-    };
-
-    fetchData();
-    
     const storedUsername = secureLocalStorage.getItem('username');
-    
-    if (storedUsername) {
+
+    if (!storedUsername) {
+      navigate("/login");
+    } else {
       setUsername(storedUsername);
       setUsernameLoaded(true);
+
+      const fetchData = async () => {
+        try {
+          const response = await axios.get('http://127.0.0.1:8000/api/calendariocliente', {
+            params: {
+              nombre_cliente: storedUsername
+            }
+          });
+
+          const citasFormatted = response.data.map(cita => ({
+            title: 'Cita',
+            start: new Date(`${cita.fecha}T${cita.hora}`),
+            citaData: cita
+          }));
+
+          setCitas(citasFormatted);
+        } catch (error) {
+          console.error('Error al obtener citas:', error);
+        }
+      };
+
+      fetchData();
+
+      const currentHour = new Date().getHours();
+      if (currentHour >= 5 && currentHour < 12) {
+        setGreeting('Buenos días');
+      } else if (currentHour >= 12 && currentHour < 18) {
+        setGreeting('Buenas tardes');
+      } else {
+        setGreeting('Buenas noches');
+      }
     }
-
-    const handleBackButton = (event) => {
-      event.preventDefault();
-      window.history.pushState(null, '', window.location.pathname);
-    };
-
-    window.history.pushState(null, '', window.location.pathname);
-    window.addEventListener('popstate', handleBackButton);
-
-    const currentHour = new Date().getHours();
-    if (currentHour >= 5 && currentHour < 12) {
-      setGreeting('Buenos días');
-    } else if (currentHour >= 12 && currentHour < 18) {
-      setGreeting('Buenas tardes');
-    } else {
-      setGreeting('Buenas noches');
-    }
-
-    return () => {
-      window.removeEventListener('popstate', handleBackButton);
-    };
   }, []);
+
+  const handleLogout = () => {
+    Swal.fire({
+      title: "¿Seguro que quieres cerrar sesión?",
+      icon: "question",
+      confirmButtonText: "Sí",
+      cancelButtonText: "No",
+      showCancelButton: true,
+      showCloseButton: true
+    }).then((result) => {
+      if (result.isConfirmed) {
+        secureLocalStorage.clear();
+        setUsername('');
+        navigate("/");
+      }
+    });
+  };
 
   const handleClick = () => {
     navigate("/miperfil", { state: { username } });
@@ -91,10 +91,8 @@ const HomeClienteComponent = () => {
 
   const handleEventClick = (info) => {
     const citaData = info.event.extendedProps.citaData;
-    // Construir el mensaje de la alerta con los detalles de la cita
     const alertMessage = `
       <div style="text-align: left;">
-        
         <p><strong style="color: #000080;">Paciente:</strong> ${citaData.paciente}</p>
         <p><strong style="color: #000080;">Doctor:</strong> ${citaData.doctor}</p>
         <p><strong style="color: #000080;">Síntomas:</strong> ${citaData.sintomas}</p>
@@ -102,7 +100,6 @@ const HomeClienteComponent = () => {
         <p><strong style="color: #000080;">Hora:</strong> ${info.event.start.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</p>
       </div>
     `;
-    // Mostrar la alerta de SweetAlert con los detalles de la cita
     Swal.fire({
       title: 'Detalles de la cita',
       html: alertMessage,
@@ -110,7 +107,7 @@ const HomeClienteComponent = () => {
       confirmButtonText: 'Cerrar',
     });
   };
- 
+
   return (
     <div className={`menu-container ${menuVisible ? 'menu-visible' : 'menu-hidden'}`}>
       <div className="sidebar" style={{ overflowY: 'auto' }}>
@@ -135,7 +132,7 @@ const HomeClienteComponent = () => {
           <img src={compras} alt="ver_productos" />
           <span>Ver mis productos comprados</span>
         </a>
-        <a onClick={() => navigate("/")}>
+        <a onClick={handleLogout}>
           <img src={salir} alt="Salir" />
           <span>Salir</span>
         </a>
@@ -149,7 +146,7 @@ const HomeClienteComponent = () => {
             plugins={[dayGridPlugin]}
             initialView="dayGridMonth"
             events={citas}
-            eventClick={handleEventClick} // Manejar clic en eventos del calendario
+            eventClick={handleEventClick}
           />
         </div>
       </div>

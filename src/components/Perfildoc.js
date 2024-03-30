@@ -87,7 +87,7 @@ const Perfildoc = () => {
                     </Avatar>
                 )}
                 <div className="titulo">
-                    <h1>Datos del Paciente</h1>
+                    <h1>Datos del Doctor</h1>
                 </div>
             </header>
 
@@ -101,7 +101,7 @@ const Perfildoc = () => {
                                         <div>
                                             <Typography variant="h6" gutterBottom align="center">Información</Typography>
                                             <Divider sx={{ mb: 2 }} />
-                                            <Typography variant="subtitle1" gutterBottom>Nombre del paciente:</Typography>
+                                            <Typography variant="subtitle1" gutterBottom>Nombre del doctor:</Typography>
                                             <Typography variant="subtitle2" gutterBottom>{userData.name}</Typography>
                                             <Typography variant="subtitle1" gutterBottom>Email:</Typography>
                                             <Typography variant="subtitle2" gutterBottom>{userData.email}</Typography>
