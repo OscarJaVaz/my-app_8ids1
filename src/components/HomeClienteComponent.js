@@ -3,7 +3,6 @@ import { useNavigate } from 'react-router-dom';
 import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
 import CloseIcon from '@mui/icons-material/Close';
-import axios from 'axios';
 import secureLocalStorage from 'react-secure-storage';
 import perfill from './assets/perfill.png';
 import cita from './assets/cita1.png';
@@ -15,6 +14,9 @@ import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
 import Swal from 'sweetalert2';
+import axios from 'axios';
+import FullCalendar from '@fullcalendar/react'; // Importa FullCalendar
+import dayGridPlugin from '@fullcalendar/daygrid'; // Importa el plugin dayGrid
 
 const HomeClienteComponent = () => {
   const navigate = useNavigate();
@@ -25,6 +27,7 @@ const HomeClienteComponent = () => {
   const [encuestaOpen, setEncuestaOpen] = useState(false); // Estado para controlar la apertura del componente de encuesta
   const [experiencia, setExperiencia] = useState(''); // Estado para almacenar la calificación de experiencia
   const [citas, setCitas] = useState([]);
+  const [currentDataIndex, setCurrentDataIndex] = useState(0); // Estado para almacenar el índice del dato actual a mostrar
 
   const toggleMenu = () => {
     setMenuVisible(!menuVisible);
@@ -72,6 +75,15 @@ const HomeClienteComponent = () => {
     }
   }, []);
 
+  useEffect(() => {
+    const interval = setInterval(() => {
+      // Cambiar al siguiente dato cuando se alcance el último índice, volver al primero
+      setCurrentDataIndex((prevIndex) => (prevIndex === datosSalud.length - 1 ? 0 : prevIndex + 1));
+    }, 10000); // Intervalo de 10 segundos
+
+    return () => clearInterval(interval); // Limpiar el intervalo cuando el componente se desmonte o vuelva a renderizarse
+  }, [currentDataIndex]);
+
   const handleLogout = () => {
     Swal.fire({
       title: "¿Seguro que quieres cerrar sesión?",
@@ -93,25 +105,35 @@ const HomeClienteComponent = () => {
     navigate("/miperfil", { state: { username } });
   };
 
+  const handleOpenEncuesta = () => {
+    setEncuestaOpen(true);
+  };
 
-  
+  const handleCancelEncuesta = () => {
+    setEncuestaOpen(false);
+  };
 
-  // Función para cerrar el componente de encuesta y mostrar un mensaje de agradecimiento
   const handleCloseEncuesta = () => {
     setEncuestaOpen(false);
     if (experiencia) {
-      alert('Gracias por tus calificaciones. ¡Hasta luego!');
+      Swal.fire({
+        icon: 'success',
+        title: '¡Gracias por tus opiniones!',
+        text: '¡Hasta luego!',
+      });
     } else {
-      alert('Por favor, califica tu experiencia antes de enviar.');
+      Swal.fire({
+        icon: 'warning',
+        title: '¡Danos tu opinion!',
+        text: 'Por favor, escribe tus opiniones antes de enviar.',
+      });
     }
   };
 
-  // Función para manejar el cambio en el campo de calificación de experiencia
   const handleExperienciaChange = (event) => {
     setExperiencia(event.target.value);
   };
 
-  // Datos ficticios relacionados con la salud
   const datosSalud = [
     {
       titulo: 'Sabías que...',
@@ -124,8 +146,55 @@ const HomeClienteComponent = () => {
     {
       titulo: '¿Sabías que...',
       contenido: 'Una dieta equilibrada rica en frutas, verduras, granos enteros y proteínas magras puede ayudar a prevenir enfermedades crónicas como la diabetes y la hipertensión.'
+    },
+    {
+      titulo: '¿Sabías que...',
+      contenido: 'Beber suficiente agua durante el día puede ayudar a mantener tu cuerpo hidratado, regular la temperatura corporal y eliminar toxinas.'
+    },
+    {
+      titulo: '¿Sabías que...',
+      contenido: 'El estrés crónico puede tener efectos negativos en tu sistema inmunológico, aumentando la susceptibilidad a enfermedades e infecciones.'
+    },
+    {
+      titulo: '¿Sabías que...',
+      contenido: 'Tomarse un tiempo para relajarse y practicar técnicas de respiración profunda puede reducir el estrés y mejorar la salud mental.'
+    },
+    {
+      titulo: '¿Sabías que...',
+      contenido: 'La exposición excesiva al sol sin protección puede aumentar el riesgo de cáncer de piel y causar envejecimiento prematuro de la piel.'
+    },
+    {
+      titulo: '¿Sabías que...',
+      contenido: 'Mantener una postura adecuada puede ayudar a prevenir dolores de espalda y cuello, así como mejorar la salud de la columna vertebral.'
+    },
+    {
+      titulo: '¿Sabías que...',
+      contenido: 'Practicar hábitos de higiene adecuados, como lavarse las manos regularmente, puede ayudar a prevenir la propagación de enfermedades infecciosas.'
     }
   ];
+
+  const [showFAQ, setShowFAQ] = useState(false); // Estado para controlar la visibilidad de las preguntas frecuentes
+
+const handleToggleFAQ = () => {
+  setShowFAQ(!showFAQ); // Cambiar el estado para mostrar u ocultar las preguntas frecuentes
+};
+
+// Preguntas frecuentes
+const preguntasFrecuentes = [
+  {
+    pregunta: '¿Cómo puedo registrar una cita?',
+    respuesta: 'Puedes registrar una cita haciendo clic en la opción "Registrar cita" en el menú lateral.'
+  },
+  {
+    pregunta: '¿Dónde puedo ver los productos que he comprado?',
+    respuesta: 'Puedes ver los productos que has comprado haciendo clic en la opción "Ver mis productos comprados" en el menú lateral.'
+  },
+  {
+    pregunta: '¿Dónde puedo ver mis datos de mi perfil?',
+    respuesta: 'Puedes ver los datos de tu perfil haciendo clic en la opción "Mi Perfil" en el menú lateral.'
+  },
+  // Agrega más preguntas y respuestas si es necesario
+];
 
   return (
     <div className={`menu-container ${menuVisible ? 'menu-visible' : 'menu-hidden'}`}>
@@ -154,37 +223,64 @@ const HomeClienteComponent = () => {
           <img src={salir} alt="Salir" />
           <span>Salir</span>
         </a>
+        <button onClick={handleOpenEncuesta}>Abrir Encuesta</button>
       </div>
       <div className="content">
         <IconButton onClick={toggleMenu} className="toggle-button">
           {menuVisible ? <CloseIcon /> : <MenuIcon />}
         </IconButton>
-        <div style={{ marginTop: '20px' }}>
-          {/* Encuesta */}
+        <div style={{ marginTop: '20px', textAlign: 'center' }}>
           {encuestaOpen && (
-            <div>
-              <h3>Califica tu experiencia:</h3>
-              <input type="text" value={experiencia} onChange={handleExperienciaChange} />
-              <button disabled={!experiencia} onClick={handleCloseEncuesta}>Enviar</button>
+            <div style={{ marginBottom: '20px' }}>
+              <h3 style={{ marginBottom: '10px' }}>Danos tu opinion:</h3>
+              <input
+                type="text"
+                value={experiencia}
+                onChange={handleExperienciaChange}
+                style={{ marginBottom: '10px', padding: '8px', borderRadius: '5px', border: '1px solid #ccc', marginRight: '10px' }}
+              />
+              <button
+                disabled={!experiencia}
+                onClick={handleCloseEncuesta}
+                style={{ padding: '8px 16px', borderRadius: '5px', backgroundColor: '#1172D8', color: '#fff', border: 'none', cursor: 'pointer' }}
+              >
+                Enviar
+              </button>
+              <button onClick={handleCancelEncuesta}>Cancelar</button>
             </div>
           )}
-          {/* Datos sobre salud */}
-          <div>
-            <h3>Datos sobre Salud</h3>
-            {datosSalud.map((dato, index) => (
-              <Card key={index} style={{ margin: '10px', minWidth: '200px' }}>
-                <CardContent>
-                  <Typography variant="h5" component="div">
-                    {dato.titulo}
-                  </Typography>
-                  <Typography variant="body2">
-                    {dato.contenido}
-                  </Typography>
-                </CardContent>
-              </Card>
-            ))}
+          <div style={{ display: 'flex', justifyContent: 'center', flexWrap: 'wrap' }}>
+            <Card key={currentDataIndex} style={{ maxWidth: 300, margin: '10px', textAlign: 'center' }}>
+              <CardContent>
+                <Typography variant="h5" component="h2" style={{ marginBottom: '10px', color: '#1172D8' }}>
+                  {datosSalud[currentDataIndex].titulo}
+                </Typography>
+                <Typography variant="body2" component="p" style={{ fontSize: '20px', lineHeight: '1.5' }}>
+                  {datosSalud[currentDataIndex].contenido}
+                </Typography>
+              </CardContent>
+            </Card>
           </div>
         </div>
+        <div style={{ marginTop: '20px' }}>
+      {/* Botón para mostrar u ocultar las preguntas frecuentes */}
+      <button onClick={handleToggleFAQ} style={{ padding: '8px 16px', borderRadius: '5px', backgroundColor: '#1172D8', color: '#fff', border: 'none', cursor: 'pointer' }}>
+        {showFAQ ? 'Ocultar Preguntas Frecuentes' : 'Mostrar Preguntas Frecuentes'}
+      </button>
+      {/* Contenedor de las preguntas frecuentes */}
+      {showFAQ && (
+        <div style={{ marginTop: '20px', textAlign: 'left', justifyContent: 'center' }}>
+          <h2>Preguntas Frecuentes</h2>
+          {/* Mapeo de las preguntas frecuentes */}
+          {preguntasFrecuentes.map((pregunta, index) => (
+            <div key={index} style={{ marginBottom: '10px' }}>
+              <h3>{pregunta.pregunta}</h3>
+              <p>{pregunta.respuesta}</p>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
       </div>
     </div>
   );
