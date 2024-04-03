@@ -60,6 +60,14 @@ const HomeClienteComponent = () => {
     navigate("/miperfil", { state: { username } });
   };
 
+  const handleLogout = () => {
+    secureLocalStorage.clear();
+    const confirmLogout = window.confirm("¿Está seguro que quiere salir?");
+    if (confirmLogout) {
+      navigate("/");
+    }
+  };
+
   // Función para cerrar el componente de encuesta y mostrar un mensaje de agradecimiento
   const handleCloseEncuesta = () => {
     setEncuestaOpen(false);
@@ -114,11 +122,7 @@ const HomeClienteComponent = () => {
           <img src={compras} alt="ver_productos" />
           <span>Ver mis productos comprados</span>
         </a>
-        <a onClick={handleCloseEncuesta}> {/* Cierra la encuesta y muestra el mensaje de agradecimiento */}
-          <img src={farmacia} alt="Encuesta" />
-          <span>Encuesta de retroalimentación</span>
-        </a>
-        <a onClick={() => navigate("/")}>
+        <a onClick={handleLogout}>
           <img src={salir} alt="Salir" />
           <span>Salir</span>
         </a>
