@@ -287,7 +287,25 @@ const Login_Component = () => {
         <form onSubmit={handleSubmit}>
             <h1>Crear cuenta</h1>
             <input type="text" placeholder="Nombre" value={nombre} onChange={handleNombreChange} onBlur={handleNombreBlur} />
-            <input type="text" placeholder="Apellidos" value={apellido} onChange={(e) => setApellido(e.target.value)} onBlur={() => handleEmptyFieldBlur(apellido, 'Apellidos')} />
+            <input 
+  type="text" 
+  placeholder="Apellidos" 
+  value={apellido} 
+  onChange={(e) => {
+    const inputValue = e.target.value;
+    const onlyLettersAndSpaces = /^[A-Za-z\s]+$/;
+    if (onlyLettersAndSpaces.test(inputValue) || inputValue === '') {
+      setApellido(inputValue);
+    } else {
+      // Aquí puedes manejar el caso de que se ingresen números
+      // Puedes ignorar la entrada o mostrar un mensaje de error
+      // Por ejemplo:
+      console.log('Solo se permiten letras y espacios en los apellidos');
+    }
+  }} 
+  onBlur={() => handleEmptyFieldBlur(apellido, 'Apellidos')} 
+/>
+
             <input type="number" inputMode="numeric" pattern="[0-9]*" placeholder="Telefono" value={telefono} onChange={(e) => setTelefono(e.target.value.replace(/\D/g, ''))} onBlur={() => handleEmptyFieldBlur(telefono, 'Teléfono')} />
             <input type="text" placeholder="Domicilio" value={domicilio} onChange={(e) => setDomicilio(e.target.value)} onBlur={() => handleEmptyFieldBlur(domicilio, 'Domicilio')} />
             <input type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} onBlur={() => handleEmptyFieldBlur(email, 'Email')} />
