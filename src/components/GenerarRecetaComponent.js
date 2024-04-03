@@ -9,13 +9,12 @@ import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import jsPDF from 'jspdf';
 import secureLocalStorage from 'react-secure-storage';
-import { CenterFocusStrong } from '@mui/icons-material';
 
 const GenerarRecetaComponent = () => {
     const navigate = useNavigate();
     const location = useLocation();
     const [receta, setReceta] = useState('');
-    const [selectedDate, setSelectedDate] = useState(null);
+    const [selectedDate, setSelectedDate] = useState(new Date()); // Modificación aquí
     const [buttonDisabled, setButtonDisabled] = useState(true);
     const storedUsername = secureLocalStorage.getItem('username');
     const clienteSeleccionado = location.state ? location.state.nombre : '';
@@ -62,15 +61,11 @@ const GenerarRecetaComponent = () => {
         // Navegar a /menu
         navigate('/menu');
     };
-    
-
-
 
     const handleInputChange = (event) => {
         setReceta(event.target.value);
         setButtonDisabled(!(event.target.value && selectedDate));
     };
-
 
     const handleDateChange = (date) => {
         setSelectedDate(date);
@@ -100,7 +95,6 @@ const GenerarRecetaComponent = () => {
                 ></textarea>
             </div>
 
-
             <div style={styles.datePickerContainer}>
                 <LocalizationProvider dateAdapter={AdapterDateFns}>
                     <DatePicker
@@ -108,25 +102,11 @@ const GenerarRecetaComponent = () => {
                         value={selectedDate}
                         onChange={handleDateChange}
                         minDate={new Date()} // Establece la fecha mínima como la fecha actual
-
                         renderInput={(params) => <TextField {...params} variant="outlined" />}
                     />
                 </LocalizationProvider>
             </div>
-            <div style={styles.dateInputContainer}>
-                <TextField
-                    label="Seleccionar fecha"
-                    type="date"
-                    InputLabelProps={{
-                        shrink: true,
-                    }}
-                    value={selectedDate ? selectedDate.toISOString().split('T')[0] : ''}
-                    onChange={(e) => handleDateChange(new Date(e.target.value))}
-                    inputProps={{
-                        min: new Date().toISOString().split('T')[0], // Evita seleccionar fechas anteriores
-                    }}
-                />
-            </div>
+
             <div style={styles.buttonContainer}>
                 <Button
                     variant="contained"
@@ -184,9 +164,6 @@ const styles = {
         lineHeight: '1.5',
     },
     datePickerContainer: {
-        marginBottom: '20px',
-    },
-    dateInputContainer: {
         marginBottom: '20px',
     },
     buttonContainer: {
