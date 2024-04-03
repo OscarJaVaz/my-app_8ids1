@@ -9,57 +9,96 @@ import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import jsPDF from 'jspdf';
 import secureLocalStorage from 'react-secure-storage';
+import consult from './assets/consult.jpeg';
 
 const GenerarRecetaComponent = () => {
     const navigate = useNavigate();
     const location = useLocation();
     const [receta, setReceta] = useState('');
-    const [selectedDate, setSelectedDate] = useState(new Date()); // Modificación aquí
+    const [selectedDate, setSelectedDate] = useState(new Date());
     const [buttonDisabled, setButtonDisabled] = useState(true);
     const storedUsername = secureLocalStorage.getItem('username');
     const clienteSeleccionado = location.state ? location.state.nombre : '';
+
     const handleGenerarReceta = () => {
-        // Generar el PDF con los datos de la cita
         const doc = new jsPDF();
-        const dateText = selectedDate ? selectedDate.toLocaleDateString() : '';
-    
-        // Establecer el estilo de fuente y tamaño
-        doc.setFont('Arial', 'normal');
-        doc.setFontSize(12);
-    
-        // Título "Receta"
-        doc.text('Consultorio Médico', 105, 10, null, null, 'center');
-    
-        // Fecha en la esquina superior derecha
-        const fechaX = 180; // Posición horizontal para la fecha
-        const fechaY = 15; // Posición vertical para la fecha
-        doc.text(`Fecha: ${dateText}`, fechaX, fechaY);
-    
-        // Receta en recuadro con bordes estilo hospital
-        const recetaY = 30; // Posición vertical inicial para la receta
-        const recetaLines = doc.splitTextToSize(receta, 180); // Definir recetaLines antes de su uso
-    
-        doc.setDrawColor(0); // Restaurar el color de dibujo en negro
-        doc.rect(10, recetaY, 190, recetaLines.length * 10 + 10); // Dibujar un rectángulo sin relleno
-        doc.text('Diagnóstico del Paciente', 105, recetaY + 7, null, null, 'center'); // Título "Diagnóstico del Paciente"
-        doc.text(recetaLines, 15, recetaY + 15);
-    
-        // Línea para la firma del doctor
-        const signatureLineWidth = 90; // Longitud de la línea de firma
-        const signatureLineY = recetaY + recetaLines.length * 10 + 30; // Posición vertical para la línea de la firma
-        const pageWidth = doc.internal.pageSize.width; // Ancho de la página
-        const signatureLineX = (pageWidth - signatureLineWidth) / 2; // Posición horizontal para centrar la línea de firma
-        doc.line(signatureLineX, signatureLineY, signatureLineX + signatureLineWidth, signatureLineY, null, 0.1);
-    
-        // Nombre del doctor debajo de la línea
-        const doctorNameY = signatureLineY + 5; // Posición vertical para el nombre del doctor
-        doc.text(`Nombre y firma del doctor: ${storedUsername}`, 105, doctorNameY, null, null, 'center');
-    
-        // Abrir el PDF en una nueva ventana
-        window.open(doc.output('bloburl'), '_blank');
-    
-        // Navegar a /menu
-        navigate('/menu');
+
+        // Añadir marco con asteriscos al contorno del PDF
+        const pageWidth = doc.internal.pageSize.width;
+        const pageHeight = doc.internal.pageSize.height;
+        const asteriskMargin = 10;
+        const asteriskSize = 5;
+        const numAsterisksHorizontal = Math.floor((pageWidth - asteriskMargin * 2) / asteriskSize);
+        const numAsterisksVertical = Math.floor((pageHeight - asteriskMargin * 2) / asteriskSize);
+
+        // Top border
+        for (let i = 0; i < numAsterisksHorizontal; i++) {
+            doc.text('*', asteriskMargin + i * asteriskSize, asteriskMargin);
+        }
+        // Right border
+        for (let i = 0; i < numAsterisksVertical; i++) {
+            doc.text('*', pageWidth - asteriskMargin, asteriskMargin + i * asteriskSize);
+        }
+        // Bottom border
+        for (let i = 0; i < numAsterisksHorizontal; i++) {
+            doc.text('*', asteriskMargin + i * asteriskSize, pageHeight - asteriskMargin);
+        }
+        // Left border
+        for (let i = 0; i < numAsterisksVertical; i++) {
+            doc.text('*', asteriskMargin, asteriskMargin + i * asteriskSize);
+        }
+
+        // Crear una nueva instancia de Image de JavaScript
+        const img = new Image();
+
+        // Cargar la imagen
+        img.onload = function() {
+            // Añadir la imagen al PDF después de cargarla
+            doc.addImage(this, 'JPEG', 10, 10, 40, 40); // Ajusta las coordenadas y el tamaño según sea necesario
+
+            const dateText = selectedDate ? selectedDate.toLocaleDateString() : '';
+        
+            // Establecer el estilo de fuente y tamaño
+            doc.setFont('Arial', 'normal');
+            doc.setFontSize(12);
+            
+            // Título "Receta"
+            doc.text('Consultech', 100, 10, null, null, 'center');
+        
+            // Fecha en la esquina superior derecha
+            const fechaX = 150; // Posición horizontal para la fecha
+            const fechaY = 15; // Posición vertical para la fecha
+            doc.text(`Fecha: ${dateText}`, fechaX, fechaY);
+        
+            // Receta en recuadro con bordes estilo hospital
+            const recetaY = 60; // Posición vertical inicial para la receta (más abajo)
+            const recetaLines = doc.splitTextToSize(receta, 180); // Definir recetaLines antes de su uso
+        
+            doc.setDrawColor(0); // Restaurar el color de dibujo en negro
+            doc.rect(10, recetaY, 190, recetaLines.length * 10 + 10); // Dibujar un rectángulo sin relleno
+            doc.text('Receta individual', 105, recetaY + 7, null, null, 'center'); // Título "Diagnóstico del Paciente"
+            doc.text(recetaLines, 15, recetaY + 15);
+        
+            // Línea para la firma del doctor
+            const signatureLineWidth = 90; // Longitud de la línea de firma
+            const signatureLineY = recetaY + recetaLines.length * 10 + 70; // Posición vertical para la línea de la firma
+            const pageWidth = doc.internal.pageSize.width; // Ancho de la página
+            const signatureLineX = (pageWidth - signatureLineWidth) / 2; // Posición horizontal para centrar la línea de firma
+            doc.line(signatureLineX, signatureLineY, signatureLineX + signatureLineWidth, signatureLineY, null, 0.1);
+        
+            // Nombre del doctor debajo de la línea
+            const doctorNameY = signatureLineY + 5; // Posición vertical para el nombre del doctor
+            doc.text(`Nombre y firma del doctor: ${storedUsername}`, 105, doctorNameY, null, null, 'center');
+        
+            // Abrir el PDF en una nueva ventana
+            window.open(doc.output('bloburl'), '_blank');
+        
+            // Navegar a /menu
+            navigate('/menu');
+        };
+
+        // Establecer la ruta de la imagen
+        img.src = consult; // Ruta a tu imagen de logo
     };
 
     const handleInputChange = (event) => {
@@ -84,14 +123,14 @@ const GenerarRecetaComponent = () => {
                 <div>{clienteSeleccionado}</div>
             </div>
             <div style={styles.recetaContainer}>
-                <label style={styles.recetaLabel}>Diagnostico del paciente:</label>
+                <label style={styles.recetaLabel}>Diagnóstico del paciente:</label>
                 <textarea
                     style={styles.recetaTextarea}
                     rows="4"
                     cols="50"
                     value={receta}
                     onChange={handleInputChange}
-                    placeholder="Escribe el diagnostico aquí"
+                    placeholder="Escribe el diagnóstico aquí"
                 ></textarea>
             </div>
 
