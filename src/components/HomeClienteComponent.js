@@ -14,6 +14,7 @@ import Encuesta from './Encuesta'; // Importa el componente de Encuesta
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
+import Swal from 'sweetalert2';
 
 const HomeClienteComponent = () => {
   const navigate = useNavigate();
@@ -23,50 +24,77 @@ const HomeClienteComponent = () => {
   const [greeting, setGreeting] = useState('');
   const [encuestaOpen, setEncuestaOpen] = useState(false); // Estado para controlar la apertura del componente de encuesta
   const [experiencia, setExperiencia] = useState(''); // Estado para almacenar la calificación de experiencia
+  const [citas, setCitas] = useState([]);
 
   const toggleMenu = () => {
     setMenuVisible(!menuVisible);
   };
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const storedUsername = secureLocalStorage.getItem('username');
-        if (!storedUsername) {
-          throw new Error('Nombre de usuario no encontrado en secureLocalStorage');
-        }
+    const storedUsername = secureLocalStorage.getItem('username');
 
-        const currentHour = new Date().getHours();
-        if (currentHour >= 5 && currentHour < 12) {
-          setGreeting('Buenos días');
-        } else if (currentHour >= 12 && currentHour < 18) {
-          setGreeting('Buenas tardes');
-        } else {
-          setGreeting('Buenas noches');
-        }
+    if (!storedUsername) {
+      navigate("/login");
+    } else {
+      setUsername(storedUsername);
+      setUsernameLoaded(true);
 
-        setUsername(storedUsername);
-        setUsernameLoaded(true);
-        setEncuestaOpen(true); // Abre automáticamente la encuesta al cargar la página
-      } catch (error) {
-        console.error('Error al obtener datos:', error);
+      const fetchData = async () => {
+        try {
+          const response = await axios.get('http://127.0.0.1:8000/api/calendariocliente', {
+            params: {
+              nombre_cliente: storedUsername
+            }
+          });
+
+          const citasFormatted = response.data.map(cita => ({
+            title: 'Cita',
+            start: new Date(`${cita.fecha}T${cita.hora}`),
+            citaData: cita
+          }));
+
+          setCitas(citasFormatted);
+        } catch (error) {
+          console.error('Error al obtener citas:', error);
+        }
+      };
+
+      fetchData();
+
+      const currentHour = new Date().getHours();
+      if (currentHour >= 5 && currentHour < 12) {
+        setGreeting('Buenos días');
+      } else if (currentHour >= 12 && currentHour < 18) {
+        setGreeting('Buenas tardes');
+      } else {
+        setGreeting('Buenas noches');
       }
-    };
-
-    fetchData();
+    }
   }, []);
+
+  const handleLogout = () => {
+    Swal.fire({
+      title: "¿Seguro que quieres cerrar sesión?",
+      icon: "question",
+      confirmButtonText: "Sí",
+      cancelButtonText: "No",
+      showCancelButton: true,
+      showCloseButton: true
+    }).then((result) => {
+      if (result.isConfirmed) {
+        secureLocalStorage.clear();
+        setUsername('');
+        navigate("/");
+      }
+    });
+  };
 
   const handleClick = () => {
     navigate("/miperfil", { state: { username } });
   };
 
-  const handleLogout = () => {
-    secureLocalStorage.clear();
-    const confirmLogout = window.confirm("¿Está seguro que quiere salir?");
-    if (confirmLogout) {
-      navigate("/");
-    }
-  };
+
+  
 
   // Función para cerrar el componente de encuesta y mostrar un mensaje de agradecimiento
   const handleCloseEncuesta = () => {
