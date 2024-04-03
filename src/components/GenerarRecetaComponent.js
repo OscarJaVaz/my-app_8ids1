@@ -31,22 +31,10 @@ const GenerarRecetaComponent = () => {
         const numAsterisksHorizontal = Math.floor((pageWidth - asteriskMargin * 2) / asteriskSize);
         const numAsterisksVertical = Math.floor((pageHeight - asteriskMargin * 2) / asteriskSize);
 
-        // Top border
-        for (let i = 0; i < numAsterisksHorizontal; i++) {
-            doc.text('*', asteriskMargin + i * asteriskSize, asteriskMargin);
-        }
-        // Right border
-        for (let i = 0; i < numAsterisksVertical; i++) {
-            doc.text('*', pageWidth - asteriskMargin, asteriskMargin + i * asteriskSize);
-        }
-        // Bottom border
-        for (let i = 0; i < numAsterisksHorizontal; i++) {
-            doc.text('*', asteriskMargin + i * asteriskSize, pageHeight - asteriskMargin);
-        }
-        // Left border
-        for (let i = 0; i < numAsterisksVertical; i++) {
-            doc.text('*', asteriskMargin, asteriskMargin + i * asteriskSize);
-        }
+        // Añadir borde al contorno del PDF
+doc.setLineWidth(1); // Establecer el ancho de la línea del borde
+doc.rect(10, 10, pageWidth - 20, pageHeight - 20); // Dibujar un rectángulo como borde
+
 
         // Crear una nueva instancia de Image de JavaScript
         const img = new Image();
@@ -54,7 +42,7 @@ const GenerarRecetaComponent = () => {
         // Cargar la imagen
         img.onload = function() {
             // Añadir la imagen al PDF después de cargarla
-            doc.addImage(this, 'JPEG', 10, 10, 40, 40); // Ajusta las coordenadas y el tamaño según sea necesario
+            doc.addImage(this, 'JPEG', 10, 10, 40, 40, 'center'); // Ajusta las coordenadas y el tamaño según sea necesario
 
             const dateText = selectedDate ? selectedDate.toLocaleDateString() : '';
         
@@ -76,7 +64,7 @@ const GenerarRecetaComponent = () => {
         
             doc.setDrawColor(0); // Restaurar el color de dibujo en negro
             doc.rect(10, recetaY, 190, recetaLines.length * 10 + 10); // Dibujar un rectángulo sin relleno
-            doc.text('Receta individual', 105, recetaY + 7, null, null, 'center'); // Título "Diagnóstico del Paciente"
+            doc.text('Diagnostico del paciente', 105, recetaY + 7, null, null, 'center'); // Título "Diagnóstico del Paciente"
             doc.text(recetaLines, 15, recetaY + 15);
         
             // Línea para la firma del doctor
@@ -166,49 +154,67 @@ const GenerarRecetaComponent = () => {
 
 const styles = {
     container: {
-        margin: 'auto',
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'center',
-        alignItems: 'center',
-        height: '78vh',
-        width: '900px',
-        background: 'rgba(255, 255, 255, 0.9)',
-        borderRadius: '50px',
-        padding: '20px',
+      margin: 'auto',
+      display: 'flex',
+      flexDirection: 'column',
+      justifyContent: 'center',
+      alignItems: 'center',
+      height: '78vh',
+      width: '900px',
+      background: 'rgba(255, 255, 255, 0.9)',
+      borderRadius: '50px',
+      padding: '20px',
     },
     title: {
-        marginBottom: '20px',
+      marginBottom: '20px',
     },
     clienteContainer: {
-        marginBottom: '20px',
+      marginBottom: '20px',
     },
     recetaContainer: {
-        marginBottom: '20px',
-        width: '100%',
+      marginBottom: '20px',
+      width: '100%',
+      display: 'flex', // Agrega display flex para centrar la imagen
+      justifyContent: 'center', // Centra horizontalmente
+      alignItems: 'center', // Centra verticalmente
     },
     recetaLabel: {
-        marginBottom: '5px',
-        fontSize: '18px',
-        fontWeight: 'bold',
-        color: '#333',
+      marginBottom: '5px',
+      fontSize: '18px',
+      fontWeight: 'bold',
+      color: '#333',
     },
     recetaTextarea: {
-        width: '100%',
-        padding: '10px',
-        borderRadius: '8px',
-        border: '1px solid #ccc',
-        resize: 'vertical', // Permite redimensionar verticalmente solo
-        fontSize: '16px',
-        lineHeight: '1.5',
+      width: '100%',
+      padding: '10px',
+      borderRadius: '8px',
+      border: '1px solid #ccc',
+      resize: 'vertical', // Permite redimensionar verticalmente solo
+      fontSize: '16px',
+      lineHeight: '1.5',
     },
     datePickerContainer: {
-        marginBottom: '20px',
+      marginBottom: '20px',
     },
     buttonContainer: {
-        display: 'flex',
-        justifyContent: 'center',
+      display: 'flex',
+      justifyContent: 'center',
     },
-};
+    imageContainer: {
+      display: 'flex',
+      justifyContent: 'center',
+      marginBottom: '20px',
+    },
+    consultImage: {
+      width: '40px', // Ajusta el ancho de la imagen según sea necesario
+      height: '40px', // Ajusta el alto de la imagen según sea necesario
+    },
+  };
+  
+  // En el JSX
+  <div style={styles.imageContainer}>
+    <img src={consult} alt="Consult" style={styles.consultImage} />
+  </div>
+  
 
 export default GenerarRecetaComponent;
