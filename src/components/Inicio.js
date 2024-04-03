@@ -447,9 +447,9 @@ const Inicio = () => {
             </div>
             <div class="footer-content-column">
               <div class="footer-menu">
-                <h2 class="footer-menu-name"> Quick Links</h2>
+                <h2 class="footer-menu-name"> Registrate para agendar tu cita</h2>
                 <ul id="menu-quick-links" class="footer-menu-list">
-
+                <p class="footer-call-to-action-description"> Consulta horarios disponibles</p>
                 </ul>
               </div>
             </div>
