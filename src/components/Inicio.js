@@ -134,11 +134,14 @@ const Inicio = () => {
       >
         <div style={{ backgroundColor: 'black', padding: '20px', width: '80%', borderRadius: '10px', textAlign: 'center', position: 'relative', zIndex: 9999, color: 'white' }}>
           <h1>Aviso de Privacidad</h1>
-          <p>En este Consultorio, valoramos su privacidad y nos comprometemos a proteger la información personal que usted nos proporciona. Este aviso describe cómo recopilamos, usamos y protegemos su información.</p>
-          <p>Recopilamos información personal solo cuando usted nos la proporciona voluntariamente, como su nombre, dirección de correo electrónico y número de teléfono.</p>
-          <p>Utilizamos su información para proporcionarle nuestros servicios, mejorar su experiencia con nosotros y enviarle comunicaciones relacionadas con su interacción con nuestra empresa.</p>
-          <p>Utilizamos cookies para mejorar su experiencia de usuario en nuestro sitio web.</p>
-          <p>Fecha de última actualización: [10/01/2024]</p>
+          <p>En nuestro Consultorio, nos tomamos muy en serio la confidencialidad y seguridad de su información personal. Nos comprometemos a proteger y resguardar cualquier dato que nos proporcione.</p>
+  <p>Nuestro compromiso se basa en la transparencia y el respeto hacia usted. Por ello, le informamos que recopilamos información personal únicamente cuando usted decide proporcionárnosla de manera voluntaria, como su nombre, dirección de correo electrónico y número de teléfono.</p>
+  <p>La información que recopilamos tiene como finalidad principal proporcionarle nuestros servicios de manera eficiente, mejorar su experiencia con nuestra empresa y mantener una comunicación efectiva con usted, relacionada con su interacción en nuestro consultorio.</p>
+  <p>Es importante destacar que utilizamos cookies con el fin de mejorar su experiencia de usuario en nuestro sitio web, asegurando así un servicio personalizado y adaptado a sus necesidades.</p>
+  <p>Agradecemos su confianza y estamos disponibles para cualquier consulta adicional que pueda surgirle.</p>
+  <p>Atentamente,</p>
+  <p>Equipo del Consultorio</p>
+          <p>Fecha de última actualización: [27/03/2024]</p>
           <Button variant="contained" onClick={handleCloseModal}>Aceptar</Button>
         </div>
       </Modal>

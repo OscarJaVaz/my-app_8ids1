@@ -80,22 +80,21 @@ const MenuComponent = () => {
     setUsernameLoaded(true);
 
     // Verificar si el usuario está logueado
+   
     const storedUsername = secureLocalStorage.getItem('username');
     if (storedUsername) {
       setUsername(storedUsername);
       setIsLoggedIn(true);
+    } else {
+      // Redirigir al usuario al componente de inicio de sesión
+      navigate('/login');
     }
-
-
+  
     // Evitar que el usuario retroceda usando el botón del navegador si no está logueado
     const handleBackButton = (event) => {
       if (!isLoggedIn && location.pathname !== '/login') {
         event.preventDefault();
-        if (showPasswordPrompt) {
-          setShowPasswordPrompt(false); // Ocultar el formulario de contraseña si está visible
-        } else {
-          navigate('/login');
-        }
+        navigate('/login');
       }
     };
 

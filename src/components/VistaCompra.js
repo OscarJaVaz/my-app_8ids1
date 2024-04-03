@@ -34,6 +34,8 @@ const VistaCompra = () => {
   const [showPaymentForm, setShowPaymentForm] = useState(false);
   const [showAddressForm, setShowAddressForm] = useState(false);
   const [processingPayment, setProcessingPayment] = useState(false);
+  const [isCPValid, setIsCPValid] = useState(true);
+  const [isNumTarjetaValid, setIsNumTarjetaValid] = useState(true);
 
   useEffect(() => {
     const storedUsername = secureLocalStorage.getItem('username');
@@ -51,12 +53,32 @@ const VistaCompra = () => {
     }));
   }, [carrito]);
 
-  const handleInputChange = (e) => {
-    setPaymentDetails({
-      ...paymentDetails,
-      [e.target.name]: e.target.value,
-    });
-  };
+  function handleInputChange(event) {
+    const { name, value } = event.target;
+  
+    // Validar solo si el cambio viene del campo de código postal (cp)
+    if (name === 'cp') {
+      const isValidInput = /^\d{0,5}$/.test(value); // Validación: solo números y máximo 5 dígitos
+      if (isValidInput || value === "") {
+        // Actualizar el estado solo si la entrada es válida o está vacía
+        setPaymentDetails(prevState => ({
+          ...prevState,
+          [name]: value
+        }));
+      }
+      else if (name === 'num_tarjeta') {
+        // Validar si la entrada contiene solo números y tiene una longitud máxima de 16 caracteres
+        const isValidInput = /^\d{0,16}$/.test(value);
+        setIsNumTarjetaValid(isValidInput);
+      }
+    } else {
+      // Para otros campos, actualizar el estado directamente
+      setPaymentDetails(prevState => ({
+        ...prevState,
+        [name]: value
+      }));
+    }
+  }
 
   const handleFocusChange = (e) => {
     setPaymentDetails({
@@ -133,7 +155,17 @@ const VistaCompra = () => {
     slidesToShow: 3,
     slidesToScroll: 1
   };
-
+  function handleKeyDown(event) {
+    // Obtener el código de la tecla presionada
+    const keyCode = event.keyCode || event.which;
+  
+    // Permitir solo números y las teclas de navegación (como las flechas, retroceso, etc.)
+    if (!(keyCode >= 48 && keyCode <= 57) && // Números del 0 al 9
+        !(keyCode >= 96 && keyCode <= 105) && // Teclado numérico
+        ![8, 9, 37, 39, 46].includes(keyCode)) { // Teclas de navegación y retroceso
+      event.preventDefault(); // Prevenir la acción predeterminada (por ejemplo, la entrada de caracteres no deseados)
+    }
+  }
   return (
     <div className="layout">
       <div className="col-md-6">
@@ -238,8 +270,10 @@ const VistaCompra = () => {
                       id="num_tarjeta"
                       maxLength="16"
                       className="form-control"
+                      pattern="[0-9]*"
                       onChange={handleInputChange}
                       onFocus={handleFocusChange}
+                      onKeyDown={handleKeyDown} 
                     />
                   </div>
                   <div className="form-group">

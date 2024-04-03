@@ -52,20 +52,27 @@ function DoctorComponent() {
   //name represente el nombre del campo y value se utiliza para el nuevo valo ingresado
   const handleGuardar = (event) => {
     const { name, value } = event.target;
-  
-    // Si el nombre es "cedula" y la longitud del valor es mayor a 8, recortarlo a 8 dígitos
+
     if (name === 'cedula' && value.length > 8) {
       setDoctor((prevState) => ({
         ...prevState,
         [name]: value.slice(0, 8),
       }));
+    } else if (name === 'contacto') {
+      const numericValue = value.replace(/\D/g, ''); // Remove anything that is not a number
+      if (numericValue.length <= 10) {
+        setDoctor((prevState) => ({
+          ...prevState,
+          [name]: numericValue,
+        }));
+      }
     } else {
       setDoctor((prevState) => ({
         ...prevState,
         [name]: value,
       }));
     }
-  
+
     if (name === 'cedula') {
       if (!isValidCedula(value) || value.length < 7) {
         setNssError('Cédula inválida. Debe tener de 7 a 8 dígitos.');
@@ -76,7 +83,6 @@ function DoctorComponent() {
       }
     }
   };
-  
 
   const isValidCedula = (cedula) => {
     return /^\d{7,8}$/.test(cedula);

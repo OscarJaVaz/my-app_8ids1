@@ -238,6 +238,27 @@ const Login_Component = () => {
     validarContrasena(valor);
   };
 
+  const handleNombreChange = (e) => {
+    const valor = e.target.value;
+    // Solo permitir letras y espacios
+    if (/^[a-zA-Z\s]*$/.test(valor)) {
+      setNombre(valor);
+    }
+  };
+  
+  const handleNombreBlur = () => {
+    if (!nombre) {
+      setMensajeValidacion('El nombre es obligatorio');
+    }
+  };
+
+  // Función para validar campos vacíos al salir del campo
+  const handleEmptyFieldBlur = (value, fieldName) => {
+    if (!value) {
+      setMensajeValidacion(`El campo ${fieldName} es obligatorio`);
+    }
+  };
+
   const handleSignUpClick = () => {
     const container = document.getElementById('container');
     container.classList.add('right-panel-active');
@@ -263,15 +284,15 @@ const Login_Component = () => {
       <div className="container" id="container">
         {/* REGISTRARSE (Elementos) */}
         <div className="form-container sign-up-container">
-          <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit}>
             <h1>Crear cuenta</h1>
-            <input type="text" placeholder="Nombre" onChange={(e) => setNombre(e.target.value)} />
-            <input type="text" placeholder="Apellidos" onChange={(e) => setApellido(e.target.value)} />
-            <input type="number" inputMode="numeric" pattern="[0-9]*" placeholder="Telefono" onChange={(e) => setTelefono(e.target.value.replace(/\D/g, ''))} />
-            <input type="text" placeholder="Domicilio" onChange={(e) => setDomicilio(e.target.value)} />
-            <input type="email" placeholder="Email" onChange={(e) => setEmail(e.target.value)} />
-            <input type="password" placeholder="Contraseña" onChange={handleContrasenaChange} />
-            <input type="password" placeholder="Confirmar contraseña" onChange={(e) => setConfirmarContrasena(e.target.value)} />
+            <input type="text" placeholder="Nombre" value={nombre} onChange={handleNombreChange} onBlur={handleNombreBlur} />
+            <input type="text" placeholder="Apellidos" value={apellido} onChange={(e) => setApellido(e.target.value)} onBlur={() => handleEmptyFieldBlur(apellido, 'Apellidos')} />
+            <input type="number" inputMode="numeric" pattern="[0-9]*" placeholder="Telefono" value={telefono} onChange={(e) => setTelefono(e.target.value.replace(/\D/g, ''))} onBlur={() => handleEmptyFieldBlur(telefono, 'Teléfono')} />
+            <input type="text" placeholder="Domicilio" value={domicilio} onChange={(e) => setDomicilio(e.target.value)} onBlur={() => handleEmptyFieldBlur(domicilio, 'Domicilio')} />
+            <input type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} onBlur={() => handleEmptyFieldBlur(email, 'Email')} />
+            <input type="password" placeholder="Contraseña" value={contrasena} onChange={handleContrasenaChange} onBlur={() => handleEmptyFieldBlur(contrasena, 'Contraseña')} />
+            <input type="password" placeholder="Confirmar contraseña" value={confirmarContrasena} onChange={(e) => setConfirmarContrasena(e.target.value)} onBlur={() => handleEmptyFieldBlur(confirmarContrasena, 'Confirmar contraseña')} />
             {mensajeValidacion && (
               <p style={{ ...styles.mensajeValidacion, color: mensajeValidacion.includes('coinciden') ? 'green' : 'red' }}>
                 {mensajeValidacion}
@@ -323,7 +344,7 @@ const Login_Component = () => {
 
             <input type="email" value={email} onChange={(e) => handleInputChange(e, setEmail)} placeholder="Email" />
             <input type="password" value={password} onChange={(e) => handleInputChange(e, setPassword)} placeholder="Contraseña" />
-            <a href="#">¿Olvidaste tu contraseña?</a>
+            
             <button onClick={fnLogin} disabled={!email || !password || loading}>
               {loading && <CircularProgress size={20} color="inherit" />}
               {!loading && <span>Iniciar Sesión</span>}
